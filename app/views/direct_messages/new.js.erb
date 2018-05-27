@@ -1,0 +1,35 @@
+$(".modal").append("<%= escape_javascript(render(:partial => 'form', :locals => {:note => @note})) %>").addClass("closeAfterSuccess");
+
+$("#flash").remove();
+
+$(".modal").dialog({
+ width: 600,
+ title: "Send an Email Message",
+ position: ['center',0]
+});
+
+$("a").blur();
+
+//Token for User Ids on Notes
+var new_user_token_path = $("form #user_tokens_message").data("path")
+$("form #user_tokens_message").tokenInput(new_user_token_path, {
+  crossDomain: false,
+  queryParam: "name",
+  theme: "facebook",
+  minChars: 3,
+  tokenLimit: 10,
+  preventDuplicates: true,
+  delay: 600
+});
+
+//Token for Contact Ids on Notes
+var new_contact_token_path = $("form #contact_tokens_message").data("path")
+$("form #contact_tokens_message").tokenInput(new_contact_token_path, {
+  crossDomain: false,
+  queryParam: "name",
+  theme: "facebook",
+  minChars: 3,
+  tokenLimit: 10,
+  preventDuplicates: true,
+  delay: 600
+});

@@ -1,0 +1,23 @@
+%tr.table-row
+  %td.table-td.name
+    .grid
+      .grid-title
+        - if import_item.created_at == import_item.updated_at
+          = image_tag('indicator.gif', :alt => "Loading")
+        = raw import_item.message
+        %small  
+          = import_item.filename
+      - if admin? && (import_item.created_at != import_item.updated_at)
+        .grid-links
+          %ul
+            %li= link_to "#{content_tag(:span, "destroy", :class => "delete")} destroy".html_safe, import_item_path(import_item), |
+                                "data-method" => 'delete',  |
+                                "data-confirm" => "Are you Sure?", |                              
+                                "data-remote" => "true",            |
+                                :class => "delete"
+  %td.table-td
+    = import_item.import_type.titlecase
+  %td.table-td
+    = import_item.imported_by
+  %td.table-td
+    = import_item.updated_at.strftime('%B %d, %Y')

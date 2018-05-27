@@ -1,0 +1,31 @@
+.form
+ 
+  %p.object_links
+    = link_to "Back to Candidates", candidates_path, :class => "button"
+  
+  %h1= "Edit Multiple Candidates" 
+  
+  = form_for(:candidate, :url => update_multiple_candidates_path, :html => {:method => :put}) do |f|
+    
+    - @candidates.each do |candidate|
+      = hidden_field_tag "selected_candidates[]", candidate.id, :id => "selected_candidates_#{candidate.id}"
+    
+    %fieldset.first
+      .fields-alt
+        = f.label :source, "Referral Source"
+        = f.select :source,
+                   DefaultVars::JOB_SOURCES|AdminDefault.settings.job_sources,
+                   {:prompt => h("Select a Source")},
+                   {:class => 'chzn'}
+
+      .fields-alt
+        = f.label :employee_id, "JSA Employee"        
+        = f.collection_select :employee_id,
+                              Employee.desc(:name),
+                              :id,
+                              :name,
+                              {:prompt => h("Select a JSA Employee")},
+                              {:class => "chzn"}        
+  
+    .actions
+      = f.submit "Update Multiple Candidates", :class => "button", "data-disable-with" => "Saving . . ."

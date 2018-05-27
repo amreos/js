@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8'>
+    <title> <%= @candidate.name %> &#8217;s Resume | JSA Search, Inc</title>
+    <style media="all">
+      * { margin: 0; padding: 0;}
+      
+      /* PDF/Print style */
+      @page { 
+        size: US-Letter portrait;
+        margin: 54px;
+
+        @bottom-right {
+          content: counter(page);
+          font-size: 10px;
+          font-style: italic;
+        }
+      }
+      
+      /* HTML PDF VIEWER */
+      #pdf-viewer { display: none; }
+      
+      h1, h2, h3, h4, h5, h6, p, ul, div, section { display: block; margin: 0;}
+      
+      /* General */
+      html, body {
+        min-height: 100%;
+      }
+
+      body {
+        color: #4a4a4a; 
+        font-family: arial, sans-serif; 
+        font-size: 13px; 
+        line-height: 15px;
+      }
+      
+      p {
+        margin-bottom: 0.8em;
+      }
+
+      /* Pages */
+      .page {
+        width: 580px;
+        min-height: 684px;
+        margin: 0 auto;
+        page-break-after: auto;
+        border: 1px solid white; /* wkhtmltopdf hack */
+      }
+      
+      /*Resume Style*/
+      
+      h1, h2 {
+        font-family: Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, "Times New Roman", Times, serif;
+        letter-spacing: -1px;
+      }
+      
+      .jsa-info {
+        font-size: 10px;
+        float: left;
+        text-align: right;
+        width: 150px; }
+        .jsa-info ul { margin-bottom: 15px;}
+          .jsa-info ul li {
+            list-style-type: none;
+            text-align: right;
+            margin: 0;
+            padding: 0 0 5px 0; }
+            .jsa-info ul li.fn, ul li.org  {
+              padding: 0 !important;}
+            .jsa-info ul li.adr {
+              text-align: right; }
+              .jsa-info ul li.adr span.street-address {
+                display: block;
+                text-align: right; }
+      
+      section {
+        page-break-after: auto;
+      }
+      section {
+        margin-left: 190px; }
+        section p {
+          margin-bottom: 20px; }
+        section hgroup {
+          margin: 0; }
+          section hgroup h1 {
+            font-size: 26 px;
+            color: #093e6a;
+            line-height: 1.1;
+            margin-bottom: 0; }
+          section hgroup h2 {
+            border: none;
+            color: #093e6a;
+            margin: 0 0 20px 0;
+            line-height: 1.15;
+            font-size: 21px;
+            border-bottom: 1px solid #6285a1; }
+        section h2 {
+          font-size: 18px;
+          color: #093e6a;
+          margin: 0;
+          line-height: 1.1; }
+          section h2.add_margin {margin-bottom: 30px !important;}
+        section ul.skills {
+          overflow: hidden;
+          margin-bottom: 20px; }
+          section ul.skills li {
+            float: left;
+            width: 150px;
+            margin-right: 10px;
+            margin-bottom: 0;
+            list-style-type: none; }
+        section .wh-wrap {
+          margin-bottom: 20px;
+          page-break-after: auto; }
+          section .wh-wrap .wh {
+            border-left: 2px solid #6285a1;
+            padding-left: 10px;
+            margin: 0 0 20px -12px;
+            page-break-after: auto; }
+            section .wh-wrap .wh h2 {
+              font-size: 16px;
+              margin: 0;
+              line-height: 1;
+              letter-spacing: .5px;
+              border: none; }
+            section .wh-wrap .wh h3 {
+              font-size: 12px;
+              margin: 0 0 5px 0; }
+            section .wh-wrap .wh .work {
+              font-size: .8em;
+              float: right;
+              line-height: 1em; }
+            section .wh-wrap .wh p {
+              margin: 0 0 10px 0; }
+              section .wh-wrap .wh p:last-child {
+                margin: 0; }
+    </style>
+
+  </head>
+  <body>
+    <div class="page">
+      <%= yield %>
+    </div>
+  </body>
+</html>

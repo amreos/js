@@ -1,0 +1,12 @@
+.form
+ 
+  %p.object_links
+    = link_to "Back to #{@client.name}", client_path(@client), :class => "button"
+  
+  %h1= "Add a Facility"
+  
+  = form_for([@client, @facility]) do |f|
+    = render :partial => 'form', :locals => { :f => f, :facility => @facility }
+  
+    .actions
+      = f.submit "Add Facility", :class => "button", "data-disable-with" => "Saving . . ."

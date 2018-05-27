@@ -1,0 +1,26 @@
+.c{"data-id" => "#{attachment.id}"}
+  .links
+    = link_to "Edit", edit_attachment_path(attachment.id, :file_parent_type => parent.class.name, :file_parent_id => parent.id), |
+      :class => "edit", :title => "Edit"
+    = link_to "Delete", attachment_path(attachment.id, :file_parent_type => parent.class.name, :file_parent_id => parent.id), |
+                        :title => "Delete", |
+                        :class => "delete", |
+                        "data-method" => 'delete',  |
+                        "data-confirm" => "Are you Sure?", |
+                        "data-remote" => "true" |                      
+  %hgroup
+    %h1
+      = attachment.name
+
+  %p
+    = link_to "Generate Download Link", attachment_path(attachment.id, :file_parent_type => parent.class.name, :file_parent_id => parent.id), |
+              :title => "Download #{attachment.name}", :class => "button small", "data-remote" => "true" |
+                            
+  %p
+    = link_to "Share File", |
+              new_share_file_path(:parent_id => parent.id, |
+                                  :parent_type => parent.class.name, |
+                                  :shared_file_type => attachment.class.name, |
+                                  :shared_file_id => attachment.id ), |
+                                  :title => "Share #{attachment.name}", :class => "button small", "data-remote" => "true" |      
+              

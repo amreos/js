@@ -1,0 +1,38 @@
+%table
+  %tr.tr-head
+    = render :partial => 'sort_links'
+
+  - @contacts.each do |contact|
+    %tr.table-row
+      %td.tabble-td.location
+        = check_box_tag "selected_contacts[]", contact.id, false, :id => "selected_contacts_#{contact.id}" 
+    
+      %td.table-td.name
+        .grid
+          .grid-title
+            = link_to contact.name_and_title, client_contact_path(contact.client_id, contact),
+                      :title => "View #{contact.name}'s info"
+          .grid-links
+            %ul
+              %li= link_to "view", client_contact_path(contact.client_id, contact), :title => "View #{contact.name}'s info"
+              %li= link_to "#{content_tag(:span, "edit contact", :class => "edit")} edit".html_safe, |
+                            edit_client_contact_path(contact.client_id, contact), :class => "edit", :title => "Edit"
+              - if admin?
+                %li= link_to "#{content_tag(:span, "destroy", :class => "delete")} destroy".html_safe, |
+                             client_contact_path(contact.client_id, contact), :title => "Delete", |
+                             :class => "delete", |
+                             "data-method" => 'delete',  |
+                             "data-confirm" => "Are you Sure?", |
+                             "data-remote" => "true" |
+                             
+      %td.table-td
+        - if contact.client.present? && contact.client.name.present?
+          = link_to contact.client.name, contact.client, :title => "View #{contact.client.name}"
+
+      %td.table-td.location
+        = contact.addresses.present? ? contact.addresses.first.city : "N/A"
+
+      %td.table-td.location
+        = contact.addresses.present? ? contact.addresses.first.state : "N/A"
+
+= paginate @contacts, :remote => "true"

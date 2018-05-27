@@ -1,0 +1,363 @@
+.content-main{ "data-id" => @candidate.id }
+  .managed_by
+    - if @candidate.employee.present?
+      = render :partial => 'shared/info/emp_link', :object => @candidate
+    - if @candidate.emails.present?
+      = render :partial => 'shared/info/quick_message', :object => @candidate
+    %a.button{:href => new_task_path(:goal_id => @candidate.id, :goal_type => 'candidate'),
+                                     :title => "Add a Task",
+                                     :class => "new_task",
+                                     "data-remote" => "true"}
+      %span Add a Task      
+  .top
+    %section.vcard
+      %hgroup
+        %h1.fn
+          = @candidate.name
+        %h2.title
+          = @candidate.display_title
+          = content_tag(:em, "legacy title") if @candidate.title.blank?
+        %h3.org= @candidate.company
+        %h5= "Source: #{@candidate.source}"
+
+      %ul
+        = render :partial => "shared/info/url", :object => @candidate.web_address if @candidate.web_address.present?
+
+        = render :partial => "shared/info/phone", :collection => @candidate.phones.first(2)
+
+        = render :partial => "shared/info/email", :collection => @candidate.emails.first(1), :locals => {:parent => @candidate}
+
+        = render :partial => "shared/info/address", :collection => @candidate.addresses.first(1)
+
+      - if more_contact_info(@candidate)
+        %h4.additional Additional Contact Info 
+        %ul.additional
+          = render :partial => "shared/info/phone", :collection => @candidate.phones[2..-1]
+
+          = render :partial => "shared/info/email", :collection => @candidate.emails[1..-1], :locals => {:parent => @candidate}
+
+          = render :partial => "shared/info/address", :collection => @candidate.addresses[1..-1]
+            
+    %section.states
+      %header
+        %h1{:class => "button #{@candidate.current_state}", :id => "current_status"}
+          = @candidate.current_state.titleize
+        
+      %ul
+        %li
+          = link_to "Placed", update_status_candidate_path(@candidate, :new_status => 0), |
+                    :class => current_state_class("placed", @candidate), "data-remote" => "true", "data-method" => "put", |
+                    :title => "Set as Placed", "data-confirm" => "Are you Sure? Other job statuses will be set to Not Match." |
+        %li
+          = link_to "Interviewing", update_status_candidate_path(@candidate, :new_status => 1), |
+                    :class => current_state_class("interviewing", @candidate), "data-remote" => "true", "data-method" => "put", |
+                    :title => "Set as Interviewing" |
+        %li
+          = link_to "Pending", update_status_candidate_path(@candidate, :new_status => 2), |
+                    :class => current_state_class("pending", @candidate), "data-remote" => "true", "data-method" => "put", |
+                    :title => "Set as Pending" |
+        %li
+          = link_to "Searching", update_status_candidate_path(@candidate, :new_status => 3), |
+                    :class => current_state_class("searching", @candidate), "data-remote" => "true", "data-method" => "put", |
+                    :title => "Set as Searching" |
+        %li
+          = link_to "Not Interested", update_status_candidate_path(@candidate, :new_status => 4), |
+                    :class => current_state_class("on_hold", @candidate), "data-remote" => "true", "data-method" => "put", |
+                    :title => "Set as On Hold" |
+        - if admin?  
+          %li
+            = link_to "Flagged", update_status_candidate_path(@candidate, :new_status => 5), |
+                      :class => current_state_class("flagged", @candidate), "data-remote" => "true", "data-method" => "put", |
+                      :title => "Set as Flagged" |
+      
+      %p.clearfix
+        = link_to 'View More Info', '#', :class => 'button left more'
+        = link_to edit_text, edit_candidate_path(@candidate), :class => "button right edit"
+                
+  .middle.additional
+    %section
+      = link_to 'Hide Info', '#', :class => 'button right close'
+      %hgroup
+        %h1 Candidate History
+      
+      %table
+        %tr.tr-head
+          %th Previous Wage
+          %th Type
+        %tr.table-row
+          %td.table-td
+            = @candidate.previous_wage && @candidate.previous_wage.present? ? number_to_currency(@candidate.previous_wage) : "N/A"
+          %td.table-td
+            = value_or_none(@candidate.wage_type)
+      %table
+        %tr.tr-head
+          %th Bonus
+          %th Type
+        %tr.table-row
+          = display_bonus(@candidate)
+          %td.table-td
+            = value_or_none(@candidate.bonus_type)
+            
+      %table            
+        %tr.tr-head
+          %th Background
+        %tr.table-row
+          %td.table-td
+            = value_or_none(@candidate.background)
+      %table            
+        %tr.tr-head
+          %th Education          
+        %tr.table-row
+          %td.table-td
+            - if @candidate.education_types.present?
+              - @candidate.education_types.each do |e|
+                %span.tag= e
+            - else
+              %span.tag N/A
+      %table            
+        %tr.tr-head
+          %th Additional Education Info
+        %tr.table-row
+          %td.table-td
+            = value_or_none(@candidate.education_info)
+                          
+      %table            
+        %tr.tr-head
+          %th Current Licenses          
+        %tr.table-row
+          %td.table-td
+            - if @candidate.licenses.present?
+              - @candidate.licenses.each do |b|
+                %span.tag= b
+            - else
+              %span.tag N/A
+      %table            
+        %tr.tr-head
+          %th Additional License Info
+        %tr.table-row
+          %td.table-td
+            = value_or_none(@candidate.license_info)
+            
+      %table            
+        %tr.tr-head
+          %th Specialties          
+        %tr.table-row
+          %td.table-td
+            - if @candidate.specialties.present?
+              - @candidate.specialties.each do |e|
+                %span.tag= e
+            - else
+              %span.tag N/A            
+            
+    %section
+      = link_to 'Hide Info', '#', :class => 'button right close'    
+      %hgroup
+        %h1 Candidate Aspirations
+      %table
+        %tr.tr-head
+          %th.short Type
+          %th Info
+        %tr.table-row
+          %td.table-td.short
+            Can Relocate To
+          %td.table-td
+            - if @candidate.possible_relocations.present?
+              - @candidate.possible_relocations.each do |e|
+                %span.tag= e
+            - else
+              %span.tag N/A            
+        %tr.table-row
+          %td.table-td.short
+            Desired Career Move
+          %td.table-td
+            = simple_format @candidate.career_move
+        %tr.table-row
+          %td.table-td.short
+            Current Job Likes
+          %td.table-td
+            = simple_format @candidate.likes_current_job_because
+        %tr.table-row
+          %td.table-td.short
+            Current Job Dislikes
+          %td.table-td
+            = simple_format @candidate.what_to_avoid_in_a_future_job
+        %tr.table-row
+          %td.table-td.short
+            Greatest Accomplishment
+          %td.table-td
+            = simple_format @candidate.recent_accomplishment
+        %tr.table-row
+          %td.table-td.short
+            Management Style
+          %td.table-td
+            = simple_format @candidate.management_style            
+        %tr.table-row
+          %td.table-td.short
+            Greatest Strength
+          %td.table-td
+            = simple_format @candidate.greatest_strength
+    
+      %section
+        = link_to 'Hide Info', '#', :class => 'button right close'    
+        %hgroup
+          %h1 Candidate Process
+        %table
+          %tr.tr-head
+            %th.short Type
+            %th Info
+          %tr.table-row
+            %td.table-td.short
+              Best Times to Interview
+            %td.table-td
+              = simple_format @candidate.best_times_to_interview
+          %tr.table-row
+            %td.table-td.short
+              Best Types of Interview
+            %td.table-td
+              - if @candidate.interview_types.present?
+                - @candidate.interview_types.each do |i|
+                  %span.tag= i
+              - else
+                %span.tag N/A  
+          %tr.table-row
+            %td.table-td.short
+              Other Recruiters
+            %td.table-td
+              = simple_format @candidate.other_recruiters
+          %tr.table-row
+            %td.table-td.short
+              Other Interviews
+            %td.table-td
+              = simple_format @candidate.other_interviews              
+          %tr.table-row
+            %td.table-td.short
+              Other Job Applications 
+            %td.table-td
+              = simple_format @candidate.other_applications
+  .bottom
+    .notes
+      %section
+        %hgroup
+          %h1 Add a Note
+        = form_for(Note.new, :remote => "true")  do |f|
+          = render :partial => 'notes/form', :locals => {:f => f, :parent => @candidate}
+        
+    %nav
+      %ul
+        %li#btn-tasks.button.active{"data-panel" => "tasks"} Tasks
+        %li#btn-applicants.button{"data-panel" => "applicants"} Jobs
+        %li#btn-workHistories.button{"data-panel" => "workHistories"} Work Histories      
+        %li#btn-resumes.button{"data-panel" => "resumes"} Resumes                      
+        %li#btn-attachments.button{"data-panel" => "attachments"} Attachments        
+    .clear
+    .previous_notes
+      #accordionNotes
+        = render :partial => 'notes/note', :collection => @notes
+      %section.loader  
+        = link_to "Load More", "#", |
+                 "data-remote" => "true", |
+                 "data-page" => "2", |
+                 "data-per" => "5", |
+                 "data-path" => load_more_index_path(:obj_parent_id => @candidate.id, :obj_type => "note", :obj_finder => "user_ids" ), |
+                 "data-disable-with" => "Loading ...", |
+                 :class => "load_more button block active" |
+    
+%aside.tasks.panel.first
+  %section
+    %hgroup
+      %h2
+        Upcoming Tasks
+  
+  %section.list    
+    = render :partial => 'tasks/task', :collection => @tasks
+
+%aside.applicants.panel
+  %section
+    %hgroup
+      %h2
+        %span.counter= @candidate.total_jobs
+        %span.cache_type{"data-plural" => "Jobs", "data-singular" => "Job"}
+          = pluralize_without_count(@candidate.total_jobs, "Job")      
+    .search
+      = text_field_tag :job_name, "", :type => "search", |
+                                      "placeholder" => "Search for a Job", |
+                                      "data-path" => "jobs", |
+                                      "data-goal" => "app_job_id", |
+                                      :class => "general" |
+    = form_for(Applicant.new, :remote => "true") do |f|
+      = hidden_field_tag :app_job_id
+      = hidden_field_tag :app_parent_type, @candidate.class.name
+      = hidden_field_tag :app_candidate_id, @candidate.id
+      .actions
+        = f.submit "Add Job", :class => 'button', "data-disable-with" => "Saving . . ."
+
+  %section.list
+    = render :partial => 'shared/panels/applicant', :collection => @candidate.applicants.limit(10).desc(:updated_at), |
+             :locals => {:parent => "Candidate"}
+  %section.loader
+    = link_to "Load More", "#", |
+             "data-remote" => "true", |
+             "data-page" => "2", |
+             "data-per" => "10", |
+             "data-path" => load_more_index_path(:obj_parent_type => "candidate", :obj_parent_id => @candidate.id, :obj_type => "applicant" ), |
+             "data-disable-with" => "Loading ...", |
+             :class => "load_more button block active" |      
+             
+%aside.workHistories.panel
+  %section
+    %hgroup
+      %h2
+        %span.counter= @candidate.total_work_histories
+        %span.cache_type{"data-plural" => "Work Histories", "data-singular" => "Work History"}
+          = pluralize_without_count(@candidate.total_work_histories, "Work History")
+    %p
+      = link_to "Add a Work History", new_candidate_work_history_path(@candidate), |
+                :title => "Add a work history for #{@candidate.name}", :class => "button" |
+  
+  %section.list    
+    = render :partial => 'shared/panels/work_history', |
+             :collection => @candidate.work_histories.limit(10).desc(:updated_at), |
+             :locals => {:candidate => @candidate}
+  %section.loader
+    = link_to "Load More", "#", |
+            "data-remote" => "true", |
+            "data-page" => "2", |
+            "data-per" => "10", |
+            "data-path" => load_more_index_path(:obj_parent_type => "candidate", :obj_parent_id => @candidate.id, :obj_type => "work_history" ), |
+            "data-disable-with" => "Loading ...", |
+            :class => "load_more button block active" |             
+  
+%aside.resumes.panel
+  %section
+    %hgroup
+      %h2 Resumes
+    %p
+      = link_to "Add a Resume", new_candidate_resume_path(@candidate), |
+                :title => "Add a resume for #{@candidate.name}", :class => "button" |
+
+  %section.list
+    = render :partial => 'shared/panels/resume', |
+             :collection => @candidate.resumes.limit(10).desc(:updated_at), |
+             :locals => {:candidate => @candidate}  
+  %section.loader
+    = link_to "Load More", "#", |
+            "data-remote" => "true", |
+            "data-page" => "2", |
+            "data-per" => "10", |
+            "data-path" => load_more_index_path(:obj_parent_type => "candidate", :obj_parent_id => @candidate.id, :obj_type => "resume" ), |
+            "data-disable-with" => "Loading ...", |
+            :class => "load_more button block active" |             
+
+%aside.attachments.panel
+  %section
+    %hgroup
+      %h2 Attachments
+    = form_for(Attachment.new, :html => { :multipart => true })  do |f|
+      = render :partial => 'shared/attachment_form', :locals => {:parent => @candidate, :f => f}
+      .actions
+        = f.submit "Save Attachment", :class => "button", "data-disable-with" => "Saving..."        
+    
+  %section.list
+    = render :partial => 'shared/panels/attachment', |
+             :collection => @candidate.attachments.desc(:updated_at), |
+             :locals => {:parent => @candidate}             

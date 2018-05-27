@@ -1,0 +1,51 @@
+- @page_title = "Thanks for Becoming A Client"
+
+%section.first
+  .row
+    .eight.columns
+      %hgroup.call
+        %h1
+          Thank You for Contacting <br>JSA Search, Inc.
+    .four.columns
+      = render :partial => 'shared/public/social_links'
+
+%section.candidates
+  .row
+    .eight.columns
+      .orbit-wrap
+        .featured-points
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/employers.jpg",
+                      :alt => "JSA for Employers",
+                      :data => {:caption => '#firstCaption'}
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/healthcare.jpg",
+                      :alt => "JSA for Healthcare Employers",
+                      :data => {:caption => '#healthCaption'},
+                      :class => 'hide'
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/staffing.jpg",
+                      :alt => "JSA for Interim Staffing",
+                      :data => {:caption => '#interimCaption'},
+                      :class => 'hide'
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/consulting.jpg",
+                      :alt => "JSA Consulting Services",
+                      :data => {:caption => '#consultingCaption'},
+                      :class => 'hide'
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/finances.jpg",
+                      :alt => "JSA Financial Staffing",
+                      :data => {:caption => '#financeCaption'},
+                      :class => 'hide'
+
+      %span.orbit-caption#firstCaption Professional and Experienced Job Placement Services
+      %span.orbit-caption#healthCaption Job Placement From the CEO to the CNA
+      %span.orbit-caption#interimCaption Fast Solutions for Short-Term Help
+      %span.orbit-caption#consultingCaption Develop Teamwork and Trust with JSA Search
+      %span.orbit-caption#financeCaption Quickly Find Financial Experts
+
+      %h3 We Will Contact You Soon
+
+      %p
+        Our Recruiters will contact you soon to get your process started.
+
+      %p
+        If you have any questions, send us a message or <br>give us a call at 1-866-572-8326
+    .four.columns
+      = render :partial => "shared/employer_nav"

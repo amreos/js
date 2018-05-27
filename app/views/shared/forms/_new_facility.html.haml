@@ -1,0 +1,20 @@
+.fields.facilities
+  = hidden_field_tag "job[facility_tags]"
+  = hidden_field_tag "job[facility_namings]"  
+  .facility
+    = label_tag :facility_tags, "Job's Facility"
+    .item.search
+      = text_field_tag :facility_search, "", |
+                       :class => "long", |
+                       :type => "search", |
+                       "data-client_id" => "#{client}", |
+                       "data-path" => "facilities", |
+                       "placeholder" => "Search for a Facility" |    
+    %p.hint
+      Type the name of the client&#8217;s facility
+
+    .links
+      = link_to_remove_facility
+
+  %p#facility_toggle.hide
+    = link_to "Add a Facility", "", :class => "add_facility button", :title => "Add a Facility"

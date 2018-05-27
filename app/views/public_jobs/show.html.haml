@@ -1,0 +1,56 @@
+- @page_title = "#{@public_job.job_type} Job near #{@public_job.general_area}"
+
+%section.first
+  .row
+    .eight.columns
+      %hgroup.call 
+        %h1
+          = "#{@public_job.job_type}"
+        %h2= "Near #{@public_job.general_area}"
+    .four.columns
+      = render :partial => 'shared/public/social_links'
+
+%section.single_job
+  .row
+    .four.columns.point
+      %p
+        = image_tag "https://maps.google.com/maps/api/staticmap?center=#{@public_job.loc.last},#{@public_job.loc.first}&zoom=7&size=300x269&maptype=roadmap&sensor=false", :alt => "Map of General Area"
+      %p
+        %a{:href => new_job_inquiry_path(@public_job),
+           :class => "button nice radius orange",
+           :title => "Inquire about this job" }
+          Inquire About This Job
+    .eight.columns
+      %section.vcard
+        %h2= "Contact Our Recruiters to Learn More"
+
+        %ul.clearfix          
+          %li{:class => "email"}
+            %span{:class => "work type"} work
+            info@jsasearch.net                    
+          %li{:class => "workl tel"}
+            %span{:class => "work type"} work
+            1-866-572-8326
+          %li{:class => "fax"}
+            %span{:class => "fax type"} fax
+            626 331-6680
+
+        
+      .job_info.blue
+        %h3 Objective
+        = simple_format @public_job.summary
+            
+      - if @public_job.benefits.present?
+        .job_info.blue2
+          %h3 Included Benefits
+          - @public_job.benefits.each do |b|
+            %span.label.radius.blue= b
+
+      - if @public_job.licenses.present?         
+        .job_info.blue3        
+          %h3 Required Licenses
+          - @public_job.licenses.each do |b|
+            %span.label.radius.blue= b
+                  
+      %h3 Description and Qualifications 
+      = simple_format @public_job.description

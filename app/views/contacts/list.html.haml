@@ -1,0 +1,66 @@
+.content-index
+  .managed_by
+    %a.button{:href => new_task_path, :title => "Add a Task", :class => "new_task", "data-remote" => "true"}
+      %span Add a Task      
+
+  %section
+    = link_to "reset", list_contacts_path, :title => "Reset Search Options", :class => "button right active"
+    = link_to "advanced search", "#", :title => "Complete an advanced search for Contacts", :class => "advanced_search button right"    
+    %h1
+      All Contacts
+    
+    .form#advanced_search
+      = form_tag(list_contacts_path, :method => 'get') do
+        = hidden_field_tag :direction, params[:direction]
+        = hidden_field_tag :sort, params[:sort]
+        %fieldset.first
+          .fields
+            = label_tag :name, 'Contact Name'
+            .item
+              = text_field_tag :name
+            %p.hint
+              Search any Contact containing the entered name
+          
+          .fields
+            = label_tag :client_name
+            .item.search
+              = text_field_tag :client_search, "", |
+                               :class => "find_clients long general", |
+                               :type => "search", |
+                               "data-path" => "clients", |
+                               "data-goal" => "client_id", |
+                               "placeholder" => "Search for a Client" |
+
+              = hidden_field_tag :client_id, nil
+              
+          .multiFields
+            .fields.med
+              = label_tag :city
+              .item
+                = text_field_tag :city
+            .fields.short
+              = label_tag :region
+              .item
+                = select_tag :region, options_for_select_with_prompt(DefaultVars::All_US_STATES, "Select a State")              
+
+        .actions
+          = submit_tag "Search", :class => "button", "data-disable-with" => "Searching . . ."
+
+    - if @contacts.present?
+      = form_tag(mass_update_contacts_path, :method => 'put') do
+        %fieldset.mass_tools
+          = link_to "check all", "#", :class => "select_all", :title => "Select all contacts below" 
+          = link_to "check none", "#", :class => "unselect_all", :title => "Deselect all contacts below"
+          .search
+            = text_field_tag :client_name, "", :type => "search", |
+                                           "placeholder" => "Search for a Client", |
+                                           "data-path" => "clients", |
+                                           "data-goal" => "client_id", |
+                                           :class => "general" |
+          = hidden_field_tag :client_id
+          = submit_tag "Update", :class => "button", "data-disable-with" => "Updating . . ."
+          
+        .contact_section    
+          = render :partial => 'shared/index/contact'
+    - else
+      %h2 No Contacts were found. Please try another search.

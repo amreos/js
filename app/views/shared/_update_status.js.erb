@@ -1,0 +1,44 @@
+$(".modal").remove();
+$('#flash').remove();
+$("header#banner").after('<div id="flash"><div id="notice"><%= escape_javascript(flash.discard(:notice)) %></div></div>');
+
+$("#current_status")
+  .removeClass()
+  .addClass("button <%= escape_javascript(f.current_state) %>")
+  .text("<%= escape_javascript(f.current_state.titleize) %>")
+  .effect('highlight',{color: '#FDE00A'},'fast');
+
+$("section.states li a").removeClass("current");  
+$("section.states li a.<%= escape_javascript(f.current_state) %>").addClass("current");
+
+<% if f.class == Job  && (f.state == 6 || f.state == 7) %> 
+if ( $(".applicants").length ) {
+  var applicants = $(".applicants .c");
+  applicants.not(".placed, .not_match, .flagged").
+    attr("class", "c not_match").
+    find("ul.states li a").
+    removeClass("current").
+    filter("a.not_match").
+    addClass("current").
+    end().end().
+    find("span.state").
+    attr("class", "state not_match");
+}
+<% elsif (f.class == Job || f.class == Candidate) && (f.state == 0) %>
+if ( $(".applicants").length ) {
+  var applicants = $(".applicants .c");
+  applicants.not(".placed, .flagged").
+    attr("class", "c not_match").
+    find("ul.states li a").
+    removeClass("current").
+    filter("a.not_match").
+    addClass("current").
+    end().end().
+    find("span.state").
+    attr("class", "state not_match");
+}
+<% end %>
+
+var flashMargin = ($(window).width() - $("#flash").width()) / 2; 
+$("#flash").css({'left' : flashMargin+"px"});
+$("#flash").delay(5000).fadeOut('slow', function() {$(this).remove();});

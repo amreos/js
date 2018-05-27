@@ -1,0 +1,27 @@
+<%= strip_tags(@note.content) %>
+
+Sincerely,
+
+<%= @employee.name %>
+<% if @employee.title.present? %>
+<%= @employee.title %>
+<% end %>
+
+<%= @employee.phones.present? ? @employee.phones.first.formated_phone_number : "866-572-8326" %>
+<%= @from_email %>
+
+<% if @employee.addresses.present? %>
+<%= @employee.addresses.first.line_1 %>
+<% if @employee.addresses.first.line_2.present? %>
+<%= @employee.addresses.first.line_2 %>
+<% end %>
+<% if @employee.addresses.first.line_3.present? %>
+<%= @employee.addresses.first.line_3 %>
+<% end %>
+<%= @employee.addresses.first.city %>, <%= @employee.addresses.first.state %> <%= @employee.addresses.first.zip if @employee.addresses.first.zip.present? %>
+<% end %>
+
+---------------------------------------------------------------------------
+JSA Search, Inc. / 866-572-8326 / jsasearch.net
+23120 Alicia Parkway Suite 110
+Mission Viejo, CA 92692

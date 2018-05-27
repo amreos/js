@@ -1,0 +1,35 @@
+.c
+  .links          
+    = link_to "Edit", edit_candidate_work_history_path(candidate, work_history), :class => "edit", :title => "Edit"
+  %span.check_box
+    = check_box_tag "resume[work_history_ids][]", work_history.id, |
+      resume.should_i_check?(resume.work_history_ids, work_history.id.to_s), |
+      :id => "resume_work_history_ids_#{Time.now}" |
+  %section
+    %hgroup 
+      %h1= work_history.title
+      %h2= work_history.company
+      
+  %section
+    %hgroup
+      %h1 Employment Dates
+
+      %p 
+        %span.tag.inline= "#{work_history.started} to #{work_history.ended}"
+        
+  %section
+    %hgroup
+      %h1 Specialties at Previous Job Location 
+    - if work_history.mix_types.present?          
+      - work_history.special_units.each do |u|
+        %span.tag.inline= u
+    - else
+      N/A        
+
+  %section
+    %hgroup
+      %h1 Accomplishments
+    - if work_history.accomplishments.present?          
+      = simple_format work_history.accomplishments
+    - else
+      N/A  

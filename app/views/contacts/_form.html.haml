@@ -1,0 +1,93 @@
+
+%fieldset.first
+  - new_child_fields_template f, :emails
+  - new_child_fields_template f, :phones
+  - new_child_fields_template f, :addresses
+
+  - if contact.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(contact.errors.count, "error")
+        prohibited this client from being saved:
+
+      %ul
+        - contact.errors.full_messages.each do |msg|
+          %li= msg
+  .fields
+    = f.label :name, add_required_star('Contact Name')
+    .item
+      = f.text_field :name
+    %p.hint
+      A great hint
+  .fields-alt
+    = f.label :title
+    = f.select :title, (DefaultVars::JOB_TITLES|AdminDefault.settings.job_titles).sort, {prompt: 'Select a Title'}, {class: 'chzn'}
+    %p.hint
+      Select an appropiate title.
+      - if @contact.legacy_title.present?
+        = "#{@contact.name}'s imported title is: #{@contact.legacy_title}"
+
+  - unless client.facilities.blank?
+    .fields.tokenSearch
+      = f.label :facility_tokens, "Facilities"
+      .item.token_field
+        - if @facilities.present?
+          = f.text_field :facility_tokens, |
+                         "data-pre" => collection_name_and_id_to_json(@facilities), |
+                         "data-path" => tokens_client_facilities_path(@client) |
+        - else
+          = f.text_field :facility_tokens, "data-pre" => "", "data-path" => tokens_client_facilities_path(@client)
+      %p.hint
+        e.g. Search for facilities
+  .fields
+    = f.label :web_address, "Web Address"
+    .item
+      = f.text_field :web_address
+    %p.hint
+      e.g. http://jsasearch.net or http://www.jsasearch.net
+            
+#accordionForm
+  %h3 
+    %a{:href => "#"}
+      Contact&#8217;s Phone Numbers
+  .ui-accordion-content
+    .additional_fields
+      = f.fields_for :phones do |builder|
+        = render :partial => 'shared/forms/phone', :locals => { :f => builder }
+    
+    %p= add_child_link "Add Phone Number", :phones
+         
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next
+
+  %h3 
+    %a{:href => "#"}
+      Contact&#8217;s Emails
+  .ui-accordion-content
+    .additional_fields
+      = f.fields_for :emails do |builder|
+        = render :partial => 'shared/forms/email', :locals => { :f => builder }
+                
+    %p= add_child_link "Add an Email", :emails
+
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next
+  %h3 
+    %a{:href => "#"}
+      Contact&#8217;s Addresses
+  .ui-accordion-content
+    .additional_fields
+      = f.fields_for :addresses do |builder|
+        = render :partial => 'shared/forms/address', :locals => { :f => builder }
+    
+    %p= add_child_link "Add an Address", :addresses
+    
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next
+    

@@ -1,0 +1,22 @@
+$(".modal").remove();
+$('#flash').remove();
+<% if @employee.present? %>
+$("body").prepend('\
+		<div id="flash"> \
+			<div id="notice"> \
+				<%= escape_javascript(flash.discard(:notice)) %> \
+			</div> \
+		</div>');
+
+$("section.single_bio").
+  html("<%= escape_javascript(render :partial => 'employee', :object => @employee) %>");
+
+$("section.bios").css("position", "absolute").
+  animate({"left":'-1000px',"opacity":"hide"},{queue:true,duration:300});
+$("section.single_bio").
+  animate({"opacity":"show"},{queue:false,duration:400});
+
+var flashMargin = ($(window).width() - $("#flash").width()) / 2;
+$("#flash").css({'left' : flashMargin+"px"});
+$("#flash").delay(5000).fadeOut('slow', function() {$(this).remove();});
+<% end %>

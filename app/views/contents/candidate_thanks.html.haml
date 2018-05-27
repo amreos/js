@@ -1,0 +1,41 @@
+- @page_title = "Thanks for Becoming A Candidate"
+
+%section.first
+  .row
+    .eight.columns
+      %hgroup.call
+        %h1
+          Thank You for Contacting <br>JSA Search, Inc.
+    .four.columns
+      = render :partial => 'shared/public/social_links'
+
+%section.candidates
+  .row
+    .eight.columns
+      .orbit-wrap
+        .featured-points
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/candidates.jpg",
+                      :alt => "JSA for Candidates",
+                      :data => {:caption => '#firstCaption'}
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/career-advice.jpg",
+                      :alt => "Career Advice",
+                      :data => {:caption => '#careerCaption'},
+                      :class => 'hide'
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/resume.jpg",
+                      :alt => "Resume Writing Services",
+                      :data => {:caption => '#resumeCaption'},
+                      :class => 'hide'
+
+      %span.orbit-caption#firstCaption We'll Work Together to Find Your Next Job
+      %span.orbit-caption#careerCaption We Offer Helpful Tips to Make Your Job Search Easier
+      %span.orbit-caption#resumeCaption Let's Make Your Resume Stand-out from the Crowd
+
+      %h3 We Will Contact You Soon
+
+      %p
+        Our Recruiters will contact you soon to get your process started.
+
+      %p
+        If you have any questions, send us a message or <br>give us a call at 1-866-572-8326
+    .four.columns
+      = render :partial => "shared/candidate_nav"

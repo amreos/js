@@ -1,0 +1,32 @@
+.form
+  = form_for(@question, :remote => "true") do |f|
+    = f.hidden_field :employee_id
+    = f.hidden_field :job_id
+    
+    .fields
+      = f.label :inquirer, add_required_star('Your Name')
+      .item
+        = f.text_field :inquirer
+      %p.hint
+
+    .fields
+      = f.label :inquirer_email, add_required_star('Your Email')
+      .item
+        = f.text_field :inquirer_email
+      %p.hint
+        We will not sell or distribute your email.
+        
+    .fields
+      = f.label :subject
+      .item
+        = f.text_field :subject
+      %p.hint        
+        
+    .fields
+      = f.label :content, add_required_star('Your Question')
+      .item
+        = f.text_area :content
+      %p.hint
+
+    .actions
+      = f.submit "Send Your Question", :class => "button", "data-disable-with" => "Sending..."

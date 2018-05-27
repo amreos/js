@@ -1,0 +1,12 @@
+.form
+ 
+  %p.object_links
+    = link_to "Back to Job", job_path(@job), :class => "button"
+  
+  %h1= "Edit Job"
+  
+  = form_for(@job) do |f|
+    = render :partial => 'form', :locals => { :f => f, :job => @job, :facility => @facility, :client => @client }
+  
+    .actions
+      = f.submit "Update job", :class => "button", "data-disable-with" => "Saving . . ."

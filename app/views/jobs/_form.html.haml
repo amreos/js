@@ -1,0 +1,415 @@
+%p
+  The Job Name and Job Number will be auto-generated upon save.
+ 
+%fieldset.first
+
+  - if job.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(job.errors.count, "error")
+        prohibited this job from being saved:
+
+      %ul
+        - job.errors.full_messages.each do |msg|
+          %li= msg
+
+  .fields.client
+    = f.label :client, add_required_star("Job's Client")
+    .item.search
+      = text_field_tag :client_search, "#{job.client_name}", |
+                       :class => "find_clients long", |
+                       :type => "search", |
+                       "data-path" => "clients", |
+                       "placeholder" => "Search for a Client", |
+                       :id => "client_search_for_job" |
+                       
+      = f.hidden_field :client_id
+      = f.hidden_field :client_name
+    %p.hint
+      Type the name of the client and select the appropriate one
+  
+
+  - if controller.action_name == "edit" && client.facilities.present?
+    .fields.facilities
+      = f.hidden_field :facility_tags, :value => job.facility_tags
+      = f.hidden_field :facility_namings, :value => job.facility_namings
+      = render :partial => 'shared/forms/facility', :locals => { :f => f, :job => job }
+      
+  .fields-alt
+    = f.label :job_type, add_required_star('Job Type')
+    = f.select :job_type,
+               (DefaultVars::JOB_TITLES|AdminDefault.settings.job_titles).sort,
+               {}, {:class => 'chzn'}
+    %p.hint
+      Select the appropriate type of job
+
+  .fields-alt
+    = f.label :industry, add_required_star('Job Industry')
+    = f.select :industry, DefaultVars::JSA_INDUSTRIES, {}, :class => 'chzn'
+    %p.hint
+      Select the appropriate industry
+
+  .fields-alt
+    = f.label :jsa_division, add_required_star('JSA Division')    
+    = f.select :jsa_division, DefaultVars::JSA_DIVISIONS, {}, :class => 'chzn'
+    %p.hint
+      Select the appropriate division      
+
+  .fields-alt
+    = f.label :source, "Referral Source"    
+    = f.select :source,
+               DefaultVars::JOB_SOURCES|AdminDefault.settings.job_sources,
+               {:prompt => h("Select a Source")},
+               {:class => 'chzn'}
+      
+  - if admin? || controller.action_name == "new"  
+    .fields-alt
+      = f.label :employee_id, "JSA Employee"
+      = f.collection_select :employee_id,
+                            Employee.desc(:name),
+                            :id,
+                            :name,
+                            {:prompt => h("Select a JSA Employee")},
+                            {:class => "chzn"}
+
+  - if admin?
+    .fields
+      = f.label :job_number
+      .item
+        = f.text_field :job_number
+      %p.hint
+        Leave blank when entering a New Job | Only Enter for Legacy Jobs      
+                  
+#accordionForm
+  %h3 
+    %a{:href => "#"}
+      Job Options
+  .ui-accordion-content
+    
+    .left_boxes  
+      - if admin?
+        .fields.bool
+          .item
+            = f.check_box :featured
+          = f.label :featured, "Mark as Featured"
+          %p.hint
+            Marking as featured will display the job publicly.
+      
+      .fields.bool
+        .item
+          = f.check_box :confidential
+        = f.label :confidential, "Mark as Confidential"
+        %p.hint
+          Mark as confidential to make sure mum&#8217;s the word.
+        
+      .fields.bool
+        .item
+          = f.check_box :screening_form
+        = f.label :screening_form, "Additional Screening Needed?"
+        
+      .fields.bool
+        .item
+          = f.check_box :drug_test
+        = f.label :drug_test, "Drug Test Needed?"
+                        
+    .left_boxes
+      .fields.bool
+        .item
+          = f.check_box :assessment
+        = f.label :assessment, "Additional Assessment Needed?"
+        
+      .fields.bool
+        .item
+          = f.check_box :background_check
+        = f.label :background_check, "Background Check Needed?"
+      
+      .fields.bool
+        .item
+          = f.check_box :pay_relocation
+        = f.label :pay_relocation, "Client Will Pay Relocation?"
+      
+      .fields.bool
+        .item
+          = f.check_box :jcaho_accredited
+        = f.label :jcaho_accredited, "JCAHO Accredited?"
+                
+      .fields.bool
+        .item
+          = f.check_box :union_building
+        = f.label :union_building, "Is the Job at a Union Building?"
+    .clear
+        
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next
+
+  %h3#job-info 
+    %a{:href => "#"}
+      Job Info
+  .ui-accordion-content
+  
+    .fields
+      = f.label :chronic_opened_on, "Opened On"  
+      .item
+        = f.text_field :chronic_opened_on, :class => "openedDate", :value => text_field_date_format(f.object.opened_on)
+      %p.hint
+        The day the search was started
+        
+    .fields
+      = f.label :chronic_interview_by, "Plan to Interview By"  
+      .item
+        = f.text_field :chronic_interview_by, :class => "interviewDate", :value => text_field_date_format(f.object.interview_by)
+      %p.hint
+        The day to interview by
+        
+    .fields
+      = f.label :chronic_starts_on, "Job Starts On"  
+      .item
+        = f.text_field :chronic_starts_on, :class => "startDate", :value => text_field_date_format(f.object.starts_on)
+      %p.hint
+        The day the job should begin
+
+    .fields
+      = f.label :hire_decision, "Who will Make the Hiring Decision?"  
+      .item
+        = f.text_field :hire_decision        
+        
+    .fields
+      = f.label :hire_type, "Type of Hire"
+      .item
+        = f.select :hire_type, DefaultVars::JOB_HIRE_TYPES, {:class => '', :prompt => h("Select a Hire Type")}
+    
+    .fields
+      = f.label :wage_type, "Type of Wage"
+      .item
+        = f.select :wage_type, DefaultVars::JOB_WAGE_TYPES, {:class => "type", :prompt => h("Select a Wage Type")}
+    
+    .multiFields    
+      .fields.short
+        = f.label :previous_wage, "Previous Wage"
+        .item
+          = f.text_field :previous_wage
+        %p.hint
+          e.g. use 15.50 for $15.50              
+      .fields.short
+        = f.label :minimum_wage, "Minimum Wage"
+        .item
+          = f.text_field :minimum_wage
+        %p.hint
+          e.g. use 15.50 for $15.50
+      .fields.short
+        = f.label :maximum_wage, "Maximum Wage"
+        .item
+          = f.text_field :maximum_wage
+        %p.hint
+          e.g. use 15.50 for $15.50
+    .multiFields    
+      .fields.short
+        = f.label :bonus, "Bonus Wage"
+        .item
+          = f.text_field :bonus
+        %p.hint
+          e.g. use 15.50 for $15.50              
+      .fields
+        = f.label :bonus_type, "Type of Bonus"
+        .item
+          = f.select :bonus_type, DefaultVars::JOB_BONUS_TYPES, {:class => "type", :prompt => h("Select a Bonus Type")}
+    
+    .fields.bool
+      = f.label :benefits, "Included Benefits"
+      %p 
+        - DefaultVars::JOB_BENEFIT_TYPES.each do |b|
+          %span
+            = check_box_tag "job[benefits][]", b, job.should_i_check?(job.benefits, b)
+            = b
+      %p.hint
+        check all that apply          
+          
+    .fields.long
+      = f.label :benefit_options, "Benefit Options"
+      .item
+        = f.text_area :benefit_options
+        %span.charactersLeft 1000
+        
+    .fields.bool
+      = f.label :licenses, "Required Licenses"
+      %p 
+        - DefaultVars::JOB_LICENSES.each do |l|
+          %span
+            = check_box_tag "job[licenses][]", l, job.should_i_check?(job.licenses, l)
+            = l  
+      %p.hint
+        check all that apply          
+
+    .fields.long
+      = f.label :license_info, "Additional Required License Info"
+      .item
+        = f.text_area :license_info
+        %span.charactersLeft 1000        
+    
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next
+
+  %h3 
+    %a{:href => "#"}
+      Site Info
+  .ui-accordion-content
+    .fields
+      = f.label :chronic_last_survey_on, "Last Survey On"  
+      .item
+        = f.text_field :chronic_last_survey_on, :class => "surveyDate"
+      %p.hint
+        The day of the last survey
+  
+    .fields.long
+      = f.label :survey_results, "Results of Last Survey"
+      .item
+        = f.text_area :survey_results
+        %span.charactersLeft 1000        
+      
+    .fields.long
+      = f.label :building_problems, "Any Rumors or Building Problems?"
+      .item      
+        = f.text_area :building_problems
+        %span.charactersLeft 1000
+    
+    .multiFields  
+      .fields.short
+        = f.label :num_beds, "# of Beds"
+        .item
+          = f.text_field :num_beds
+        %p.hint
+          e.g. 58
+      .fields.short
+        = f.label :current_census, "Current Census"
+        .item
+          = f.text_field :current_census
+        %p.hint
+          e.g. 20          
+      .fields.short
+        = f.label :subordinates, "# of Subordinates"
+        .item
+          = f.text_field :subordinates
+        %p.hint
+          e.g. 6 or leave blank if none
+          
+    .fields.bool
+      = f.label :special_units, "Facility Services"
+      %p 
+        - DefaultVars::JOB_SPECIAL_UNITS.each do |u|
+          %span
+            = check_box_tag "job[special_units][]", u, job.should_i_check?(job.special_units, u)
+            = u            
+      %p.hint
+        check all that apply          
+        
+    .fields.bool
+      = f.label :mix_types, "Mix Types"
+      %p 
+        - DefaultVars::JOB_MIX_TYPES.each do |m|
+          %span
+            = check_box_tag "job[mix_types][]", m, job.should_i_check?(job.mix_types, m)
+            = m
+      %p.hint
+        check all that apply
+
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next
+        
+  %h3 
+    %a{:href => "#"}
+      Selling Points
+  .ui-accordion-content
+    .fields.long
+      = f.label :general_area, "The General Area of the Job"
+      .item
+        = f.text_field :general_area
+      %p.hint
+        e.g. Southern California or Greater LA Area        
+
+    .fields.long
+      = f.label :summary, "Job Summary"
+      .item
+        = f.text_area :summary
+        %span.charactersLeft 160
+      %p.hint
+        Write something catchy - Will display publicly if the job is featured
+
+    
+    .fields.long
+      = f.label :description, "Job Description"
+      .item
+        = f.text_area :description
+        %span.charactersLeft 820
+      %p.hint
+        Will display publicly if the job is featured        
+  
+    .fields.long
+      = f.label :history, "Did Anything Happen with the Previous Employee?"
+      .item
+        = f.text_area :history
+        %span.charactersLeft 1000
+      
+    .fields.long
+      = f.label :challenges, "Are There Any Challenges with This Position?"
+      .item
+        = f.text_area :challenges
+        %span.charactersLeft 1000
+        
+    .fields.long
+      = f.label :attractions, "Are There Any Attractions with This Position or Facility?"
+      .item
+        = f.text_area :attractions
+        %span.charactersLeft 1000        
+      
+    .fields.long
+      = f.label :perfect_candidate, "Describe Your Perfect Candidate."
+      .item
+        = f.text_area :perfect_candidate
+        %span.charactersLeft 1000
+      
+    .fields.long
+      = f.label :interview_process, "What is the Client&#8217;s Your Hiring Process?".html_safe
+      .item
+        = f.text_area :interview_process
+        %span.charactersLeft 1000
+
+    .fields.long
+      = f.label :people_interviewed, "List Any People Who Have Been Interviewed."
+      .item
+        = f.text_area :people_interviewed
+        %span.charactersLeft 1000
+      
+    .fields.long
+      = f.label :current_progress, "Where Are These People in the Hiring Process."
+      .item
+        = f.text_area :current_progress
+        %span.charactersLeft 1000
+      
+    .fields.bool
+      = f.label :pending_offers, "Are There Any Pending Offers?"
+      .item
+        = f.check_box :pending_offers
+      
+    .fields.long.hide
+      = f.label :offers_sent_to, "Who Have Offers Been Sent To?"
+      .item
+        = f.text_area :offers_sent_to
+        %span.charactersLeft 1000
+      
+    .fields.long
+      = f.label :comments, "Other Comments"
+      .item
+        = f.text_area :comments
+        %span.charactersLeft 1000 
+    
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next
+    

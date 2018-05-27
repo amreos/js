@@ -1,0 +1,10 @@
+$(".endlessItems")
+  .append("<%= j(render :partial => 'public_jobs/public_job', :collection => @public_jobs) %>");
+
+ <% if @public_jobs.current_page.to_i < @public_jobs.num_pages.to_i %>
+  $('.endlessLoad .pagination').replaceWith('<%= j paginate(@public_jobs) %>');
+<% else %>
+  $('.endlessLoad').remove();
+<% end %>
+
+$('#flash').remove();

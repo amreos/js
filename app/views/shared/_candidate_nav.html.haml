@@ -1,0 +1,34 @@
+%nav{:class => "#{controller.action_name} sub"}
+  %ul
+    %li
+      %a{:href => career_advice_path, :class => "advice", :title => "Career Advice for Candidates by JSA Search"}
+        Career Advice
+        %em.hide-on-phones
+          Helpful Tips to Keep Moving Forward
+    %li
+      %a{:href => resume_writing_services_path, :class => "resume_services", :title => "Helpful Resume Services by JSA Search"}
+        Submit Your Resume
+        %em.hide-on-phones
+          Make Your Resume Communicate You
+    %li
+      %a{:href => new_question_path, :class => "question", :title => "Ask JSA Search a question", "data-remote" => "true"}
+        Have a Question?
+        %em.hide-on-phones
+          Get a Quick Answer
+
+.panel
+  %h5 Join Our Email List
+  %p Recieve News and Job Updates
+  %form#subForm.nice.form.f2{:action => "https://jsasearch.createsend.com/t/j/s/jliyg/", :method => "post"}
+    %p
+      %label{:for => "name"} Name:
+      %input#name.input-text{:name => "cm-name", :type => "text"}
+    %p
+      %label{:for => "jliyg-jliyg"} Email:
+      %input#jliyg-jliyg.input-text{:name => "cm-jliyg-jliyg", :type => "text"}
+    %p
+      %label{:for => "Clients"}
+        %input#Clients{:name => "cm-ol-jltilu", :type => "checkbox"}
+        Join Our Employer List as well
+    %p
+      %input.button.green.small{:type => "submit", :value => "Subscribe"}

@@ -1,0 +1,18 @@
+$(".modal").remove();
+$('#flash').remove();
+$("header#banner").after('<div id="flash"><div id="notice"><%= j(flash.discard(:notice)) %></div></div>');
+
+<% if (@task.due_at < Time.now.end_of_day)  %>
+var count_text = parseInt($(".task_counter").text());
+var new_count = count_text - 1;
+if ( new_count == 0 ) {
+	$(".task_counter").addClass("hide");	
+} else {
+	$(".task_counter").text(new_count);
+}
+$(".task_counter, .tasks_due").text(new_count);
+<% end %>
+
+var flashMargin = ($(window).width() - $("#flash").width()) / 2; 
+$("#flash").css({'left' : flashMargin+"px"});
+$("#flash").delay(5000).fadeOut('slow', function() {$(this).remove();});

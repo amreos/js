@@ -1,0 +1,44 @@
+.form
+  = form_for(@note, :url => quick_messages_path, :remote => "true", :html => {:class => "popup_form new_note with_email_attachment"}) do |f|
+    = hidden_field_tag :recipient_email, params[:recipient_email]
+    = hidden_field_tag :recipient,       params[:recipient]
+    = hidden_field_tag :recipient_type,  params[:recipient_type]
+    = f.hidden_field :email_attachment_id, :value => '', :class => "attachable_id"
+    = f.hidden_field :author, :value => current_user.name
+    .fields
+      %strong
+        To:
+      = "#{@recipient_email.address}"
+
+    .fields
+      = f.label :subject, "Subject"
+      .item
+        = f.text_field :subject, :autocomplete => "off"
+
+    .fields
+      = f.label :bcc_email, "BCC Email"
+      .item
+        = f.text_field :bcc_email, :placeholder => "ie info@jsasearch.net", :autocomplete => "off"
+      %p.hint
+        Optional BCC Email
+
+    .fields
+      .item
+        = f.text_area :content, :class => "note_content", :placeholder => "Add a Note..."
+
+    .fields
+      .item
+        = image_tag 'loading.gif', :alt => "Loading", :class => 'left hide rMargin loading-pic'
+        #add-email-attachment
+          %input#fileupload{:type => "file", :name => "files[]", :data => {:url => "/manage/email_attachments"}}
+      %p.hint
+        Please choose a word doc, pdf, pages, png, jpg, or jpeg under 5mbs
+
+
+    .actions
+      = f.submit "Send Message", :class => 'button', "data-disable-with" => "Sending . . ."
+
+:javascript
+  $(function() {
+    new EmailAttachmentUploader;
+  });

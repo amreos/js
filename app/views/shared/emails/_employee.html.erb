@@ -1,0 +1,39 @@
+<table width="500px" border="0" cellspacing="0" cellpadding="0" style="background-color:#ffffff; border-top:5px solid #ffffff;" >
+  <tr>
+    <td valign="center" style="width:75px;">      
+      <%= image_tag(employee.avatar.image_path_with_ssl, :alt => employee.name, :width => "75", :height => "75", :style => "border-bottom: 3px solid #921920;") %>
+    </td>
+    <td valign="center" style="padding-left:20px;padding-right:9px;width:196px;">
+      <p style="margin-bottom:0px;color: #003946;font-family: Georgia, Cambria, 'Times New Roman', Times, serif;font-size:13px;text-align: left;line-height: 1.5;">
+        <strong><%= employee.name %></strong>
+        <% if employee.title.present? %>
+        <br/><%= employee.title %>
+        <% end %>
+      </p>
+    </td>
+    <td valign="center" style="border-left: 1px solid #999999;padding-left:9px;width:189px;">
+      <p style="color: #003946;font-family: Georgia, Cambria, 'Times New Roman', Times, serif;font-size:13px;text-align: left;line-height: 1.5;margin-bottom:20px;">
+        <% if employee.phones.present?  %>
+        <%= employee.phones.first.formated_phone_number %><br/>
+        <% else %>
+        866-572-8326<br/>
+        <% end %>
+        <%= @from_email %>
+      </p>
+      <p style="margin-bottom:0px;color: #003946;font-family: Georgia, Cambria, 'Times New Roman', Times, serif;font-size:13px;text-align: left;line-height: 1.5;">
+        <% if employee.addresses.present? %>
+        <%= employee.addresses.first.line_1 %><br/>
+        <% if employee.addresses.first.line_2.present? %>
+        <%= employee.addresses.first.line_2 %><br/>
+        <% end %>
+        <% if employee.addresses.first.line_3.present? %>
+        <%= employee.addresses.first.line_3 %><br/> 
+        <% end %>
+        <%= employee.addresses.first.city %>, <%= employee.addresses.first.state %> <%= employee.addresses.first.zip if employee.addresses.first.zip.present? %>
+        <% end %>
+      </p>      
+    </td>
+  </tr>
+</table>
+
+

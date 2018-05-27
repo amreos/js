@@ -1,0 +1,12 @@
+.form
+ 
+  %p.object_links
+    = link_to "Back to #{@candidate.name}", candidate_path(@candidate), :class => "button"
+  
+  %h1= "Edit Resume"
+  
+  = form_for([@candidate, @resume]) do |f|
+    = render :partial => 'form', :locals => { :f => f, :resume => @resume }
+  
+    .actions
+      = f.submit "Update Resume", :class => "button", "data-disable-with" => "Saving . . ."

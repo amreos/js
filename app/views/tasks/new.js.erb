@@ -1,0 +1,15 @@
+$(".modal").
+	append("<%= j render(:partial => 'form', :target => @task) %>").
+	addClass("closeAfterSuccess");
+
+$("#flash").remove();
+
+$(".taskDate").datepicker({defaultDate: '+1d', dateFormat: "MM dd, yy"});
+
+$(".modal").dialog({
+ width: 600,
+ title: "<%= controller.action_name.titleize %> Task",
+ position: ['center',50]
+});
+
+$("a").blur();

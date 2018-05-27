@@ -1,0 +1,56 @@
+var parent = $(".c[data-id='<%= escape_javascript(@applicant.id.to_s) %>']");
+var current_state = "<%= escape_javascript(@applicant.current_state) %>";
+var state = <%= @applicant.state %>;
+var old_state = <%= @applicant.previous_state %>;
+
+$(".modal").remove();
+$('#flash').remove();
+$("header#banner").after('<div id="flash"><div id="notice"><%= escape_javascript(flash.discard(:notice)) %></div></div>');
+
+parent.
+  removeClass().
+  addClass(current_state + " c").
+  effect('highlight',{color: '#FDE00A'},'fast');
+
+parent.find("ul.states li a").removeClass("current");  
+parent.find(".states li a."+current_state).addClass("current");
+parent.find("span.state").
+  removeClass().
+  addClass("state "+current_state).
+  text(current_state).
+  attr('title', current_state);
+
+if ( <%= @applicant.state %> === 8) {
+  $("#current_status").
+    removeClass().
+    addClass("button placed").
+    text("Placed").
+    effect('highlight',{color: '#FDE00A'},'fast');
+  $("section.states li a").removeClass("current");  
+  $("section.states li a.placed").addClass("current");
+  
+  if ( $(".candidates").length ) {
+    parent.siblings(".c").
+      attr("class", "c on_hold").
+      find("ul.states li a").
+      removeClass("current").
+      filter("a.on_hold").
+      addClass("current").
+      end().end().
+      find("span.state").
+      attr("class", "state on_hold");
+  }  
+  
+} else if ( <%= @applicant.previous_state %> === 8) {
+  $("#current_status").
+    removeClass().
+    addClass("button searching").
+    text("Searching").
+    effect('highlight',{color: '#FDE00A'},'fast');
+  $(".top section.states li a").removeClass("current");  
+  $(".top section.states li a.searching").addClass("current");
+}
+
+var flashMargin = ($(window).width() - $("#flash").width()) / 2; 
+$("#flash").css({'left' : flashMargin+"px"});
+$("#flash").delay(5000).fadeOut('slow', function() {$(this).remove();});

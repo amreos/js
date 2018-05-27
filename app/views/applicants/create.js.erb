@@ -1,0 +1,20 @@
+$('#flash').remove();
+$("body").append('<div id="flash"><div id="notice"><%= escape_javascript(flash.discard(:notice)) %></div></div>');
+
+$(".panel.applicants section.list").prepend('<%= escape_javascript(render :partial => "shared/panels/applicant", :object => @applicant, :locals => {:parent => @parent}) %>');
+
+var count_holder = $(".panel.applicants .counter");
+var new_count = parseInt(count_holder.text()) + 1;
+var cache_plural = count_holder.siblings(".cache_type");
+
+if ( new_count === 1 ) {  
+  cache_plural.text(cache_plural.data("singular"));
+} else {
+  cache_plural.text(cache_plural.data("plural"));
+}
+
+count_holder.text(new_count);
+
+var flashMargin = ($(window).width() - $("#flash").width()) / 2; 
+$("#flash").css({'left' : flashMargin+"px"});
+$("#flash").delay(5000).fadeOut('slow', function() {$(this).remove();});

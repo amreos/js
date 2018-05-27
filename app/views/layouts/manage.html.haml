@@ -1,0 +1,115 @@
+!!! 5
+%html{:lang => "en", :class => "manage"}
+  %head
+    %meta{:charset => "UTF-8"}
+    %title JSA Search
+    <!--[if lt IE 9]>
+    <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="https://use.typekit.com/tql8nur.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    
+    %link{:rel => "stylesheet", :href => "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css"}
+    = stylesheet_link_tag 'manage'                        
+    = javascript_include_tag "manage"    
+    = csrf_meta_tag
+  %body{:id => "#{controller.controller_name}", :class => "#{controller.action_name}"}
+    %div{:class => "wrapper"}
+      %header{:id => "banner"}
+        .container
+          %div{:id => "user_info"}
+            %span.user_links
+              - if user_signed_in?
+                = link_to "Your Account", edit_user_path(current_user), :title => "Edit Your Account"
+                \/
+                = link_to "Sign Out", destroy_user_session_path, :title => "Sign Out"
+              - else
+                = link_to "Sign In", new_user_session_path, :title => "Sign in"
+        
+          %nav{:class => "main clearfix"}            
+            %ul
+              %li= link_to "JSA", root_path, :title => "JSA Search home", :id => "jsa"
+
+              %li
+                = list_todays_tasks(current_user)
+                = link_to drop_down_parent("Dashboard"),
+                          manage_dashboard_path,
+                          :title => "View Your Dashboard",
+                          :class => "dashboard"
+                %ul
+                  %li
+                    = link_to "Tasks - #{total_tasks_due(current_user)} due".html_safe,
+                              tasks_path,
+                              :title => "View Your Tasks",
+                              :class => "Dashboard"
+              - if admin?              
+                %li
+                  = link_to drop_down_parent("Clients"),
+                            clients_path,
+                            :title => "View Your Clients",
+                            :class => "clients"                
+                  %ul
+                    %li= link_to "Contacts", list_contacts_path, :title => "View Your Contacts", :class => "clients"
+                    %li= link_to "Facilities", list_facilities_path, :title => "View Your Clients", :class => "clients"                    
+              - else
+                %li
+                  = link_to "Clients",
+                            clients_path,
+                            :title => "View Your Clients",
+                            :class => "clients"
+              %li= link_to "Jobs", jobs_path, :title => "View Your Jobs", :class => "jobs"
+              %li
+                = link_to "Candidates", candidates_path,
+                          :title => "View all Candidates",
+                          :class => "candidates"                        
+                %li
+                  = link_to drop_down_parent("Employees"),
+                            employees_path,
+                            :title => "View all Employees",
+                            :class => "employees"
+                  %ul
+                    %li= link_to "Downloads", doc_templates_path,
+                                :title => "View Avaialble Templates",
+                                :class => "downloads"
+                    %li
+                      %a{:href => new_direct_message_path,
+                         :title => "Send a Direct Message",
+                         "data-remote" => "true"}
+                        %span Send an Email                      
+                    - if admin?
+                      %li
+                        = link_to "Activity", activities_path,
+                                  :title => "View Recent Activity",
+                                  :class => "activities"
+                      %li
+                        = link_to "System Defaults", admin_defaults_path,
+                                  :title => "Edit Job Titles and Sources",
+                                  :class => "settings"                                            
+          #action-bar
+            %span#new-shortcut
+              %em.add
+                Add a&#8230;
+            %ul
+              %li{"data-url" => "#{new_job_path}", :title => "Add a Job"}
+                Job
+              %li{"data-url" => "#{new_candidate_path}", :title => "Add a Candidate"}
+                Candidate
+              %li{"data-url" => "#{new_client_path}", :title => "Add a Client"}
+                Client
+
+            .megaSearch
+              = text_field_tag :megaTerm, "", |
+                               :id => "quickSearch", |
+                               "data-path" => all_autocomplete_index_path, |
+                               :title => "Search for a Job, Client, Candidate, Contact, Facility, or Employee" |
+      - if flash.present?
+        #flash
+          - flash.each do |type, msg|
+            %div{:id => "#{type}"}
+              = msg
+    %div{:class => "wrapper odd"}              
+      #content.manage.clearfix  
+        = yield
+            
+      #jstemplates
+        = yield :jstemplates

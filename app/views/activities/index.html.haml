@@ -1,0 +1,27 @@
+.content-index
+	.managed_by
+		%a.button{:href => new_task_path, :title => "Add a Task", :class => "new_task", "data-remote" => "true"}
+			%span Add a Task			
+	%section.endlessItems
+
+		= link_to "reset", activities_path, :title => "Reset Search Options", :class => "button right active"
+		= link_to "advanced search", "#", :title => "Complete an advanced search for Clients", :class => "advanced_search button right"    
+		%h1
+			Recent Activity
+
+		.form#advanced_search
+			= form_tag(activities_path, :method => 'get') do
+				%fieldset.first
+					.fields-alt	
+						= label_tag :author_id, 'Employee'            
+						= select_tag :author_id, options_from_collection_for_select(Employee.all, :id, :name), :prompt => h("Select an Employee"), :class => "chzn"
+					.actions
+						= link_to "reset", activities_path, :title => "Reset Search Options", :class => "button right active"        
+						= submit_tag "Search", :class => "button", "data-disable-with" => "Searching . . ."
+
+		- if @activities.present?
+			= render :partial => 'shared/panels/activity', :collection => @activities
+		- else
+			%h2 There is no Activity logged
+	%section.endlessLoad
+		= paginate @activities

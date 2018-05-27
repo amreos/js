@@ -1,0 +1,5 @@
+%p.auth_s3_url
+ = link_to "Download file", attachment.misc_file.url, :title => "Your download link will expire in 5 Days", :target => "_blank"
+ %small
+  This link expires <br>
+  = 5.days.from_now.strftime("%m/%d/%y at %I:%M %p")   

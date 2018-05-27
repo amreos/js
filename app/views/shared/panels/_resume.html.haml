@@ -1,0 +1,26 @@
+.c{"data-id" => resume.id}
+  .links          
+    = link_to "Edit", edit_candidate_resume_path(candidate, resume), :class => "edit", :title => "Edit"
+    = link_to "Delete", candidate_resume_path(candidate, resume), :title => "Delete", |
+                        :class => "delete", |
+                        "data-method" => 'delete',  |
+                        "data-confirm" => "Are you Sure?", |
+                        "data-remote" => "true" |
+  %hgroup
+    %h1
+      = link_to resume.name, candidate_resume_path(candidate, resume), |
+        :title => "View more info for #{resume.name}"
+    %h2= truncate resume.objective
+  
+  - unless resume.generated_pdf.blank? || resume.currently_rendering?  
+    %p 
+      = link_to "Share PDF", |
+                new_share_file_path(:parent_id => candidate.id, |
+                                    :parent_type => candidate.class.name, |
+                                    :shared_file_type => resume.class.name, |
+                                    :shared_file_id => resume.id ), |
+                                    :title => "Share #{resume.name}", :class => "button small ", "data-remote" => "true" |                                  
+  - else
+    %p 
+      = link_to "Generate Resume", candidate_resume_path(candidate, resume), :class => "edit", :title => "Edit"                                  
+    

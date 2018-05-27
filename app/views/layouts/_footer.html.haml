@@ -1,0 +1,42 @@
+- unless controller.controller_name == "sessions"
+  .container#mobile-nav-bottom
+    .row
+      .twelve.columns.footerWrapper
+        .row
+          .four.columns
+            %h2 JSA Search Inc.
+            %nav
+              %ul.block-grid.two-up
+                %li= link_to "Back to Top", "#mobile-nav-top", :title => "Back to Top", :class => 'show-on-phones'
+                %li= link_to "Home", root_path, :title => "JSA Search Home"
+                %li= link_to "Employers", employers_path, :title => "JSA Search for Employers"
+                %li= link_to "Candidates", about_candidates_path, :title => "JSA Search for Candidates"
+                %li= link_to "Jobs", public_jobs_path, :title => "Open Jobs via JSA Search"
+                %li= link_to "About", about_path, :title => "About JSA Search"
+                %li= link_to "Exec. Bios", bios_path, :title => "JSA Search Bios"
+                %li= link_to "Contact", contact_path, :title => "Contact JSA Search", :class => "contact"
+                %li= link_to "Newsletters", newsletters_path, :title => "Recent JSA Search Newsletters", :class => "newsletterIndex"
+                %li= link_to "Dashboard", manage_dashboard_path, :title => "Visit Your Dashboard", :class => "dashboard"
+          - if employee?
+            .four.columns
+              %h2 Admin
+              %nav
+                %ul.block-grid.two-up
+                  %li= link_to "Clients", clients_path, :title => "JSA Search Clients"
+                  %li= link_to "Candidates", candidates_path, :title => "JSA Search Candidates"
+                  %li= link_to "Jobs", jobs_path, :title => "JSA Search Jobs Index"
+                  %li= link_to "Dashboard", manage_dashboard_path, :title => "Your Dashboard"
+                  %li= link_to "Employees", employees_path, :title => "JSA Search Employees"
+
+          .four.columns
+            %p
+              = "Content &#169; #{Time.now.year} JSA Search, Inc.".html_safe
+              %br
+              27742 Vista Del Lago
+              %br
+              Suite J1
+              %br
+              Mission Viejo, CA 92692
+            %p
+              Design &amp; Development by
+              %a{:href => "http://rwldesign.com", :title => "RWL Design makes your business brilliant"} rwl design

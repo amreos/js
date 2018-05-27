@@ -1,0 +1,43 @@
+.c{"data-id" => task.id, :class => add_task_class(task)}
+  %hgroup
+    %h1
+      = task.employee.name if controller.controller_name != 'tasks'
+      %span.purpose= task.purpose
+    %h2
+      - if task.completed?
+        %strong      
+          Completed:
+        %span.due_at= l(task.updated_at.in_time_zone(current_time_zone), :format => :note_archive).downcase
+      - else
+        %strong Due:  
+        %span.due_at= l(task.due_at.in_time_zone(current_time_zone), :format => :note_archive).downcase
+  %p
+    - if task.goal_link.present? && !current_page?(task.goal_link)
+      = link_to "View Info",
+                task.goal_link,
+                :title => "View Info for this task",
+                :class => "button small rMargin"
+    - if !task.completed? && task.employee == current_user
+      = link_to "Complete",
+                finish_task_path(task),
+                :title => "Mark as Completed",
+                :class => "finish button green small",
+                :method => 'put',
+                :data => {:remote => 'true'}
+
+  - if admin? || ( task.employee == current_user )
+    .links
+      - if !task.completed? && task.employee == current_user
+        = link_to "Edit Task",
+                  edit_task_path(task),
+                  :title => "Edit Task",
+                  :class => "edit",              
+                  :data => {:remote => 'true'}
+      
+      - if admin? || ( task.employee == current_user )
+        = link_to "Delete Task",
+                  task_path(task),
+                  :title => "Delete Task",
+                  :class => "delete",
+                  :method => :delete,
+                  :data => {:remote => 'true'}

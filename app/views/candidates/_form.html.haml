@@ -1,0 +1,292 @@
+%fieldset.first
+  - new_child_fields_template f, :emails
+  - new_child_fields_template f, :phones
+  - new_child_fields_template f, :addresses
+
+  - if candidate.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(candidate.errors.count, "error")
+        prohibited this candidate from being saved:
+
+      %ul
+        - candidate.errors.full_messages.each do |msg|
+          %li= msg
+
+  .fields
+    = f.label :name, add_required_star('Candidate Name')
+    .item
+      = f.text_field :name
+    %p.hint
+      Does not have to be unique
+
+  .fields-alt
+    = f.label :title
+    = f.select :title,
+               (DefaultVars::JOB_TITLES|AdminDefault.settings.job_titles).sort,
+               {:prompt => h("Select a Title")},
+               {:class => 'chzn'}
+    %p.hint
+      Select the most appropriate job title
+
+  .fields
+    = f.label :company, "Current Company"
+    .item
+      = f.text_field :company
+    %p.hint
+
+  .fields.bool
+    = f.label :special_units, "Candidate Specialties"
+    %p
+      - DefaultVars::JOB_SPECIAL_UNITS.each do |u|
+        %span
+          = check_box_tag "candidate[specialties][]", u, candidate.should_i_check?(candidate.specialties, u)
+          = u
+    %p.hint
+      check all that apply
+
+  .fields
+    = f.label :web_address, "Web Address"
+    .item
+      = f.text_field :web_address
+    %p.hint
+      e.g. http://jsasearch.net or http://www.jsasearch.net
+
+  .fields-alt
+    = f.label :source, "Referral Source"
+    = f.select :source, DefaultVars::JOB_SOURCES|AdminDefault.settings.job_sources, {:prompt => h("Select a Source")}, {:class => 'chzn', }
+
+  - if admin? || controller.action_name == "new"
+    .fields-alt
+      = f.label :employee_id, "JSA Employee"
+      = f.collection_select :employee_id, Employee.desc(:name),
+                            :id,
+                            :name,
+                            {:prompt => h("Select a JSA Employee")},
+                            {:class => 'chzn'}
+
+#accordionForm
+  %h3
+    %a{:href => "#"}
+      Candidate&#8217;s Phone Numbers
+  .ui-accordion-content
+    .additional_fields
+      = f.fields_for :phones do |builder|
+        = render :partial => 'shared/forms/phone', :locals => { :f => builder }
+
+    %p= add_child_link "Add Phone Number", :phones
+
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next
+
+  %h3
+    %a{:href => "#"}
+      Candidate&#8217;s Emails
+  .ui-accordion-content
+    .additional_fields
+      = f.fields_for :emails do |builder|
+        = render :partial => 'shared/forms/email', :locals => { :f => builder }
+
+    %p= add_child_link "Add an Email", :emails
+
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next
+  %h3
+    %a{:href => "#"}
+      Candidate&#8217;s Addresses
+  .ui-accordion-content
+    .additional_fields
+      = f.fields_for :addresses do |builder|
+        = render :partial => 'shared/forms/address', :locals => { :f => builder }
+
+    %p= add_child_link "Add an Address", :addresses
+
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next
+
+  %h3
+    %a{:href => "#"}
+      Candidate&#8217;s History
+  .ui-accordion-content
+    .multiFields
+      .fields.short
+        = f.label :previous_wage, "Previous Wage"
+        .item
+          = f.text_field :previous_wage
+        %p.hint
+          e.g. use 15.50 for $15.50
+      .fields.wages
+        = f.label :wage_type, "Type of Wage"
+        .item
+          = f.select :wage_type, DefaultVars::JOB_WAGE_TYPES, {:class => "type", :prompt => h("Select a Wage Type")}
+
+    .multiFields
+      .fields.short
+        = f.label :bonus, "Bonus Wage"
+        .item
+          = f.text_field :bonus
+        %p.hint
+          e.g. use 15.50 for $15.50
+      .fields.wages
+        = f.label :bonus_type, "Type of Bonus"
+        .item
+          = f.select :bonus_type, DefaultVars::JOB_BONUS_TYPES, {:class => "type", :prompt => h("Select a Bonus Type")}
+
+    .fields.long
+      = f.label :background
+      .item
+        = f.text_area :background
+        %span.charactersLeft 1000
+
+    .fields.bool
+      = f.label :education_types, "Education"
+      %p
+        - DefaultVars::EDUCATION_TYPES.each do |e|
+          %span
+            = check_box_tag "candidate[education_types][]", e, candidate.should_i_check?(candidate.education_types, e)
+            = e
+      %p.hint
+        Check all that apply
+
+    .fields.long
+      = f.label :education_info, "Additional Education Info"
+      .item
+        = f.text_area :education_info
+        %span.charactersLeft 1000
+      %p.hint
+        Any other education info
+
+    .fields.bool
+      = f.label :licenses, "Licenses"
+      %p
+        - DefaultVars::JOB_LICENSES.each do |l|
+          %span
+            = check_box_tag "candidate[licenses][]", l, candidate.should_i_check?(candidate.licenses, l)
+            = l
+      %p.hint
+        check all that apply
+
+    .fields.long
+      = f.label :license_info, "Additional License Info"
+      .item
+        = f.text_area :license_info
+        %span.charactersLeft 1000
+
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next
+
+  %h3
+    %a{:href => "#"}
+      Candidate&#8217;s Aspirations
+  .ui-accordion-content
+    .fields.tokenSearch.long
+      = f.label :relocation_tokens, "Interested In Relocating to:"
+      .item.token_field
+        - if candidate.possible_relocations.present?
+          = f.text_field :relocation_tokens, |
+                         "data-pre" => relocations_to_json(candidate.possible_relocations), |
+                         "data-path" => us_states_tokens_path |
+        - else
+          = f.text_field :relocation_tokens, "data-pre" => "", "data-path" => us_states_tokens_path
+      %p.hint
+        e.g. California
+
+    .fields.long
+      = f.label :career_move, "Desired Career Move"
+      .item
+        = f.text_area :career_move
+        %span.charactersLeft 1000
+      %p.hint
+        Where does the candidate want to grow in their career?
+
+    .fields.long
+      = f.label :likes_current_job_because, "Candidate Likes Current Job Because:"
+      .item
+        = f.text_area :likes_current_job_because
+        %span.charactersLeft 1000
+      %p.hint
+        Where does the candidate want to grow in their career?
+
+    .fields.long
+      = f.label :what_to_avoid_in_a_future_job, "Candidate Wants to Avoid:"
+      .item
+        = f.text_area :what_to_avoid_in_a_future_job
+        %span.charactersLeft 1000
+      %p.hint
+        What the candidate wants to avoid in a future job?
+
+    .fields.long
+      = f.label :recent_accomplishment, "Candidate&#8217;s Greatest, Recent Accomplishment:".html_safe
+      .item
+        = f.text_area :recent_accomplishment
+        %span.charactersLeft 1000
+      %p.hint
+        What the candidate is proud of in the last six months?
+
+    .fields.long
+      = f.label :management_style, "Candidate&#8217;s Management Style".html_safe
+      .item
+        = f.text_area :management_style
+        %span.charactersLeft 1000
+      %p.hint
+
+    .fields.long
+      = f.label :greatest_strength, "Candidate&#8217;s Greatest Strength".html_safe
+      .item
+        = f.text_area :greatest_strength
+        %span.charactersLeft 1000
+      %p.hint
+
+  %h3
+    %a{:href => "#"}
+      Candidate&#8217;s Process
+  .ui-accordion-content
+    .fields.long
+      = f.label :best_times_to_interview, "Best Times to Interview?"
+      .item
+        = f.text_area :best_times_to_interview
+        %span.charactersLeft 1000
+      %p.hint
+        e.g. Mondays from 9am - 12pm
+
+    .fields
+      = f.label :interview_types, "Best Ways to Interview"
+      %p
+        - DefaultVars::INTERVIEW_TYPES.each do |e|
+          %span
+            = check_box_tag "candidate[interview_types][]", e, candidate.should_i_check?(candidate.interview_types, e)
+            = e
+      %p.hint
+        Check all that apply
+
+    .fields.long
+      = f.label :other_recruiters, "Other Recruiters"
+      .item
+        = f.text_area :other_recruiters
+        %span.charactersLeft 1000
+      %p.hint
+        List any other recruiters the candidate is working with
+
+    .fields.long
+      = f.label :other_interviews, "Other Interviews"
+      .item
+        = f.text_area :other_interviews
+        %span.charactersLeft 1000
+      %p.hint
+        List any other interviews with other companies
+
+    .fields.long
+      = f.label :other_applications, "Other Job Applications"
+      .item
+        = f.text_area :other_applications
+        %span.charactersLeft 1000
+      %p.hint
+        List any other companies the candidate has sent information

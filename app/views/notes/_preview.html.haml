@@ -1,0 +1,24 @@
+%div{"data-id" => "#{preview.id.to_s}"}
+  %section.notePreview
+    - if preview.emailed?
+      %p
+        %strong
+          Emailed to:
+        = preview.recipients
+
+    - if preview.email_attachments.present? && preview.email_attachments.first.attachments.present?
+      %p
+        %strong Emailed File:
+        = link_to preview.email_attachments.first.attachments.first[:misc_file],
+                  preview.email_attachments.first.attachments.first.misc_file.url,
+                  :title => "Download file"        
+    = simple_format preview.content
+
+  - if admin?
+    .links          
+      = link_to "Delete", note_path(preview), |
+                          :title => "Delete", |
+                          :class => "delete", |
+                          "data-method" => 'delete',  |
+                          "data-confirm" => "Are you Sure?", |
+                          "data-remote" => "true" |

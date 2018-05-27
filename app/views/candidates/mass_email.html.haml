@@ -1,0 +1,40 @@
+.content-index
+  %section
+    %h1= "Email #{pluralize @recipients.count, "Candidate"}"
+    .tagListing
+      = display_candidate_params_tags
+
+    .form
+      = form_for(@note, :url => mass_messages_path, :remote => "true", :html => { :class => "with_email_attachment"}) do |f|
+        = search_candidate_params_tags
+        = hidden_field_tag :recipient_type, "candidate"
+        = hidden_field_tag :mass_email, 1
+        = f.hidden_field :email_attachment_id, :value => '', :class => "attachable_id"
+        %fieldset.first
+          = f.hidden_field :recipients, :value => pluralize(@recipients.count, "Candidate")
+          = f.hidden_field :author, :value => current_user.name
+
+          .fields
+            = f.label :subject, "Subject"
+            .item
+              = f.text_field :subject, :autocomplete => "off", :class => 'mass'
+
+          .fields
+            .item
+              = f.text_area :content, :class => "note_content mass", :placeholder => "Add a Note..."
+
+          .fields
+            .item
+              = image_tag 'loading.gif', :alt => "Loading", :class => 'left hide rMargin loading-pic'
+              #add-email-attachment
+                %input#fileupload{:type => "file", :name => "files[]", :data => {:url => "/manage/email_attachments"}}
+            %p.hint
+              Please choose a word doc, pdf, pages, png, jpg, or jpeg under 5mbs
+
+          .actions
+            = f.submit "Send Message", :class => 'button', "data-disable-with" => "Sending . . .", "data-confirm" => "Are you Sure?"
+
+:javascript
+  $(function() {
+    new EmailAttachmentUploader;
+  });

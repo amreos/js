@@ -1,0 +1,66 @@
+.content-index
+  .managed_by
+    %a.button{:href => new_task_path, :title => "Add a Task", :class => "new_task", "data-remote" => "true"}
+      %span Add a Task      
+
+  %section
+    = link_to "reset", list_facilities_path, :title => "Reset Search Options", :class => "button right active"
+    = link_to "advanced search", "#", :title => "Complete an advanced search for Facilities", :class => "advanced_search button right"    
+    %h1
+      All Facilities
+    
+    .form#advanced_search
+      = form_tag(list_facilities_path, :method => 'get') do
+        = hidden_field_tag :direction, params[:direction]
+        = hidden_field_tag :sort, params[:sort]
+        %fieldset.first
+          .fields
+            = label_tag :name, 'Facility Name'
+            .item
+              = text_field_tag :name
+            %p.hint
+              Search any Facility containing the entered name
+          
+          .fields
+            = label_tag :client_name
+            .item.search
+              = text_field_tag :client_search, "", |
+                               :class => "find_clients long general", |
+                               :type => "search", |
+                               "data-path" => "clients", |
+                               "data-goal" => "client_id", |
+                               "placeholder" => "Search for a Client" |
+
+              = hidden_field_tag :client_id, nil
+              
+          .multiFields
+            .fields.med
+              = label_tag :city
+              .item
+                = text_field_tag :city
+            .fields.short
+              = label_tag :region
+              .item
+                = select_tag :region, options_for_select_with_prompt(DefaultVars::All_US_STATES, "Select a State")              
+
+        .actions
+          = submit_tag "Search", :class => "button", "data-disable-with" => "Searching . . ."
+
+    - if @facilities.present?
+      = form_tag(mass_update_facilities_path, :method => 'put') do
+        %fieldset.mass_tools
+          = link_to "check all", "#", :class => "select_all", :title => "Select all facilities below" 
+          = link_to "check none", "#", :class => "unselect_all", :title => "Deselect all facilities below"
+          .search
+            = text_field_tag :client_name, "", :type => "search", |
+                                           "placeholder" => "Search for a Client", |
+                                           "data-path" => "clients", |
+                                           "data-goal" => "client_id", |
+                                           :class => "general" |
+          = hidden_field_tag :client_id
+          = submit_tag "Update", :class => "button", "data-disable-with" => "Updating . . ."
+          
+        .facility_section    
+          = render :partial => 'shared/index/facility'
+    - else
+      %h2 No Facilities were found. Please try another search.

@@ -1,0 +1,54 @@
+- @page_title = "Job Placement that Helps Employers"
+
+%section.first
+  .row
+    .eight.columns
+      %hgroup.call
+        %h1
+          We Find the Best Candidates  <br> to Make Your Job Easier
+    .four.columns
+      = render :partial => 'shared/public/social_links'
+%section.employers
+  .row
+    .eight.columns
+      .orbit-wrap
+        .featured-points
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/employers.jpg",
+                      :alt => "JSA for Employers",
+                      :data => {:caption => '#firstCaption'}
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/healthcare.jpg",
+                      :alt => "JSA for Healthcare Employers",
+                      :data => {:caption => '#healthCaption'},
+                      :class => 'hide'
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/staffing.jpg",
+                      :alt => "JSA for Interim Staffing",
+                      :data => {:caption => '#interimCaption'},
+                      :class => 'hide'
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/consulting.jpg",
+                      :alt => "JSA Consulting Services",
+                      :data => {:caption => '#consultingCaption'},
+                      :class => 'hide'
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/finances.jpg",
+                      :alt => "JSA Financial Staffing",
+                      :data => {:caption => '#financeCaption'},
+                      :class => 'hide'
+
+      %span.orbit-caption#firstCaption Professional and Experienced Job Placement Services
+      %span.orbit-caption#healthCaption Job Placement From the CEO to the CNA
+      %span.orbit-caption#interimCaption Fast Solutions for Short-Term Help
+      %span.orbit-caption#consultingCaption Develop Teamwork and Trust with JSA Search
+      %span.orbit-caption#financeCaption Quickly Find Financial Experts
+
+      %h3 Understanding Your Process
+      %p
+        At JSA SEARCH INC., we are dedicated to understanding your needs and presenting the most qualified and pre-screened candidates. Our industry experience and proven techniques provide exclusive access to candidates unavailable through other sources. We work on low, flat fees and, for retained searches, provide a 6-month guarantee with all of our placements.
+
+      %h3 Contingency Recruiting
+      %p
+        When we receive your assignment, we identify qualified candidates from within your industry. Working with you, our staffing professionals present your opportunity to potential candidates and make the hire. JSA does all the necessary reference checks and salary verifications. You have no cost or obligation unless a candidate is placed.
+
+      %h3 Retained Searching
+      %p
+        Working for you exclusively allows us to retain searches until successfully filled and provide you with a 6-month guarantee for all of our placements. We offer several retainer programs for a greatly discounted rate compared to our contingency pricing. During a retainer search you have the complete focus, attention, and dedication of a personal hiring management team.
+    .four.columns
+      = render :partial => "shared/employer_nav"

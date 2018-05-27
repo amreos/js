@@ -1,0 +1,95 @@
+%fieldset.first
+  - new_child_fields_template f, :emails
+  - new_child_fields_template f, :phones
+  - new_child_fields_template f, :addresses
+
+  - if client.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(client.errors.count, "error")
+        prohibited this client from being saved:
+
+      %ul
+        - client.errors.full_messages.each do |msg|
+          %li= msg
+  .fields
+    = f.label :name, add_required_star('Client Name')
+    .item
+      = f.text_field :name
+    %p.hint
+      A great hint
+  .fields
+    = f.label :web_address, "Web Address"
+    .item
+      = f.text_field :web_address
+    %p.hint
+      e.g. http://jsasearch.net or http://www.jsasearch.net
+
+  - if @client.contacts.present?
+    .fields-alt
+      = f.label :primary_contact_id, "Primary Contact"
+      = f.collection_select :primary_contact_id,
+                            @client.contacts.desc(:name),
+                            :id,
+                            :name_and_title,
+                            {:prompt => h("Select a Primary Contact")},
+                            {:class => 'chzn', }
+
+  .fields-alt
+    = f.label :source, add_required_star("Referral Source")
+    = f.select :source, DefaultVars::JOB_SOURCES|AdminDefault.settings.job_sources, {:prompt => h("Select a Source")}, {:class => 'chzn', }
+      
+  - if admin? || controller.action_name == "new"  
+    .fields-alt
+      = f.label :employee_id, "JSA Employee"
+      = f.collection_select :employee_id, Employee.desc(:name),
+                            :id,
+                            :name,
+                            {:prompt => h("Select a JSA Employee")},
+                            {:class => 'chzn'}
+            
+#accordionForm
+  %h3 
+    %a{:href => "#"}
+      Client&#8217;s Phone Numbers
+  .ui-accordion-content
+    .additional_fields
+      = f.fields_for :phones do |builder|
+        = render :partial => 'shared/forms/phone', :locals => { :f => builder }
+
+    %p= add_child_link "Add Phone Number", :phones
+               
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next
+
+  %h3 
+    %a{:href => "#"}
+      Client&#8217;s Emails
+  .ui-accordion-content
+    .additional_fields
+      = f.fields_for :emails do |builder|
+        = render :partial => 'shared/forms/email', :locals => { :f => builder }
+              
+    %p= add_child_link "Add an Email", :emails
+
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next
+  %h3 
+    %a{:href => "#"}
+      Client&#8217;s Addresses
+  .ui-accordion-content
+    .additional_fields
+      = f.fields_for :addresses do |builder|
+        = render :partial => 'shared/forms/address', :locals => { :f => builder }
+  
+    %p= add_child_link "Add an Address", :addresses
+    
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next
+    

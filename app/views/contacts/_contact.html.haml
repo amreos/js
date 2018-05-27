@@ -1,0 +1,38 @@
+%section.vcard{"data-id" => contact.id}
+  %hgroup
+    %h1.org.fn= link_to contact.name, client_contact_path(@client, contact), :title => "view all info for #{contact.name}"
+    %h2= contact.display_title
+
+  %ul
+    - if contact.web_address.present?
+      = render :partial => "shared/info/url", :object => contact.web_address
+
+    = render :partial => "shared/info/phone", :collection => contact.phones.first(2)
+
+    = render :partial => "shared/info/email", :collection => contact.emails.first(1), :locals => {:parent => contact}
+
+    = render :partial => "shared/info/address", :collection => contact.addresses.first(1)
+      
+  - unless @facilities.blank?
+    %h3 Facilities:
+    %p
+      - @facilities.each do |facility|
+        %span.tag
+          = link_to facility.name, client_facility_path(@client, facility.id), |
+            :title => "View #{facility.name} info", |
+            "data-remote" => "true" |
+  .links          
+    = link_to "Edit", edit_client_contact_path(@client, contact), :class => "edit", :title => "Edit"
+    - if admin?
+      = link_to "Delete", client_contact_path(@client, contact), :title => "Delete", |
+                          :class => "delete", |
+                          "data-method" => 'delete',  |
+                          "data-confirm" => "Are you Sure?", |
+                          "data-remote" => "true" |
+  / .notes                                            
+  /   %section
+  /     %hgroup
+  /       %h1 Add a Note
+  /     = form_for(Note.new, :remote => "true")  do |f|
+  /       = render :partial => 'notes/form', :locals => {:f => f, :parent => contact}        
+  

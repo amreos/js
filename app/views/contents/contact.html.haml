@@ -1,0 +1,65 @@
+- @page_title = "Contact Us to Learn more about Easy Job Placement"
+
+%section.first
+  .row
+    .eight.columns
+      %hgroup.call
+        %h1
+          Contact Us About Your Job Placement Needs
+    .four.columns
+      = render :partial => 'shared/public/social_links'
+
+%section.employers
+  .row
+    .eight.columns
+      .point
+        = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/contact.jpg", :alt => "Contact JSA Search"
+        %h3 It's Easy To Get In Touch
+
+        %p
+          We would love to talk to you about your recruiting needs - whether you are searching for a job or needing to fill one. So give us a shout, ping or email and we will respond as soon as we can.
+        %nav.sub
+          %ul
+            %li
+              %a{:href => new_question_path, :class => "question", :title => "Click here to ask JSA Search a question", "data-remote" => "true"}
+                Send Us a Really Fast Message
+                %em
+                  Then Get a Quick Answer
+        %h4 Or Find Us on Twitter or Facebook
+        %ul.info
+          %li{:class => ""}
+            %span{:class => "twitter type"}
+              Twitter
+            %a{:href => "http://twitter.com/JSASearch", :title => "Follow Us on Twitter"}
+              @jsasearch
+          %li{:class => ""}
+            %span{:class => "facebook type"}
+              Facebook
+            %a{:href => "http://facebook.com/JSASearchInc", :title => "Find Us on Facebook"}
+              Facebook.com/jsasearchinc
+    .four.columns
+      .point
+        %a{:href => "https://www.google.com/maps/place/27742+Vista+Del+Lago/@33.6326136,-117.6464871,19z/data=!4m6!3m5!1s0x80dce97c32dec305:0x456e19cc6c2c903a!4b1!8m2!3d33.6323702!4d-117.6464361", :title => "Get Directions on Google Maps"}
+          = image_tag "https://maps.google.com/maps/api/staticmap?center=33.6326136,-117.6464871&zoom=15&size=300x269&maptype=roadmap&markers=color:red|label:A|33.6326136,-117.6464871&sensor=false", :alt => "Map to JSA"
+
+      %h4 Our Corporate HQ
+      %ul.info
+        %li{:class => "work tel"}
+          %span{:class => "work type"}
+            work
+          866 572-8326
+        %li{:class => "work fax"}
+          %span{:class => "fax type"}
+            fax
+          626 331-6680
+        %li{:class => "email"}
+          %span{:class => "work type"}
+            work
+          info@jsasearch.net
+        %li{:class => "work adr"}
+          %span{:class => "work type"}
+          27742 Vista Del Lago<br>
+          Suite J1<br>
+          Mission Viejo, CA 92692
+
+  = render partial: "shared/public/newsletter_forms"

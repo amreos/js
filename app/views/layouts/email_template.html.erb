@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <base href="https://www.jsasearch.net/" />
+  <title>Greetings from JSA Search</title>
+  <style type="text/css" media="screen">
+  body { background-color: #e3e3e3; }
+  a img { border: none; }
+  a {
+    color: #6285A1;
+    text-decoration: none;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: 14px;
+    text-align: left;
+    line-height: 1.5;
+  }
+  p {
+    font-size: 14px;
+    color: #003946;
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: 14px;
+    text-align: left;
+    line-height: 1.5;
+    margin-bottom:20px;
+  }
+  table.bg1 {
+    background-color: #e3e3e3;
+  }
+  td.header {
+    background-color: #e3e3e3;
+    padding-top: 15px;
+  }
+  td.footer {
+    background-color: #e3e3e3;
+  }
+  td.permission {
+    background-color: #e3e3e3;
+    padding: 10px 20px 10px 20px;
+    text-align: left;
+  }
+  td.permission p {
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: 12px;
+    text-align: left;
+    line-height: 1.5;
+    font-weight: normal;
+    color: #777777;
+    margin: 0;
+    text-align: left;
+    padding: 0;
+  }
+  td.permission p a {
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-weight: normal;
+    color: #333333;
+  }
+  td.body {
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: 14px;
+    text-align: left;
+    line-height: 1.5;
+    padding: 10px 50px;
+    width: 500px;
+    background-color: #ffffff;
+  }
+  </style>
+</head>
+<body style="background-color:#e3e3e3;" >
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="bg1" style="background-color:#e3e3e3;" >
+    <tr>
+      <td align="center">
+        <table width="600px" border="0" cellspacing="0" cellpadding="0" class="bg2" style="background-color:#ffffff;" >
+          <tr>
+            <td valign="top" class="header" style="background-color:#e3e3e3;padding-top:15px;" >
+              <%= image_tag("https://s3.amazonaws.com/new-assets.jsasearch.net/jsa-email-header.png",
+                :width => "600", :height => "34", :alt => "JSA Search Email Header", :style => "border:none;display:block; margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;") %>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" class="body" style="font-family: Georgia, Cambria, 'Times New Roman', Times, serif;font-size: 14px;text-align: left;line-height: 1.5;padding-top:10px;padding-right:50px;padding-bottom:10px;padding-left:50px;width: 500px;background-color: #ffffff;" >
+              <table width="500" border="0" cellspacing="0" cellpadding="0" style="background-color:#ffffff;" >
+                <tr>
+                  <td valign="center" style="padding-bottom:10px;">
+                    <%= image_tag("https://s3.amazonaws.com/new-assets.jsasearch.net/jsa-email-logo.png",
+                      :width => "210", :height => "45", :alt => "JSA Search Inc", :align => "left", :style => "border:none;display:block; margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;") %>
+                  </td>
+                </tr>
+              </table>
+              <%= yield %>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" class="footer" style="background-color:#e3e3e3;" >
+              <%= image_tag("https://s3.amazonaws.com/new-assets.jsasearch.net/jsa-email-footer.png",
+                :width => "600px", :height => "34", :alt => "JSA Search Email footer", :style => "border:none;display:block; margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;") %>
+            </td>
+          </tr>
+          <tr>
+            <td class="permission" align="center" style="background-color:#e3e3e3;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-align:left;" >
+              <p style="font-family: Georgia, Cambria, 'Times New Roman', Times, serif;font-size: 12px;text-align: left;line-height: 1.5;font-weight: normal;color:#777777;margin: 0;text-align: left;padding: none;">
+                Please Contact Our Main Office at <a href="mailto:info@jsasearch.com" title="Our Main Office">info@jsasearch.com</a> to change your email preferences.
+              </p>
+              <p style="font-family: Georgia, Cambria, 'Times New Roman', Times, serif;font-size: 12px;text-align: left;line-height: 1.5;font-weight: normal;color:#777777;margin: 0;text-align: left;padding: none;">
+                 JSA Search, Inc. // 866.572.8326<br/>23120 Alicia Parkway Suite 110, Mission Viejo, CA 92692
+               </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

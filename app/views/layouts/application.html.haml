@@ -1,0 +1,52 @@
+!!! 5
+%html{:lang => "en", :class => "manage"}
+  %head
+    %meta{:charset => "UTF-8"}
+    %title= page_title
+    <!--[if lt IE 9]>
+    <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="https://use.typekit.com/tql8nur.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    %link{:rel => "stylesheet", :href => "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css"}
+    = stylesheet_link_tag 'application'
+    = csrf_meta_tag
+
+  %body{:id => "#{controller.controller_name}", :class => "#{controller.action_name}"}
+    %div{:class => "wrapper"}
+      %header{:id => "banner"}
+        .container
+          %div{:id => "user_info"}
+            %span.user_links
+              - if user_signed_in?
+                = user_links(current_user)
+                = link_to "Sign Out", destroy_user_session_path, :title => "Sign Out"
+              - else
+                = link_to "Sign In", new_user_session_path, :title => "Sign in"
+
+          %nav{:class => "main clearfix"}
+            %ul
+              %li= link_to "JSA", root_path, :title => "JSA Search home", :id => "jsa"
+              %li= link_to "Employers", employers_path, :title => "JSA Search for Employers", :class => "employers"
+              %li= link_to "Candidates", about_candidates_path, :title => "JSA Search for Candidates", :class => "candidates"
+              %li= link_to "Jobs", public_jobs_path, :title => "Recent Jobs from JSA Search", :class => "jobs"
+              %li= link_to "About", about_path, :title => "About JSA Search", :class => "about"
+              %li= link_to "Bios", bios_path, :title => "JSA Search Executive Bios", :class => "bios"
+              %li= link_to "Contact", contact_path, :title => "Contact JSA Search", :class => "contact"
+
+
+      - if flash.present?
+        #flash
+          - flash.each do |type, msg|
+            %div{:id => "#{type}"}
+              = msg
+    %div{:class => "wrapper odd"}
+      #content.manage.clearfix
+        = yield
+
+      #jstemplates
+        = yield :jstemplates
+
+      = render :partial => 'layouts/footer'
+
+    = javascript_include_tag "application"

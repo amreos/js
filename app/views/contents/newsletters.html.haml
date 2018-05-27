@@ -1,0 +1,61 @@
+- @page_title = "Recent Newsletters"
+
+%section.first
+  .row
+    .twelve.columns
+      .row
+        .eight.columns
+          %hgroup.call
+            %h1
+              = "Recent News and Updates"
+        .four.columns
+          = render :partial => 'shared/public/social_links'
+
+%section.newsletters
+  .row
+    .eight.columns.recent-campaigns
+      %h3
+        = image_tag 'loading.gif', :alt => "Loading Recent Newsletters", :class => "rMargin"
+        Loading Newsletters
+
+
+    .four.columns
+      %dl.tabs.nice.mobile
+        %dd
+          %a.active{:href => "#candidateList"} Candidates
+        %dd
+          %a{:href => "#clientList"} Employers
+
+      %ul.tabs-content.nice
+        %li#candidateListTab.active
+          %h5 Join Our Candidate Email List
+          %form#subForm.nice.form.f2{:action => "https://jsasearch.createsend.com/t/j/s/jliyg/",
+                                     :method => "post"}
+            %p
+              %label{:for => "name"} Name:
+              %input#name.input-text{:name => "cm-name", :type => "text"}
+            %p
+              %label{:for => "jliyg-jliyg"} Email:
+              %input#jliyg-jliyg.input-text{:name => "cm-jliyg-jliyg", :type => "text"}
+            %p
+              %label{:for => "Clients"}
+                %input#Clients{:name => "cm-ol-jltilu", :type => "checkbox"}
+                Join our Employer List as well
+            %p
+              %input.button.green.small{:type => "submit", :value => "Subscribe"}
+        %li#clientListTab
+          %h5 Join Our Employer Email List
+          %form#subForm.nice.form.f2{:action => "https://jsasearch.createsend.com/t/j/s/jltilu/",
+                                     :method => "post"}
+            %p
+              %label{:for => "name"} Name:
+              %input#name.input-text{:name => "cm-name", :type => "text"}
+            %p
+              %label{:for => "jltilu-jltilu"} Email:
+              %input#jltilu-jltilu.input-text{:name => "cm-jltilu-jltilu", :type => "text"}
+            %p
+              %label{:for => "Candidates"}
+                %input#Candidates{:name => "cm-ol-jliyg", :type => "checkbox"}
+                Join our Candidate List as well
+            %p
+              %input.button.green.small{:type => "submit", :value => "Subscribe"}

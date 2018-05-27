@@ -1,0 +1,97 @@
+!!! 5
+/ paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
+/[if lt IE 7 ] <html class="ie6 public" lang=\"en\">
+/[if IE 7 ] <html class="ie7 public" lang="en">
+/[if IE 8 ] <html class="ie8 public" lang="en">
+/[if IE 9 ] <html class="ie9 public" lang="en">
+/[if (gt IE 9)|!(IE)]<!--> <html class="public" lang="en">
+%head
+  %meta{:charset => "UTF-8"}
+  %meta{ :name => "viewport", :content => "width=device-width, initial-scale=1.0" }
+  %meta{'http-equiv' => 'X-UA-Compatible', content: 'IE=7' }
+  %title= page_title
+  <!--[if lt IE 9]>
+  <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script type="text/javascript" src="https://use.typekit.com/tql8nur.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  %link{:rel => "stylesheet", :href => "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css"}
+  = stylesheet_link_tag 'home'
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+  = csrf_meta_tag
+
+%body{:id => "#{controller.controller_name}", :class => "#{controller.action_name}"}
+  #fb-root
+  :javascript
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=204712616236697";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  - if flash.present?
+    #flash
+      - flash.each do |type, msg|
+        %div{:id => "#{type}"}
+          = msg
+
+  .container.topBar#mobile-nav-top
+    .row
+      .nine.columns
+        %header{:id => "banner"}
+          %nav{:class => "main clearfix"}
+            %ul.clearfix
+              %li= link_to "Menu", "#mobile-nav-bottom", :title => "View Nav Links", :class => "menu show-on-phones"
+              %li= link_to "Home",
+                            root_path,
+                            :title => "JSA Search home",
+                            :class => "home"
+              %li
+                = link_to "Employers",
+                          employers_path,
+                          :title => "JSA Search for Employers",
+                          :class => "employers hide-on-phones"
+              %li
+                = link_to "Candidates",
+                          about_candidates_path,
+                          :title => "JSA Search for Candidates",
+                          :class => "candidates hide-on-phones"
+
+              %li= link_to "Jobs", public_jobs_path, :title => "Recent Jobs from JSA Search", :class => "jobs hide-on-phones"
+              %li= link_to "About", about_path, :title => "About JSA Search", :class => "about hide-on-phones"
+              %li= link_to "Executive Bios", bios_path, :title => "JSA Search Executive Bios", :class => "bios hide-on-phones"
+              %li= link_to "Contact", contact_path, :title => "Contact JSA Search", :class => "contact"
+      .three.columns.hide-on-phones
+        %span.jsa-phone 1-866-JSA-Team
+
+  .topWrapper
+    .container
+      .row
+        .twelve.columns
+          %a{:href => "tel://1-866-572-8326"}
+            %span.jsa-phone.large-banner.show-on-phones 1-866-JSA-Team
+          .row.byline
+            .four.columns
+              %h1.logo
+                %a{href: "/", title: "JSA Search - Placing Jobs Across the USA"}
+                  %img{:src => "https://s3.amazonaws.com/new-assets.jsasearch.net/jsa-logo-new.png",
+                       :alt => "JSA Search"}
+                  %span JSA Search
+            .eight.columns
+              %h2.headline
+                JSA Search, INC.
+                %em Nationwide Job Placement Made Easy <br> for Healthcare, Interim, and Accounting Staffing
+  .container.bottomMessage
+    .row
+      .twelve.columns
+        .bottomWrap
+          = yield
+
+  .modal
+  #jstemplates
+    = yield :jstemplates
+  = render :partial => 'layouts/footer'
+
+  = javascript_include_tag "home"

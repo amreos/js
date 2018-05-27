@@ -1,0 +1,50 @@
+$(".modal").remove();
+$('#flash').remove();
+$("header#banner").after('<div id="flash"><div id="notice">Loaded More</div></div>');
+
+<% case @partial %>
+  <% when "applicant" %>
+  $("aside.panel.applicants section.list").
+    append('<%= escape_javascript(render :partial => "shared/panels/#{@partial}", :collection => @loaded_objects, :locals => {:parent => @parent.class.name}) %>');
+
+  <% when "work_history"  %>
+    $("aside.panel.workHistories section.list").
+      append('<%= escape_javascript(render :partial => "shared/panels/#{@partial}", :collection => @loaded_objects, :locals => {:candidate => @parent}) %>');
+
+  <% when "resume"  %>
+    $("aside.panel.resumes section.list").
+      append('<%= escape_javascript(render :partial => "shared/panels/#{@partial}", :collection => @loaded_objects, :locals => {:candidate => @parent}) %>');
+
+  <% when "note"  %>
+    $(".previous_notes div#accordionNotes").append('<%= escape_javascript(render :partial => "notes/#{@partial}", :collection => @loaded_objects) %>');
+    $("#accordionNotes").accordion("destroy");
+    $("#accordionNotes").accordion({
+      collapsible: true,
+      header: "div.note_title",
+      autoHeight: false    
+    });
+
+  <% when "facility" %>
+    $("aside.panel.facilities section.list").
+      append('<%= escape_javascript(render :partial => "shared/panels/#{@partial}", :collection => @loaded_objects, :locals => {:client => @parent}) %>');
+
+  <% when "contact" %>
+    $("aside.panel.contacts section.list").
+      append('<%= escape_javascript(render :partial => "shared/panels/#{@partial}", :collection => @loaded_objects, :locals => {:client => @parent}) %>');
+      
+  <% when "job" %>
+    <%= display_jobs_for_ajax(@partial, @scope_type, @loaded_objects) %>
+
+  <% when "candidate" %>
+    $("aside.panel.candidates section.list").
+      append('<%= escape_javascript(render :partial => "shared/panels/#{@partial}", :collection => @loaded_objects) %>');
+      
+  <% when "client" %>
+    $("aside.panel.clients section.list").
+      append('<%= escape_javascript(render :partial => "shared/panels/#{@partial}", :collection => @loaded_objects) %>');      
+    
+<% end %>
+
+var flashMargin = ($(window).width() - $("#flash").width()) / 2; 
+$("#flash").css({'left' : flashMargin+"px"});
+$("#flash").delay(5000).fadeOut('slow', function() {$(this).remove();});

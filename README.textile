@@ -1,0 +1,7 @@
+h1. JSA Search
+
+h2. Developer Setup
+
+* gem install bundler
+* bundle
+* be rails s

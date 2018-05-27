@@ -1,0 +1,132 @@
+- @page_title = "Submit Your Resume to JSA Search"
+
+%section.first
+  .row
+    .eight.columns
+      %hgroup.call 
+        %h1 Submit Your Resume
+        %h2 Make it Communicate You
+    .four.columns
+      = render :partial => 'shared/public/social_links' if controller.action_name == 'new'
+
+%section.single_job
+  .row
+    .eight.columns
+      %section.vcard
+        %h2= "Send us Your Info to Get Started"
+        %p Enter your information below and our recruiters will contact you soon.
+
+        = form_for(@resume_submission, :html => {:class => 'nice form f2', :multipart => true}) do |f|
+          - if @resume_submission.errors.any?
+            #error_explanation
+              %h2
+                = pluralize(@resume_submission.errors.count, "error")
+                prohibited this candidate from being saved.
+          
+          %fieldset
+            %h5 Your Info
+            .row
+              .eight.columns
+                = f.label :name, "Name *"
+                = f.text_field :name, :class => "large input-text", :placeholder => "First and Last Name"
+
+            .row.select-wrapper
+              .ten.columns
+                = f.label :title, "Title *", :class => "noBottom"
+                = f.select :title,
+                     (DefaultVars::JOB_TITLES|AdminDefault.settings.job_titles).sort,
+                     {:prompt => h("Select a Title")},
+                     {:class => 'chzn large select', :style => 'margin-top: -9px; width: 75%;'}
+            
+            .row
+              .eight.columns
+                = f.label :company, "Company *"
+                = f.text_field :company,
+                               :class => "large input-text",
+                               :placeholder => "Where You Current Work"
+
+          %fieldset
+            %h5 Your Resume
+            %p Please only submit .doc, .docx, .numbers, .xls, .xlsx, .txt, .csv, .pdf, .png, .jpg, &amp; .pages up to 4mbs in size.
+            = f.fields_for :attachments do |builder|
+              = builder.hidden_field :name, :value => "Resume - #{@resume_submission.id}"
+
+
+              = builder.label :misc_file, "Resume File"
+              = builder.file_field :misc_file
+              = builder.hidden_field :misc_file_cache
+
+          %fieldset
+            %h5 Your Contact Info
+            .row
+              .eight.columns
+                = f.label :email_address, "Email *"
+                = f.text_field :email_address,
+                               :class => "expand input-text",
+                               :placeholder => "eg info@jsasearch.net"
+              .four.columns
+                = f.label :email_type
+                = f.select :email_type, [['work', "work"], ['personal', "personal"], ['mobile', "mobile"],['fax', "fax"],['other', "other"]], {}, :class => "type"
+
+            .row
+              .six.columns
+                = f.label :phone_number, "Phone Number *"
+                = f.text_field :phone_number,
+                               :class => "expand input-text",
+                               :placeholder => "eg 909-123-1234"
+              .three.columns
+                = f.label :phone_ext
+                = f.text_field :phone_ext,
+                               :class => 'input-text small',
+                               :placeholder => "eg 123"
+              .three.columns
+                = f.label :phone_type
+                = f.select :phone_type, [['work', "work"], ['personal', "personal"], ['mobile', "mobile"],['fax', "fax"],['other', "other"]], {}, :class => "type"
+          %fieldset  
+            %h5 Your Address
+            .row
+              .twelve.columns
+                = f.label :line_1, "Line 1 *"
+                = f.text_field :line_1,
+                               :class => "large input-text",
+                               :placeholder => "eg 500 Main St"
+                
+                = f.label :line_2
+                = f.text_field :line_2,
+                               :class => "large input-text",
+                               :placeholder => "eg Suite 100"
+
+                = f.label :line_3
+                = f.text_field :line_3, :class => "large input-text"
+            .row
+              .six.columns
+                = f.label :city, "City *"
+                = f.text_field :city,
+                               :class => 'expand input-text',
+                               :placeholder => "eg Covina"
+              .three.columns
+                = f.label :region, "State *"
+                = f.text_field :region,
+                               :class => 'small input-text',
+                               :placeholder => "eg CA"
+              .three.columns
+                = f.label :zip, "Zip *"
+                = f.text_field :zip,
+                               :class => 'small input-text',
+                               :placeholder => "eg 91723"
+          %fieldset
+            %h5 Any Comments
+            .row
+              .twelve.columns
+                = f.label :comments
+                = f.text_area :comments, :rows => 3, :class => 'large'
+
+          .row            
+            = f.submit "Send", "data-disable-with" => "Sending...", :class => "nice button green"
+                          
+    .four.columns.point
+      .panel.hide-on-phones
+        %h5 Thank You Contacting Us
+        %p We are looking forward to working with you to find your next job. Please fill out this form completely so that we can best serve you.
+        %p JSA Search will not sell your information. We will will only distribute your information with your permission when working towards a job placement.
+        %p * denotes required fields

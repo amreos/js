@@ -1,0 +1,66 @@
+<p>-----------------------------------------------------------------------</p>
+<p>You have received a job order request from <%= @job_request.name %>.</p>
+
+<p>-----------------------------------------------------------------------</p>
+
+<p>
+	Name: <%= @job_request.try(:name) %>
+</p>
+
+<p>Title: <%= @job_request.title %></p>
+
+<p>Company: <%= @job_request.company %></p>
+
+<% if @user.present? %>
+<p>
+	<%= "#{@user.class.name.titleize}: " %>
+	<%= link_to @user.name,
+							send("#{@user.class.name.downcase}_url", @user),
+							:title => "View Info" %>
+</p>
+<% end %>
+
+<% if @facility.present? %>
+<p>
+	Facility: <%= link_to @facility.name,	client_url(@facility.client),	:title => "View Client Info of Facility" %>
+</p>
+<% end %>
+
+<% if @contact.present? %>
+<p>
+	Contact: <%= link_to @contact.name,	client_contact_url(@contact.client, @contact), :title => "View Contact Info" %>
+</p>
+<% end %>
+
+<p><%= @job_request.email_type.titleize %> Email: <%= @job_request.email_address %></p>
+
+<p><%= @job_request.phone_type.titleize %> Phone: <%= @job_request.formated_phone_number %></p>
+
+<p>
+	<%= @job_request.address_type.titleize %> Address: <br/>
+	<%= @job_request.line_1 %> <br/>
+	<% if @job_request.line_2.present? %>
+	<%= @job_request.line_2 %> <br/>
+	<% end %>
+	<% if @job_request.line_3.present? %>
+	<%= @job_request.line_3 %> <br/>
+	<% end %>
+	<%= @job_request.city %>, <%= @job_request.region %> <%= @job_request.zip %>
+</p>
+
+<p>-----------------------------------------------------------------------</p>
+
+<p>Job Order Title: <%= @job_request.job_title %></p>
+
+<% if @job_request.comments.present? %>
+<p>-----------------------------------------------------------------------</p>
+<span>Comments: <br/></span>
+<%= simple_format strip_tags(@job_request.comments) %>
+<% end %>
+
+<p>
+-----------------------------------------------------------------------<br/>
+JSA Search, Inc. / 866-572-8326 / jsasearch.net <br/>
+23120 Alicia Parkway Suite 110<br/>
+Mission Viejo, CA 92692
+</p>

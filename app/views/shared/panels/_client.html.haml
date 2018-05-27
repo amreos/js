@@ -1,0 +1,22 @@
+.c{"data-id" => client.id, :class => "#{client.current_state}"}
+  .links          
+    = link_to "Edit", edit_client_path(client), :class => "edit", :title => "Edit"
+    - if admin?
+      = link_to "Delete", client_path(client), :title => "Delete", |
+                          :class => "delete", |
+                          "data-method" => 'delete',  |
+                          "data-confirm" => "Are you Sure?", |
+                          "data-remote" => "true" |                      
+  %hgroup
+    %h1
+      = link_to client.name, client_path(client), :title => "View #{client.name}'s info"
+
+  - if client.emails.present? || client.phones.present?
+
+    %ul
+      = render :partial => "shared/info/phone", :collection => client.phones.first(1)
+
+      = render :partial => "shared/info/email_short", :collection => client.emails.first(1), :locals => {:parent => client}
+      
+  = content_tag(:span, client.current_state, :class => "#{client.current_state} state", :title => "#{client.current_state.titleize}")
+  

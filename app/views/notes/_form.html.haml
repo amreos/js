@@ -1,0 +1,35 @@
+= hidden_field_tag :parent_name, parent.name
+= hidden_field_tag :parent_klass, parent.class.name
+.fields
+  = f.hidden_field :author, :value => current_user.name
+  .item
+    = f.text_area :content, :class => "note_content", :placeholder => "Add a Note..."    
+  %p.hint
+    Press alt+ctrl+s to save
+    
+.fields.tokenSearch
+  = f.label :user_tokens, "CC: Candidates, Clients, and Employees"
+  .item.token_field
+    - if controller.controller_name == "clients" || controller.controller_name == "candidates" || controller.controller_name == "employees"
+      = f.text_field :user_tokens, "data-pre" => member_name_and_id_to_json(parent), "data-path" => users_tokens_path  
+    - else
+      = f.text_field :user_tokens, "data-pre" => "", "data-path" => users_tokens_path
+      
+.fields.tokenSearch
+  = f.label :contact_tokens, "CC: Contacts"
+  .item.token_field
+    - if controller.controller_name == "contacts"
+      = f.text_field :contact_tokens, "data-pre" => member_name_and_id_to_json(parent), "data-path" => contacts_tokens_path  
+    - else
+      = f.text_field :contact_tokens, "data-pre" => "", "data-path" => contacts_tokens_path
+
+.fields.tokenSearch
+  = f.label :job_tokens, "CC: Jobs"
+  .item.token_field
+    - if controller.controller_name == "jobs"
+      = f.text_field :job_tokens, "data-pre" => member_name_and_id_to_json(parent), "data-path" => jobs_tokens_path  
+    - else
+      = f.text_field :job_tokens, "data-pre" => "", "data-path" => jobs_tokens_path
+                  
+.actions
+  = f.submit "Add Note", :class => 'button', "data-disable-with" => "Saving . . ."

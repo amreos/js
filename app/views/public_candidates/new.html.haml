@@ -1,0 +1,58 @@
+.content-public
+  .form
+ 
+    %h1 Become a Job Candidate for <br>Your Best Job Ever
+    
+    .columns
+      %p
+        Sign-up to apply for jobs with JSA Search. Completing the following fields will help us stay in contact and best serve you while you are placed for jobs. We honor your privacy and we will not sell your information.
+      %p
+        We will only distribute your information for potential job openings once we have been given your permission and have had a chance to brief you on potential jobs.
+      %p
+        Our Recruiters will contact you after you have submitted your information and schedule a time to talk about your goals.
+      %p
+        %strong 
+          If you are not a candidate and want to hire job seekers,
+          = link_to "sign up here to become a client.", new_public_client_path, :title => "Sign up to become a clientd and find your best next job."        
+  
+    = form_for(@candidate, :url => public_candidates_path) do |f|
+      %fieldset.first
+        - if @candidate.errors.any?
+          #error_explanation
+            %h2
+              = pluralize(@candidate.errors.count, "error")
+              prohibited this candidate from being saved:
+
+            %ul
+              - @candidate.errors.full_messages.each do |msg|
+                %li= msg
+                
+        = hidden_field_tag :employee, params[:employee] if params[:employee].present?                        
+        
+        .fields
+          = f.label :name, add_required_star('Your Name')
+          .item
+            = f.text_field :name
+
+        .fields
+          = f.label :title, add_required_star('Title')
+          .item
+            = f.select :title, (DefaultVars::JOB_TITLES|AdminDefault.settings.job_titles).sort, {:class => '', :prompt => h("Select a Title")}
+          %p.hint
+            Select the most appropriate job title
+
+        .fields
+          = f.label :company, add_required_star('Current Company')
+          .item
+            = f.text_field :company
+      
+        .additional_fields    
+          = f.fields_for :phones do |builder|
+            = render :partial => 'shared/forms/public_phone', :locals => { :f => builder }
+
+        .additional_fields
+          = f.fields_for :emails do |builder|
+            = render :partial => 'shared/forms/public_email', :locals => { :f => builder }            
+  
+      .actions
+        = f.submit "Sign up as a Job Candidate", :class => "button", "data-disable-with" => "Saving . . ."

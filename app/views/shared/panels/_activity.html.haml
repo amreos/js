@@ -1,0 +1,50 @@
+.c{"data-id" => activity.id, :class => activity_css_class(activity)}
+  %hgroup
+    %h1
+      = link_to activity.author, employee_path(activity.author_id), :title => "View #{activity.author}'s info"
+    %h2
+      = l(activity.created_at.in_time_zone(current_time_zone),
+          :format => :note_archive).downcase
+  %p
+    - if activity.deed_action == 3 && activity.deed_type != 7
+      %span= "#{activity.display_deed_action} of"
+      = link_to "#{activity.deed_name}", |
+                {:controller => activity.display_deed_type.pluralize.downcase, :action => :show, :id => activity.deed_id }, |
+                :title => "View info for #{activity.deed_name}" |
+      %span= "to #{activity.try(:deed_parent).humanize}"
+
+    - elsif activity.deed_action == 3 && activity.deed_type == 7
+      %span= "#{activity.display_deed_action} of"
+      = link_to "#{activity.deed_name}", |
+                {:controller => :candidates, :action => :show, :id => activity.deed_id }, |
+                :title => "View info for #{activity.deed_name}" |
+      %span= "to #{activity.try(:deed_parent).humanize}"
+
+    - elsif activity.deed_action == 4 && activity.deed_type == 6 
+      %span= "#{activity.display_deed_action} about " 
+      = link_to activity.deed_name, note_path(activity.deed_id), :title => "Read note", "data-remote" => "true"
+      
+    - elsif activity.deed_action == 5 && activity.deed_type == 6
+      %span= "#{activity.display_deed_action} to "
+      = link_to activity.deed_name, note_path(activity.deed_id), :title => "Read note", "data-remote" => "true"    
+      
+    - elsif activity.deed_action == 0 && activity.deed_type == 6 
+      %span= "Added #{activity.display_deed_type.titleize} to" 
+      = link_to activity.deed_name, note_path(activity.deed_id), :title => "Read note", "data-remote" => "true"
+      
+    - elsif activity.deed_type == 1 || activity.deed_type == 4  && activity.deed_action != 2
+      %span= "#{activity.display_deed_action} #{activity.display_deed_type.titleize}:"
+      = link_to activity.deed_name, {:controller => :clients, :action => :show, :id => activity.deed_id }, |
+                :title => "View info for #{activity.deed_name}" |      
+
+    - elsif activity.deed_action != 2 && activity.deed_type != 6 && activity.deed_type != 1
+      %span= "#{activity.display_deed_action} #{activity.display_deed_type.titleize}:"
+      = link_to activity.deed_name, {:controller => activity.display_deed_type.pluralize.downcase, :action => :show, :id => activity.deed_id }, |
+                :title => "View info for #{activity.deed_name}" |      
+
+    - else
+      %span= "#{activity.display_deed_action} #{activity.display_deed_type.titleize}:"
+      =  "#{activity.deed_name}"    
+
+  - if activity.deed_action == 3 && activity.deed_parent.present?
+    = content_tag(:span, activity.deed_parent, :class => "#{activity.deed_parent} state", :title => "#{activity.deed_parent.humanize}")

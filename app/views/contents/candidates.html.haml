@@ -1,0 +1,43 @@
+- @page_title = "Job Placement For Job Candidates"
+
+%section.first
+  .row
+    .eight.columns
+      %hgroup.call
+        %h1
+          We Help You Find the Right Job
+          <br>
+          to Reach Your Potential
+    .four.columns
+      = render :partial => 'shared/public/social_links'
+
+%section.candidates
+  .row
+    .eight.columns
+      .orbit-wrap
+        .featured-points
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/jsa-puzzle.jpg",
+                      :alt => "JSA for Candidates",
+                      :data => {:caption => '#firstCaption'}
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/career-advice.jpg",
+                      :alt => "Career Advice",
+                      :data => {:caption => '#careerCaption'},
+                      :class => 'hide'
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/candidates.jpg",
+                      :alt => "Resume Writing Services",
+                      :data => {:caption => '#resumeCaption'},
+                      :class => 'hide'
+
+      %span.orbit-caption#firstCaption We'll Work Together to Find Your Next Job
+      %span.orbit-caption#careerCaption We Offer Helpful Tips to Make Your Job Search Easier
+      %span.orbit-caption#resumeCaption Let's Make Your Resume Stand-out from the Crowd
+
+      %h3 Recruitment Services that Work For You
+
+      %p At JSA SEARCH INC., we know your future employer affects not only your career, but your family and lifestyle. We give you the highest quality service, so you can enjoy the highest quality life. With over 10 years of healthcare staffing experience, we understand your success is our success, and we want to see you succeed.
+
+      %p Our experience finding jobs and placing candidates has been in a variety of areas such as: Corporate Executives, Regional Managers, all levels of positions of Interim Staffing, Administrators and Directors of Nursing, MDS Coordinator, Business Office Manager, Staff Developer, Admissions, Marketing, Dietary Positions, RN's, LPN's, LVN's, Therapists, Pharmacists, and more.
+    .four.columns
+      = render :partial => "shared/candidate_nav"
+
+

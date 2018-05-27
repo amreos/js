@@ -1,0 +1,99 @@
+.content-main{ "data-id" => @contact.id }
+  .managed_by
+    - if @client.employee.present?
+      = render :partial => 'shared/info/emp_link', :object => @client
+    - if @contact.emails.present?
+      = render :partial => 'shared/info/quick_message', :object => @contact
+
+    %a.button{:href => new_task_path(:goal_id => @contact.id,
+                                     :goal_type => "contact",
+                                     :goal_parent_id => @client.id,
+                                     :goal_parent_type => "client"),
+              :title => "Add a Task",
+              :class => "new_task",
+              "data-remote" => "true"}
+      %span Add a Task
+            
+  .top
+    %section.vcard
+      %hgroup
+        %h1.fn= @contact.name
+        %h2= @contact.display_title
+        %h3.org= link_to @client.name, @client, :title => "View info for #{@client.name}"
+        %h5= "Source: #{@client.source}"
+
+      %ul
+        = render :partial => "shared/info/url", :object => @contact.web_address if @contact.web_address.present?
+
+        = render :partial => "shared/info/phone", :collection => @contact.phones.first(2)
+
+        = render :partial => "shared/info/email", :collection => @contact.emails.first(1), :locals => {:parent => @contact}
+
+        = render :partial => "shared/info/address", :collection => @contact.addresses.first(1)
+
+      - if more_contact_info(@contact)
+        %h4.additional Additional Contact Info 
+        %ul.additional
+          = render :partial => "shared/info/phone", :collection => @contact.phones[2..-1]
+
+          = render :partial => "shared/info/email", :collection => @contact.emails[1..-1], :locals => {:parent => @contact}
+
+          = render :partial => "shared/info/address", :collection => @contact.addresses[1..-1]
+            
+    %section.states      
+      %p.clearfix
+        = link_to 'More Info', '#', :class => 'button left more'              
+        = link_to edit_text, edit_client_contact_path(@client, @contact), :class => "button right edit"
+  
+  .bottom
+    .notes
+      %section
+        %hgroup
+          %h1 Add a Note
+        = form_for(Note.new, :remote => "true")  do |f|          
+          = render :partial => 'notes/form', :locals => {:f => f, :parent => @contact}
+        
+    %nav
+      %ul
+        %li#btn-tasks.button.active{"data-panel" => "tasks"} Tasks      
+        %li#btn-facilities.button{"data-panel" => "facilities"} Facilities
+
+    .clear
+    .previous_notes
+      #accordionNotes
+        = render :partial => 'notes/note', :collection => @notes
+      %section.loader  
+        = link_to "Load More", "#", |
+                 "data-remote" => "true", |
+                 "data-page" => "2", |
+                 "data-per" => "5", |
+                 "data-path" => load_more_index_path(:obj_parent_id => @contact.id, :obj_type => "note", :obj_finder => "contact_ids" ), |
+                 "data-disable-with" => "Loading ...", |
+                 :class => "load_more button block active" |        
+    
+%aside.tasks.panel.first
+  %section
+    %hgroup
+      %h2
+        Upcoming Tasks
+  
+  %section.list    
+    = render :partial => 'tasks/task', :collection => @tasks      
+
+%aside.facilities.panel
+  %section
+    %hgroup
+      %h2= pluralize(@contact.facility_ids.length, "Facility")      
+  
+  %section.list    
+    = render :partial => 'shared/panels/facility', |
+             :collection => @facilities, |
+             :locals => {:client => @client}
+  %section.loader
+    = link_to "Load More", "#", |
+            "data-remote" => "true", |
+            "data-page" => "2", |
+            "data-per" => "10", |
+            "data-path" => load_more_index_path(:obj_type => "contact", :obj_id => @contact.id ), |
+            "data-disable-with" => "Loading ...", |
+            :class => "load_more button block active" |             

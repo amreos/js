@@ -1,0 +1,8 @@
+- if phone.type == "fax"
+  %li{:class => "fax"}
+    %span{:class => "#{phone.type} type"}= phone.type
+    = phone.formated_phone_number
+-else
+  %li{:class => "#{phone.type} tel"}
+    %span{:class => "#{phone.type} type"}= phone.type
+    = phone.formated_phone_number

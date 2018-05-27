@@ -1,0 +1,15 @@
+.fields-alt
+	= f.label :template_type, add_required_star("Template Type")
+	= f.select :template_type, [['Candidate'], ['Client'], ['Job'], ['Employee']], {}, {:class => 'chzn', }
+
+= f.fields_for :attachments do |builder|
+	.fields
+		= builder.label :name 
+		.item
+			= builder.text_field :name, :placeholder => "Enter a Name..."
+	.fields 
+		.item
+			= builder.file_field :misc_file
+			= builder.hidden_field :misc_file_cache
+		%p.hint  
+			Only .doc, .docx, .pdf, .png, .jpg, &amp; .pages up to 5mbs in size.

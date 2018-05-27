@@ -1,0 +1,211 @@
+.content-index
+  .managed_by
+    %a.button{:href => new_task_path, :title => "Add a Task", :class => "new_task", "data-remote" => "true"}
+      %span Add a Task      
+  
+  %section
+    = link_to "reset", candidates_path, :title => "Reset Search Options", :class => "button right active"
+    - if admin?
+      = link_to "export",
+                exports_path(params.merge({:export_type => 'candidate', :data_export => 1})),
+                :title => "Export to CSV",
+                :class => "button right rMargin10",
+                :data => {:remote => "true"}
+                            
+    - if admin? && params.include?(:source)
+      = link_to "mass email", mass_email_candidates_path(params.slice(*Candidate::ACCEPTABLE_QUERIES).update(:mass_email => 1)),
+                              :title => "Mass email candidates",
+                              :class => "button right rMargin10"
+                              
+    = link_to "advanced search", "#", :title => "Complete an advanced search for Candidates", :class => "advanced_search button right"    
+    %h1
+      All Candidates
+    
+    .form#advanced_search
+      = form_tag(candidates_path, :method => 'get') do
+        = hidden_field_tag :direction, params[:direction]
+        = hidden_field_tag :sort, params[:sort]
+        %fieldset.first
+          .fields
+            = label_tag :name, 'Candidate Name'
+            .item
+              = text_field_tag :name
+            %p.hint
+              Search any Candidate containing the entered name
+
+          .fields
+            = label_tag :user_email, 'Candidate Email'
+            .item
+              = text_field_tag :user_email
+            %p.hint
+              Search any Candidate containing the entered email
+
+          .fields
+            = label_tag :phone_number, 'Candidate Phone Number'
+            .item
+              = text_field_tag :phone_number
+            %p.hint
+              e.g. 909 will search for area code, 909-123-1234 will search the whole number 
+          
+          .fields-alt
+            = label_tag :title
+            = select_tag :title,
+               options_for_select((DefaultVars::JOB_TITLES|AdminDefault.settings.job_titles).sort),
+               :prompt => h("Select a Title"),
+               :class => 'chzn'
+            %p.hint
+              Leave blank if you need to search a legacy title (old job titles)
+          
+            .fields
+              = label_tag :legacy_title, 'Legacy Title'
+              .item
+                = text_field_tag :legacy_title
+              %p.hint
+                Search any Candidate that does not have an official system title
+
+            - if admin?
+              .fields
+                Candidates Without a Title 
+                .item
+                  = label_tag do
+                    = check_box_tag :only_legacy_title
+                    Without Titles
+                %p.hint
+                  Search any Candidate that only has a legacy title
+          
+          .fields#locationSearchSelect
+            %p
+              %span#selectRegionSearch.active.button
+                Search by Region
+              %span#selectGeoSearch.button
+                Search Near a Job
+              %span#selectRelocateSearch.button
+                Search by Possible Relocation                
+            
+            = hidden_field_tag :location_type, "region"
+              
+            .multiFields#regionSearch
+              .fields.short
+                = label_tag :city
+                .item
+                  = text_field_tag :city
+              .fields.short
+                = label_tag :region
+                .item
+                  = select_tag :region, options_for_select_with_prompt(DefaultVars::All_US_STATES, "Select a State")
+              .fields.short
+                = label_tag :zip
+                .item
+                  = text_field_tag :zip
+
+            .multiFields#jobGeoSearch.hide
+              .fields.med
+                = label_tag :job_location, "Search Near a Job"
+                .item.search
+                  = text_field_tag :job_location, nil, :class => "general", "data-path" => "jobs", "data-goal" => "job_location"
+                  = hidden_field_tag :geo_loc, nil
+
+              .fields.short
+                = label_tag :radius
+                .item
+                  = select_tag :radius, options_for_select([['10 Miles', 10], ['25 Miles', 25], ['50 Miles', 80], ['100 Miles', 100]])
+                  
+            .multiFields#relocateSearch.hide
+              .fields.med
+                = label_tag :relocate_to, "Can Relocate To"
+                .item
+                  = select_tag :relocate_to, options_for_select_with_prompt(DefaultVars::All_US_STATES, "Select a State")
+
+          .fields.bool
+            = label_tag :state, "Current Candidate State"
+            %p 
+              - DefaultVars::STATE_TYPES.each do |u|
+                %span
+                  = radio_button_tag "state", u[:value]                
+                  = u[:term].titleize
+              
+          .fields.bool
+            = label_tag :specialties, "Candidate Specialties"
+            %p 
+              - DefaultVars::JOB_SPECIAL_UNITS.each do |u|
+                %span
+                  = check_box_tag "specialties[]", u                  
+                  = u
+            %p.hint
+              Check all that you want to search for
+              
+          .fields.bool
+            = label_tag :education, "Candidate Education"
+            %p 
+              - DefaultVars::EDUCATION_TYPES.each do |u|
+                %span
+                  = check_box_tag "education[]", u                  
+                  = u
+            %p.hint
+              Check all that you want to search for              
+
+          .fields.bool
+            = label_tag :licenses, "Candidate Licenses"
+            %p 
+              - DefaultVars::JOB_LICENSES.each do |l|
+                %span
+                  = check_box_tag "licenses[]", l                
+                  = l   
+            %p.hint
+              Check all that you want to search for            
+            
+          .multiFields    
+            .fields.short
+              = label_tag :min_wage, "Minimum Wage"
+              .item
+                = text_field_tag :min_wage
+              %p.hint
+                e.g. use 15.50 for $15.50
+            .fields.short
+              = label_tag :max_wage, "Maximum Wage"
+              .item
+                = text_field_tag :max_wage
+              %p.hint
+                e.g. use 15.50 for $15.50                             
+            .fields.wages
+              = label_tag :wage_type, "Type of Wage"
+              .item
+                = select_tag :wage_type, options_for_select_with_prompt(DefaultVars::JOB_WAGE_TYPES, "Select a Wage Type"), {:class => "type"}              
+
+          .fields-alt
+            = label_tag :source, "Referral Source"            
+            = select_tag :source,
+                         options_for_select(DefaultVars::JOB_SOURCES|AdminDefault.settings.job_sources),
+                         :prompt => h("Select a Source"),
+                         :class => 'chzn'
+
+          .fields-alt
+            = label_tag :employee_id, 'Employee'            
+            = select_tag :employee_id, options_from_collection_for_select(Employee.all, :id, :name), :prompt => h("Select an Employee"), :class => "chzn"             
+                
+        .actions
+          = link_to "reset", candidates_path, :title => "Reset Search Options", :class => "button right active"        
+          = submit_tag "Search", :class => "button", "data-disable-with" => "Searching . . ."
+    
+    - if @candidates.present?
+      = form_tag(mass_create_applicants_path, :remote => "true") do
+        %fieldset.mass_tools
+          = link_to "check all", "#", :class => "select_all", :title => "Select all candidates below" 
+          = link_to "check none", "#", :class => "unselect_all", :title => "Select all candidates below"
+          .search
+            = text_field_tag :job_name, "", :type => "search", |
+                                            "placeholder" => "Search for a Job", |
+                                            "data-path" => "jobs", |
+                                            "data-goal" => "app_job_id", |
+                                            :class => "general" |
+          = hidden_field_tag :app_job_id
+          = submit_tag "Add to Job", :class => "button", "data-disable-with" => "Adding . . ."
+          - if admin?
+            %span.right              
+              = link_to "Edit Checked", edit_multiple_candidates_path, |
+                        :class => "button edit_multiple", :title => "Edit Selected Candidates" |
+       
+        .candidate_section
+          = render :partial => 'shared/index/candidate'
+    - else
+      %h2 No Candidates were found. Please try another search.

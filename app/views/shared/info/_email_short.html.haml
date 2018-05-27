@@ -1,0 +1,6 @@
+%li{:class => "email"}
+  %span{:class => "#{email_short.type} type"}= email_short.type
+  = link_to truncate(email_short.address, :length => 20), |
+            new_quick_message_path(:recipient => parent.id, :recipient_email => email_short.id, :recipient_type => parent.class.name.downcase), |
+            :title => "Send a quick message to #{parent.name}", |
+            :remote => "true" |

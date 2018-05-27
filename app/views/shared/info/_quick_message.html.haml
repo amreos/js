@@ -1,0 +1,6 @@
+= link_to content_tag(:span, "Send an Email"),
+					new_quick_message_path(:recipient => quick_message.id,
+																 :recipient_email => quick_message.emails.first.id,
+																 :recipient_type => quick_message.class.name.downcase),
+					:title => "Send a Quick Message",
+					:class => "dm_link button", "data-remote" => "true"

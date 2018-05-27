@@ -1,0 +1,37 @@
+- if !job.facility_ids.blank?
+  .facility
+    = label_tag :facility_id, add_required_star("Job's Facility")
+    .item.search
+      = text_field_tag :facility_search, job.facility_name, |
+                       :class => "long", |
+                       :type => "search", |
+                       "data-client_id" => "#{job.client_id}", |
+                       "data-path" => "facilities", |
+                       "placeholder" => "Search for a Facility" |    
+    %p.hint
+      Type the name of the client&#8217;s facility
+
+    .links
+      = link_to_remove_facility  
+
+  %p.hide#facility_toggle
+    = link_to "Add a Facility", "", :class => "add_facility button", :title => "Add a Facility"
+
+- else
+  .facility.hide
+    = label_tag :facility_id, add_required_star("Job's Facility")
+    .item.search
+      = text_field_tag :facility_search, "", |
+                       :class => "long", |
+                       :type => "search", |
+                       "data-client_id" => "#{job.client_id}", |
+                       "data-path" => "facilities", |
+                       "placeholder" => "Search for a Facility" |    
+    %p.hint
+      Type the name of the client&#8217;s facility
+
+    .links
+      = link_to_remove_facility  
+
+  %p#facility_toggle
+    = link_to "Add a Facility", "", :class => "add_facility button", :title => "Add a Facility"  

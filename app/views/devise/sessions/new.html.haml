@@ -1,0 +1,23 @@
+.content_sign_in
+  %section.top
+    %h2 Sign in to JSA Search Admin
+
+  = form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
+    .fields
+      = f.label :login
+      .item
+        = f.text_field :login
+    .fields
+      = f.label :password
+      .item
+        = f.password_field :password
+    .fields.bool  
+      - if devise_mapping.rememberable?
+        .item
+          = f.check_box :remember_me
+        = f.label :remember_me
+    .actions
+      = f.submit "Sign in", :class => "button", "data-disable-with" => "Signing In . . ."
+    
+  = render :partial => "devise/shared/links"
+

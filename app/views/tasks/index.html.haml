@@ -1,0 +1,29 @@
+.content-index
+	.managed_by
+		%a.button{:href => new_task_path, :title => "Add a Task", :class => "new_task", "data-remote" => "true"}
+			%span Add a Task			
+	%section.endlessItems
+
+		= link_to "Completed",
+							tasks_path(:type => 'completed'),
+							:title => "View Completed Tasks",
+							:class => "button right"							  
+		= link_to "Upcoming",
+							tasks_path,
+							:title => "View Upcoming Tasks",
+							:class => "button right rMargin"
+		%h1
+			- if params[:type].present? && params[:type] == 'completed'
+				Your Completed Tasks
+			- else
+				Your Tasks
+		.tasks
+			- if @tasks.present?		
+				= render @tasks
+			- else
+				.c.none
+					%hgroup
+						%h1 Sorry, no tasks were found.
+						%h2 You can create a new one by pressing alt+ctr+t or clicking the 'Add a Task' button above.
+	%section.endlessLoad
+		= paginate @tasks

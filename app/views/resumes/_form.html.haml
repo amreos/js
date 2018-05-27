@@ -1,0 +1,91 @@
+%fieldset.first
+
+  - if resume.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(resume.errors.count, "error")
+        prohibited this resume from being saved:
+
+      %ul
+        - resume.errors.full_messages.each do |msg|
+          %li= msg
+  .fields
+    = f.label :name, add_required_star('Name')
+    = f.text_field :name
+    %p.hint
+      A good name for the resume
+  .fields
+    = f.label :objective, add_required_star('Objective')
+    .item
+      = f.text_field :objective
+    %p.hint
+      i.e. Talented, Reliable Salesman Seeking to Increase Regional Development 
+      
+  .fields.long
+    = f.label :description, "Further Objective Description"
+    .item
+      = f.text_area :description
+      %span.charactersLeft 1000
+    %p.hint
+      Better describe the objective or candidate
+      
+  .fields.bool
+    .item
+      = f.check_box :show_candidate_contact_info
+    = f.label :show_candidate_contact_info, "Display Contact Info for Candidate?"  
+    %p.hint
+      Check to show both JSA and Candidate contact info. Uncheck to only show JSA contact info      
+      
+#accordionForm
+  %h3 
+    %a{:href => "#"}
+      Resume&#8217;s Work Histories
+  .ui-accordion-content
+  
+    %p Select the Work Histories You wish to include on this resume.
+    
+    = render :partial => 'shared/index/work_history', |
+             :collection => @candidate.work_histories.sort_by(&:ended).reverse, |
+             :locals => {:f => f, :resume => resume, :candidate => @candidate } |
+    
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next 
+
+  %h3 
+    %a{:href => "#"}
+      Resume&#8217;s Additional Info
+  .ui-accordion-content
+  
+    .fields.long
+      .c
+        %p
+          %strong Candidate&#8217;s Education Info 
+        - if @candidate.education_types.present?
+          %p
+            - @candidate.education_types.each do |education|
+              %span.tag= education
+          = simple_format @candidate.education_info if @candidate.education_info.present?
+        - else
+          %p If Education Info is added to the Candidate, it will be displayed here for reference.
+     
+      = f.label :education_info, "Summarize Relevant Education / Skills"
+      .item
+        = f.text_area :education_info
+        %span.charactersLeft 1000
+      %p.hint
+        Better describe any relevant education or skills
+
+    .fields.long
+      = f.label :awards, "Summarize Relevant Awards / Citations"
+      .item
+        = f.text_area :awards
+        %span.charactersLeft 1000
+      %p.hint
+        i.e. Winner of 1999 Notary Alliance Award
+        
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next        

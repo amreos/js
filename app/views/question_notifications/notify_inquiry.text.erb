@@ -1,0 +1,18 @@
+Hey <%= @send_to %>,
+
+You have received a question from <%= @question.inquirer %>.
+
+------------------------------------------------------------
+
+From: <%= @question.inquirer %> <<%= @question.inquirer_email %>>
+
+<% if @job.present? %>
+Job: <%= @job.name %>
+<% end %>
+
+<%= strip_tags(@question.content) %>
+
+------------------------------------------------------------
+JSA Search, Inc. / 866-572-8326 / jsasearch.net
+23120 Alicia Parkway Suite 110
+Mission Viejo, CA 92692

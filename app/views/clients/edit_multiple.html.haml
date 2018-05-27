@@ -1,0 +1,31 @@
+.form
+ 
+  %p.object_links
+    = link_to "Back to Clients", clients_path, :class => "button"
+  
+  %h1= "Edit Multiple Clients" 
+  
+  = form_for(:client, :url => update_multiple_clients_path, :html => {:method => :put}) do |f|
+    
+    - @clients.each do |client|
+      = hidden_field_tag "selected_clients[]", client.id, :id => "selected_clients_#{client.id}"
+    
+    %fieldset.first
+      .fields-alt
+        = f.label :source, "Referral Source"
+        = f.select :source,
+                   DefaultVars::JOB_SOURCES|AdminDefault.settings.job_sources,
+                   {:prompt => h("Select a Source")},
+                   {:class => 'chzn'}
+
+      .fields-alt
+        = f.label :employee_id, "JSA Employee"
+        = f.collection_select :employee_id,
+                              Employee.desc(:name),
+                              :id,
+                              :name,
+                              {:prompt => h("Select a JSA Employee")},
+                              {:class => 'chzn'}
+  
+    .actions
+      = f.submit "Update Multiple Clients", :class => "button", "data-disable-with" => "Saving . . ."

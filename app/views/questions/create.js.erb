@@ -1,0 +1,7 @@
+$(".modal").remove();
+$('#flash').remove();
+$("body").append('<div id="flash"><div id="notice"><%= escape_javascript(flash.discard(:notice)) %></div></div>');
+
+var flashMargin = ($(window).width() - $("#flash").width()) / 2; 
+$("#flash").css({'left' : flashMargin+"px"});
+$("#flash").delay(5000).fadeOut('slow', function() {$(this).remove();});

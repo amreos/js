@@ -1,0 +1,14 @@
+.public-job{ :class => cycle("", 'odd') }
+  .row
+    .two.columns
+      %p  
+        = link_to "Info",
+                  "/jobs/#{public_job.id}",
+                  :title => "Learn more about the #{public_job.job_type} position near #{public_job.general_area}",
+                  :class => "button green"
+    .four.columns
+      %h2= public_job.job_type
+      %h3= public_job.general_area
+
+    .six.columns
+      = simple_format public_job.summary

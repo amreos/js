@@ -1,0 +1,14 @@
+.form
+
+  %p.object_links
+    = link_to "Back to #{@parent.name}", {:controller => @parent.class.to_s.tableize, :action => :show, :id => @parent.id}, :class => "button"
+  
+  %h1= "Edit Attachment" 
+  
+  = form_for(@attachment, :html => { :multipart => true })  do |f|
+    %fieldset.first
+  
+      = render :partial => 'shared/attachment_form', :locals => {:parent => @parent, :f => f}
+      
+    .actions
+      = f.submit "Update Attachment", :class => "button", "data-disable-with" => "Updating..."

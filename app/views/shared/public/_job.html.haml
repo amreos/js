@@ -1,0 +1,10 @@
+.page
+  .job
+    %h2= job.job_type
+    %h4= job.general_area
+    = simple_format truncate(job.description, :length => 200)
+    %p
+      = link_to "Learn more about this job", |
+                "#", |
+                :title => "Learn more about the #{job.job_type} position near #{job.general_area}", |
+                :class => "green" |

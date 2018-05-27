@@ -1,0 +1,10 @@
+$(".modal").remove();
+$('#flash').remove();
+$("header#banner").after('<div id="flash"><div id="notice">Loaded More</div></div>');
+
+$("aside.panel section.list")
+  .append("<%= escape_javascript(render :partial => 'shared/panels/activity', :collection => @activities) %>");
+
+var flashMargin = ($(window).width() - $("#flash").width()) / 2; 
+$("#flash").css({'left' : flashMargin+"px"});
+$("#flash").delay(5000).fadeOut('slow', function() {$(this).remove();});

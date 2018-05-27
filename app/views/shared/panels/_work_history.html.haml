@@ -1,0 +1,20 @@
+.c{"data-id" => work_history.id}
+  .links          
+    = link_to "Edit", edit_candidate_work_history_path(candidate, work_history), :class => "edit", :title => "Edit"
+    = link_to "Delete", candidate_work_history_path(candidate, work_history), :title => "Delete", |
+                        :class => "delete", |
+                        "data-method" => 'delete',  |
+                        "data-confirm" => "Are you Sure?", |
+                        "data-remote" => "true" |
+  %hgroup
+    %h1
+      = link_to work_history.title, candidate_work_history_path(candidate, work_history), |
+        :title => "View more info for #{work_history.title}", |
+        "data-remote" => "true" |
+    %h2= work_history.title
+    %h3= work_history.company
+
+  %p 
+    %span= "#{work_history.started}"
+    &#8211; 
+    %span= "#{work_history.ended}"

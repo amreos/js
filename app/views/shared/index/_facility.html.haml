@@ -1,0 +1,37 @@
+%table
+  %tr.tr-head
+    = render :partial => 'sort_links'
+
+  - @facilities.each do |facility|
+    %tr.table-row
+      %td.tabble-td.location
+        = check_box_tag "selected_facilities[]", facility.id, false, :id => "selected_facilities_#{facility.id}" 
+    
+      %td.table-td.name
+        .grid
+          .grid-title
+            = link_to facility.name, client_facility_path(facility.client_id, facility), |
+                      :title => "View #{facility.name}'s info", "data-remote" => "true" |
+          .grid-links
+            %ul
+              %li= link_to "view", client_facility_path(facility.client_id, facility), :title => "View #{facility.name}'s info", "data-remote" => "true"
+              %li= link_to "#{content_tag(:span, "edit facility", :class => "edit")} edit".html_safe, |
+                            edit_client_facility_path(facility.client_id, facility), :class => "edit", :title => "Edit"
+              - if admin?
+                %li= link_to "#{content_tag(:span, "destroy", :class => "delete")} destroy".html_safe, |
+                             client_facility_path(facility.client_id, facility), :title => "Delete", |
+                             :class => "delete", |
+                             "data-method" => 'delete',  |
+                             "data-confirm" => "Are you Sure?", |
+                             "data-remote" => "true" |
+                             
+      %td.table-td
+        = link_to facility.client.name, facility.client, :title => "View #{facility.client.name}"
+
+      %td.table-td.location
+        = facility.addresses.present? ? facility.addresses.first.city : "N/A"
+
+      %td.table-td.location
+        = facility.addresses.present? ? facility.addresses.first.state : "N/A"
+
+= paginate @facilities, :remote => "true"

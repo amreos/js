@@ -1,0 +1,12 @@
+.form
+
+	%p.object_links
+		= link_to "Back to Doc Templates", doc_templates_path, :class => "button"
+
+	%h1 Edit Document Template
+
+	= form_for(@doc_template, :html => { :multipart => true })  do |f|
+		%fieldset.first
+			= render :partial => 'form', :locals => { :f => f }
+		.actions
+			= f.submit "Save Template", :class => "button", "data-disable-with" => "Updating..."

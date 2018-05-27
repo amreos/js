@@ -1,0 +1,250 @@
+/*=========== Colors*/
+$alert_red: #DE1915;
+$red: #940401;
+$drk_red: #68000f;
+
+$lgt_grey: #F2F2F2;
+
+$lgt_green: #589849;
+$drk_green: #21763A;
+
+$lgt_orange: #F4A624;
+$drk_orange: #F56E05;
+
+$lgt_yellow:#FDE00A;
+
+$pale_blue: #C8D3DC;
+$lgt_blue: #9FD9FB;
+$med_blue: #6285A1;
+$drk_blue: #093E6A;
+$darker_blue: #1E1A4D;
+
+$alt_pale_blue: #C9D4DD;
+$alt_lgt_blue: #8BC3E5;
+$alt_med_blue: #386d94;
+$alt_drk_blue: #255880;
+
+/*=========== Mixins*/
+@mixin calluna {
+  font-family: "calluna-1","calluna-2", Georgia, "Times New Roman", serif;
+}
+
+@mixin sans-fonts {
+  font: 16px/1.5 "Lucida Grande", Tahoma, Verdana, Arial, sans-serif;
+}
+
+@mixin sans-serif {
+  font-family: 'lucida grande','lucida sans unicode', arial, helvetica, sans-serif;
+}
+
+@mixin sans-font-family {
+  font-family: "Lucida Grande", Tahoma, Verdana, Arial, sans-serif;
+}
+
+@mixin serif-font-family {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+@mixin border-radius($radius: 10px) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin bottom-border-radius($radius: 10px) {
+  -webkit-border-bottom-right-radius: $radius;
+  -webkit-border-bottom-left-radius: $radius;
+  -moz-border-radius-bottomright: $radius;
+  -moz-border-radius-bottomleft: $radius;
+  border-bottom-right-radius: $radius;
+  border-bottom-left-radius: $radius;
+}
+
+@mixin right-border-radius($radius: 10px) {
+  -webkit-border-top-right-radius: $radius;
+  -webkit-border-bottom-right-radius: $radius;
+  -moz-border-radius-topright: $radius;
+  -moz-border-radius-bottomright: $radius;
+  border-top-right-radius: $radius;
+  border-bottom-right-radius: $radius;
+}
+
+@mixin left-border-radius($radius: 10px) {
+  -webkit-border-top-left-radius: $radius;
+  -webkit-border-bottom-left-radius: $radius;
+  -moz-border-radius-topleft: $radius;
+  -moz-border-radius-bottomleft: $radius;
+  border-top-left-radius: $radius;
+  border-bottom-left-radius: $radius;
+}
+
+@mixin top-border-radius($radius: 10px) {
+  -webkit-border-top-left-radius: $radius;
+  -webkit-border-top-right-radius: $radius;
+  -moz-border-radius-topleft: $radius;
+  -moz-border-radius-topright: $radius;
+  border-top-left-radius: $radius;
+  border-top-right-radius: $radius;
+}
+
+@mixin top-right-border-radius($radius: 10px) {
+  -webkit-border-top-right-radius: $radius;
+  -moz-border-radius-topright: $radius;
+  border-top-right-radius: $radius;
+}
+
+@mixin top-left-border-radius($radius: 10px) {
+  -webkit-border-top-left-radius: $radius;
+  -moz-border-radius-topleft: $radius;
+  border-top-left-radius: $radius;
+}
+
+@mixin bottom-right-border-radius($radius: 10px) {
+  -webkit-border-bottom-right-radius: $radius;
+  -moz-border-radius-bottomright: $radius;
+  border-bottom-right-radius: $radius;
+}
+
+@mixin shadow($color: rgba($drk_blue,0.45), $size: 5px) {
+  -moz-box-shadow: 0 0 $size $color;
+  -webkit-box-shadow: 0 0 $size $color;
+  box-shadow: 0 0 $size $color;
+}
+
+@mixin no-shadow() {
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+@mixin text-indent {
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@mixin inset-shadow($x: 0, $y: 0, $radius: 1px, $color: rgba($med_blue, 0.65)) {
+  -moz-box-shadow: inset $x $y $radius $color;
+  -webkit-box-shadow: inset $x $y $radius $color;
+  box-shadow: inner inset $x $y $radius $color;
+}
+
+@mixin text-shadow($x: 0, $y: 0, $radius: 1px, $color: rgba($med_blue, 0.65)) {
+  -moz-text-shadow: $x $y $radius $color;
+  -webkit-text-shadow: $x $y $radius $color;
+  text-shadow: $x $y $radius $color;
+}
+
+@mixin no-text-shadow {
+  -moz-text-shadow: none;
+  -webkit-text-shadow: none;
+  text-shadow: none;
+}
+
+@mixin background-image-gradient($start, $end) {
+  background: -moz-linear-gradient(top, $start, $end );
+  background: -ms-linear-gradient(top, $start, $end) no-repeat; /* IE10 */    
+  background: -webkit-gradient(linear, 0% 0%, 20% 50%, from($start), to($end));
+  background: -webkit-linear-gradient(top, $start 0%, $end 100%); /* Safari 5.1+, Chrome 10+ *  
+  background: linear-gradient(top, $start 0%, $end 100%); /* the standard */
+}
+
+@mixin disabled_button {
+  @include border-radius(6px);
+  background-color: $med_blue;
+  color: $lgt_blue;
+  border: 1px solid $med_blue;
+  @include background-image-gradient(lighten($med_blue, 10%), $med_blue);
+  &:hover, &:active {
+    background-color: $med_blue;
+    @include background-image-gradient(lighten($med_blue, 20%), $med_blue);
+    color: #fff;
+  }   
+}
+
+@mixin green_button {
+  @include border-radius(4px);
+  @include shadow;
+  background-color: $drk_green;
+  color: #fff;
+  border: 1px solid $drk_green;    
+  @include background-image-gradient(lighten($drk_green, 10%), $drk_green);
+  &:hover, &:active {
+    background-color: $drk_green;
+    @include background-image-gradient(lighten($drk_green, 20%), $drk_green);
+    color: #fff;
+  }   
+}
+
+@mixin yellow_button {
+  
+  background-color: $lgt_yellow;
+  @include background-image-gradient($lgt_yellow, $lgt_orange);
+  color: $drk_orange;
+  border: 1px solid $drk_orange;
+  
+  &:hover, &:active {
+    background-color: $lgt_yellow;
+    @include background-image-gradient(lighten($lgt_yellow, 30%), $lgt_yellow);
+    color: $drk_orange;
+  } 
+}
+
+@mixin blue_button {
+  
+  background-color: $alt_med_blue;
+  @include background-image-gradient($lgt_blue, $alt_med_blue);    
+  color: #fff;
+  border: 1px solid $drk_blue;  
+  
+  &:hover, &:active {
+    background-color: $drk_red;
+    @include background-image-gradient($alert_red, $drk_red);
+    color: #fff;
+  } 
+}
+
+@mixin orange_button {
+  
+  background-color: $drk_orange;
+  @include background-image-gradient($lgt_orange, $drk_orange);
+  color: #fff;
+  border: 1px solid $drk_orange;
+  
+  &:hover, &:active {
+    background-color: $lgt_yellow;
+    @include background-image-gradient($lgt_yellow, $drk_orange);
+    color: #fff;
+  } 
+}
+
+@mixin red_button {
+  background-color: #ff0000;
+  color: #a51a1a;
+  border: 1px solid darken(#ff0000, 10%);
+  @include background-image-gradient(lighten(#ff0000, 10%), #ff0000);
+  &:hover, &:active {
+    background-color: #ff0000;
+    @include background-image-gradient(lighten(#ff0000, 20%), #ff0000);
+    color: #fff;
+  }
+}
+
+@mixin container {
+  overflow: visible;
+  width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+  padding:0 10px;
+  text-align: center;
+}
+
+@mixin left($dist: 20px) {
+  float: left;
+  margin-left: $dist;
+}
+
+@mixin right($dist: 20px) {
+  float: right;
+  margin-right: $dist;
+}

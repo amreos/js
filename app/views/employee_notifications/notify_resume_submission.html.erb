@@ -1,0 +1,50 @@
+<p>-----------------------------------------------------------------------</p>
+<p>You have received a resume submission from <%= @resume_submission.name %>.</p>
+
+<p>-----------------------------------------------------------------------</p>
+
+<p>
+	Name: <%= @resume_submission.try(:name) %>
+</p>
+
+<% if @candidate.present? %>
+<p>
+	Candidate: <%= link_to @candidate.name,
+												 candidate_url(@candidate, :only_path => false),
+												 :title => "Visit the candidate page" %>
+</p>
+<% end %>
+
+<p><%= @resume_submission.email_type.titleize %> Email: <%= @resume_submission.email_address %></p>
+
+<p>Title: <%= @resume_submission.try(:title) %></p>
+
+<p>
+	Company: <%= @resume_submission.try(:company) %>
+</p>
+
+<p><%= @resume_submission.phone_type.titleize %> Phone: <%= @resume_submission.formated_phone_number %></p>
+
+<p>
+	<%= @resume_submission.address_type.titleize %> Address: <br/>
+	<%= @resume_submission.line_1 %> <br/>
+	<% if @resume_submission.line_2.present? %>
+	<%= @resume_submission.line_2 %> <br/>
+	<% end %>
+	<% if @resume_submission.line_3.present? %>
+	<%= @resume_submission.line_3 %> <br/>
+	<% end %>
+	<%= @resume_submission.city %>, <%= @resume_submission.region %> <%= @resume_submission.zip %>
+</p>
+
+<% if @resume_submission.comments.present? %>
+<span>Comments: <br/></span>
+<%= simple_format strip_tags(@resume_submission.comments) %>
+<% end %>
+
+<p>
+-----------------------------------------------------------------------<br/>
+JSA Search, Inc. / 866-572-8326 / jsasearch.net <br/>
+23120 Alicia Parkway Suite 110<br/>
+Mission Viejo, CA 92692
+</p>

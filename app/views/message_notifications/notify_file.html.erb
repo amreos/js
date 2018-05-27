@@ -1,0 +1,17 @@
+<table width="500px" border="0" cellspacing="0" cellpadding="0" style="background-color:#ffffff;" >
+  <tr>
+    <td valign="top" style="font-size: 14px;color: #003946;line-height:1.5;font-family: Georgia, Cambria, 'Times New Roman', Times, serif;">
+      <p style="font-size: 14px;color: #003946;font-family: Georgia, Cambria, 'Times New Roman', Times, serif;font-size:14px;text-align: left;line-height: 1.5;margin-bottom:20px;">
+        <%= @employee.name %> has shared: <%= @shared_file.name %>
+      </p>
+    </td>
+  </tr>
+</table>
+<table width="500px" border="0" cellspacing="0" cellpadding="0" style="background-color:#ffffff;" >
+  <tr>
+    <td valign="top" style="border-top: 1px solid #999999;padding-top:20px;font-size: 14px;color: #003946;line-height:1.5;font-family: Georgia, Cambria, 'Times New Roman', Times, serif;">      
+      <%= render :partial => 'shared/emails/content_bubble', :object => @note %>
+      <%= render :partial => 'shared/emails/employee', :object => @employee %>      
+    </td>
+  </tr>
+</table>

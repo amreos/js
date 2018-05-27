@@ -1,0 +1,46 @@
+.content-public
+  .form
+ 
+    %h1 Sign-up as an Employer to <br>Find the Best Candidates with JSA Search
+    
+    .columns
+      %p
+        Sign-up to enlist JSA Search to find the best candidates for your staffing needs. We will work closely together to make sure you find the right people to fill your open jobs.
+      %p
+        We will not sell or distribute your information unless it is to enable potential job candidates to interview with you.
+      %p
+        After you submit your information, a recruiter will contact you to learn more about your staffing needs.  
+      %p
+        %strong
+          If you are not an employer and want to find a job,
+          = link_to "sign up here to become a candidate.", new_public_candidate_path, :title => "Sign up to become a job candidate and find your best next job."
+  
+    = form_for(@client, :url => public_clients_path) do |f|
+      %fieldset.first
+        - if @client.errors.any?
+          #error_explanation
+            %h2
+              = pluralize(@client.errors.count, "error")
+              prohibited this candidate from being saved:
+
+            %ul
+              - @client.errors.full_messages.each do |msg|
+                %li= msg
+
+        = hidden_field_tag :employee, params[:employee] if params[:employee].present?
+        
+        .fields
+          = f.label :name, add_required_star('Your Company Name')
+          .item
+            = f.text_field :name
+        
+        .additional_fields
+          = f.fields_for :emails do |builder|
+            = render :partial => 'shared/forms/public_email', :locals => { :f => builder }            
+      
+        .additional_fields    
+          = f.fields_for :phones do |builder|
+            = render :partial => 'shared/forms/public_phone', :locals => { :f => builder }      
+  
+      .actions
+        = f.submit "Sign up as an Employer", :class => "button", "data-disable-with" => "Saving . . ."

@@ -1,0 +1,34 @@
+- @page_title = "Professional and Experience Recruiters"
+
+%section.first
+  .row
+    .eight.columns
+      %hgroup.call
+        %h1
+          We are a Dedicated Group of Professionals Committed to Finding You the Right Job.
+    .four.columns
+      = render :partial => 'shared/public/social_links'
+
+%section.bios
+  .row
+    .twelve.columns
+      - @employees.each_slice(3) do |employee_row|
+        .row
+          - employee_row.each do |employee|
+            .four.columns
+              .e{:id => employee.id, :class => "#{cycle("","","")}"}
+                - if employee.avatar.present?
+                  = link_to image_tag(employee.avatar.image_path_with_ssl, :alt => employee.name, :class => ""), |
+                            bio_path(employee), |
+                            :title => "Learn more about #{employee.name}", "data-remote" => "true"
+                - else
+                  = link_to image_tag('https://s3.amazonaws.com/new-assets.jsasearch.net/default-avatar.png', :alt => employee.name, :class => ""), |
+                            bio_path(employee), |
+                            :title => "Learn more about #{employee.name}", "data-remote" => "true"
+
+                .vcard
+                  %h4.fn
+                    = link_to employee_name_and_title(employee), |
+                      bio_path(employee), :title => "Learn about #{employee.name}", "data-remote" => "true" |
+
+%section.single_bio.clearfix

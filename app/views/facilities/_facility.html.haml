@@ -1,0 +1,53 @@
+%section.vcard{"data-id" => facility.id}
+  %hgroup
+    %h1.org.fn= facility.name
+    %h2
+      of
+      = link_to @client.name, @client, :title => "View Client Info"
+    - if facility.primary_contact.present?    
+      %h4
+        %strong Attn:
+        = link_to facility.attention_name,
+                  client_contact_path(@client, facility.primary_contact),
+                  :title => "Preview Primary Contact",
+                  :data => {:remote => true}
+
+  %p= "Source: #{@client.source}"                          
+
+  %ul
+    - if facility.web_address.present?
+      = render :partial => "shared/info/url", :object => facility.web_address
+    - facility.phones.each do |phone|
+      - if phone.type == "fax"
+        %li{:class => "fax"}
+          %span{:class => "#{phone.type} type"}= phone.type
+          = phone.formated_phone_number
+      -else
+        %li{:class => "#{phone.type} tel"}
+          %span{:class => "#{phone.type} type"}= phone.type
+          = phone.formated_phone_number
+    - facility.emails.each do |email|
+      %li{:class => "email"}
+        %span{:class => "#{email.type} type"}= email.type
+        = email.address
+    - facility.addresses.each do |address|
+      %li{:class => "#{address.type} adr"}
+        %span{:class => "#{address.type} type"}= address.type
+        = formatted_address(address)
+
+  - unless @contacts.blank?
+    %h3 Contacts: 
+    %p
+      - @contacts.each do |contact|
+        %span.tag
+          = link_to %Q[#{contact.name} - #{content_tag(:em, contact.display_title)}].html_safe, client_contact_path(@client, contact.id),
+            :title => "View #{contact.name} info"
+
+  .links          
+    = link_to "Edit", edit_client_facility_path(@client, facility), :class => "edit"
+    - if admin?
+      = link_to "Delete", client_facility_path(@client, facility), |
+                          :class => "delete", |
+                          "data-method" => 'delete',  |
+                          "data-confirm" => "Are you Sure?", |
+                          "data-remote" => "true" |                      

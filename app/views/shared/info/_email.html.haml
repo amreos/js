@@ -1,0 +1,6 @@
+%li{:class => "email"}
+  %span{:class => "#{email.type} type"}= email.type
+  = link_to email.address, |
+            new_quick_message_path(:recipient => parent.id, :recipient_email => email.id, :recipient_type => parent.class.name.downcase), |
+            :title => "Send a quick message to #{parent.name}", |
+            :remote => "true" |

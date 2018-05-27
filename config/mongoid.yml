@@ -1,0 +1,23 @@
+defaults: &defaults
+  host: localhost
+  # slaves:
+  #   - host: slave1.local
+  #     port: 27018
+  #   - host: slave2.local
+  #     port: 27019
+
+development:
+  <<: *defaults
+  database: jsa_search_development
+
+test:
+  <<: *defaults
+  database: jsa_search_test
+
+# set these environment variables on your prod server
+production:
+  uri: <%= ENV['MONGOHQ_URL'] %>
+  # port: <%= ENV['MONGOHQ_PORT'] %>
+  # username: <%= ENV['MONGOHQ_USERNAME'] %>
+  # password: <%= ENV['MONGOHQ_PASSWORD'] %>
+  # database: <%= ENV['MONGOHQ_DATABASE'] %>

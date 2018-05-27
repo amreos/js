@@ -1,0 +1,173 @@
+.content-main
+  .managed_by
+    - if @employee.emails.present?
+      = render :partial => 'shared/info/quick_message', :object => @employee
+    %a.button{:href => new_task_path(:goal_id => @employee.id, :goal_type => 'employee'),
+                       :title => "Add a Task",
+                       :class => "new_task",
+                       "data-remote" => "true"}
+      %span Add a Task      
+  .top
+    %section.vcard
+      = image_tag(@employee.avatar.thumb_path_with_ssl, :alt => @employee.name, :class => "left avatar") if @employee.avatar?
+      %hgroup
+        %h1.fn= @employee.name
+
+      %ul
+        = render :partial => "shared/info/url", :object => @employee.web_address if @employee.web_address.present?
+                         
+        = render :partial => "shared/info/phone", :collection => @employee.phones.first(2)
+        
+        = render :partial => "shared/info/email", :collection => @employee.emails.first(1), :locals => {:parent => @employee}
+        
+        = render :partial => "shared/info/address", :collection => @employee.addresses.first(1)
+        
+      - if more_contact_info(@employee)
+        %h4.additional Additional Contact Info 
+        %ul.additional
+          = render :partial => "shared/info/phone", :collection => @employee.phones[2..-1]
+
+          = render :partial => "shared/info/email", :collection => @employee.emails[1..-1], :locals => {:parent => @employee}
+
+          = render :partial => "shared/info/address", :collection => @employee.addresses[1..-1]
+        
+      .bio.additional
+        %h4 Bio 
+        = simple_format @employee.bio
+    %section.states            
+      %p.clearfix
+        - if admin?
+          = link_to 'View More Info', '#', :class => 'button left more'
+          = link_to edit_text, edit_employee_path(@employee), :class => "button right edit"
+        - else
+          = link_to 'More Info', '#', :class => 'button right more'
+          
+  .bottom
+    .notes
+      %section
+        %hgroup
+          %h1 Add a Note
+        = form_for(Note.new, :remote => "true")  do |f|
+          = render :partial => 'notes/form', :locals => {:f => f, :parent => @employee}
+    %nav
+      %ul
+        %li#btn-contacts.button.active{"data-panel" => "jobs"} Open Jobs      
+        %li#btn-candidates.button{"data-panel" => "placements"} Placed Jobs        
+        %li#btn-facilities.button{"data-panel" => "candidates"} Candidates
+        %li#btn-tasks.button{"data-panel" => "clients"} Clients
+        %li#btn-attachments.button{"data-panel" => "attachments"} Attachments        
+
+    .clear    
+    .previous_notes
+      #accordionNotes
+        = render :partial => 'notes/note', :collection => @notes
+      %section.loader  
+        = link_to "Load More", "#", |
+                 "data-remote" => "true", |
+                 "data-page" => "2", |
+                 "data-per" => "5", |
+                 "data-path" => load_more_index_path(:obj_parent_id => @employee.id, :obj_type => "note", :obj_finder => "user_ids" ), |
+                 "data-disable-with" => "Loading ...", |
+                 :class => "load_more button block active" |        
+        
+      
+%aside.jobs.panel.first
+  %section
+    %hgroup
+      %h2
+        %span.counter= @employee.open_jobs
+        %span.cache_type{"data-plural" => "Open Jobs", "data-singular" => "Open Job"}
+          = pluralize_without_count(@employee.open_jobs, "Open Job")
+        
+  %section.list    
+    = render :partial => 'shared/panels/job', :collection => @open_jobs
+  %section.loader
+    = link_to "Load More", "#", |
+             "data-remote" => "true", |
+             "data-page" => "2", |
+             "data-per" => "10", |
+             "data-path" => load_more_index_path(:obj_finder => "employee_id", |
+                                                 :obj_parent_id => @employee.id, |
+                                                 :obj_type => "job", |
+                                                 :obj_scope => "open" ), |
+             "data-disable-with" => "Loading ...", |
+             :class => "load_more button block active" |    
+    
+%aside.placements.panel
+  %section
+    %hgroup
+      %h2
+        %span.counter= @employee.total_placed_jobs
+        %span.cache_type{"data-plural" => "Placed Jobs", "data-singular" => "Placed Job"}
+          =pluralize_without_count(@employee.total_placed_jobs, "Placed Job")
+
+  %section.list
+    = render :partial => 'shared/panels/job', :collection => @placed_jobs
+  %section.loader
+    = link_to "Load More", "#", |
+             "data-remote" => "true", |
+             "data-page" => "2", |
+             "data-per" => "10", |
+             "data-path" => load_more_index_path(:obj_finder => "employee_id", |
+                                                 :obj_parent_id => @employee.id, |
+                                                 :obj_type => "job", |
+                                                 :obj_scope => "placed" ), |
+             "data-disable-with" => "Loading ...", |
+             :class => "load_more button block active" |    
+
+%aside.candidates.panel
+  %section
+    %hgroup
+      %h2
+        %span.counter= @employee.total_candidates
+        %span.cache_type{"data-plural" => "Candidates", "data-singular" => "Candidate"}
+          = pluralize_without_count(@employee.total_candidates, "Candidate")
+    
+  %section.list
+    = render :partial => 'shared/panels/candidate', :collection => @employee.candidates.desc(:updated_at).limit(10)
+  %section.loader    
+    = link_to "Load More", "#", |
+             "data-remote" => "true", |
+             "data-page" => "2", |
+             "data-per" => "10", |
+             "data-path" => load_more_index_path(:obj_finder => "employee_id", |
+                                                 :obj_parent_id => @employee.id, |
+                                                 :obj_type => "candidate" ), |
+             "data-disable-with" => "Loading ...", |
+             :class => "load_more button block active" |    
+
+%aside.clients.panel
+  %section
+    %hgroup
+      %h2
+        %span.counter= @employee.total_clients
+        %span.cache_type{"data-plural" => "Clients", "data-singular" => "Client"}        
+          = pluralize_without_count(@employee.total_clients, "Client")
+  %section.list
+    = render :partial => 'shared/panels/client', :collection => @employee.clients.desc(:updated_at).limit(10)
+  %section.loader    
+    = link_to "Load More", "#", |
+             "data-remote" => "true", |
+             "data-page" => "2", |
+             "data-per" => "10", |
+             "data-path" => load_more_index_path(:obj_finder => "employee_id", |
+                                                 :obj_parent_id => @employee.id, |
+                                                 :obj_type => "client" ), |
+             "data-disable-with" => "Loading ...", |
+             :class => "load_more button block active" |        
+    
+%aside.attachments.panel
+  %section
+    %hgroup
+      %h2 Attachments
+    = form_for(Attachment.new, :html => { :multipart => true })  do |f|
+      = render :partial => 'shared/attachment_form', :locals => {:parent => @employee, :f => f}
+      .actions
+      = f.submit "Save Attachment", :class => "button", "data-disable-with" => "Saving..."        
+
+  %section.list
+    = render :partial => 'shared/panels/attachment', |
+      :collection => @employee.attachments.asc(:created_at), |
+      :locals => {:parent => @employee}    
+    
+    

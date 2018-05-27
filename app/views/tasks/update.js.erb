@@ -1,0 +1,60 @@
+var new_time = "<%= j l(@task.due_at.in_time_zone(current_time_zone),
+            :format => :note_archive).downcase.strip %>";
+
+if ( $("body#tasks.index").length ) {	
+	var el = $("section.endlessItems .tasks .c[data-id='<%= j @task.id.to_s %>']");
+	var old_time = el.find(".due_at").text();
+	var count_text = parseInt($(".tasks_due").text());
+	el.find(".purpose").text("<%= j @task.purpose %>");
+	el.find(".due_at").text(new_time);
+
+	el.removeClass("task").removeClass("flagged").removeClass("due");
+
+	el.addClass("<%= j add_task_class(@task) %>");
+
+	if ( $('.c.none').length ) {
+		$('.c.none').remove();
+	}
+}
+
+if ( $("aside.panel.tasks").length ) {	
+	var el = $("aside.panel.tasks section.list .c[data-id='<%= j @task.id.to_s %>']");
+	var old_time = el.find(".due_at").text();
+	var count_text = parseInt($(".tasks_due").text());
+	el.find(".purpose").text("<%= j @task.purpose %>");
+	el.find(".due_at").text(new_time);
+
+	el.removeClass("task").removeClass("flagged").removeClass("due");
+
+	el.addClass("<%= j add_task_class(@task) %>");
+
+	if ( $('.c.none').length ) {
+		$('.c.none').remove();
+	}
+}
+
+<% if @task.due_at < Time.zone.now.end_of_day %>
+if ( new_time.substr(0,7) != old_time.substr(0,7) ) {
+	var new_count = count_text + 1;
+	$(".task_counter").text(new_count).removeClass("hide");
+	$(".task_counter, .tasks_due").text(new_count);		
+}	
+<% elsif @task.due_at > Time.zone.now.end_of_day %>
+if ( new_time.substr(0,7) != old_time.substr(0,7) ) {
+	var new_count = count_text - 1;
+	if ( new_count == 0 ) {
+		$(".task_counter").addClass("hide");	
+	} else {
+		$(".task_counter").text(new_count);
+	}
+	$(".task_counter, .tasks_due").text(new_count);
+}
+<% end %>
+
+$(".modal").remove();
+$('#flash').remove();
+$("header#banner").after('<div id="flash"><div id="notice"><%= j(flash.discard(:notice)) %></div></div>');
+
+var flashMargin = ($(window).width() - $("#flash").width()) / 2; 
+$("#flash").css({'left' : flashMargin+"px"});
+$("#flash").delay(5000).fadeOut('slow', function() {$(this).remove();});

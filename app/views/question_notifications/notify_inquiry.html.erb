@@ -1,0 +1,20 @@
+<p>Hey <%= @send_to %>,</p>
+
+<p>You have received a question from <%= @question.inquirer %>.</p>
+
+<p>-----------------------------------------------------------------------</p>
+
+<p>From: <%= @question.inquirer %> &#60;<%= @question.inquirer_email %>&#62;</p>
+
+<% if @job.present? %>
+<p>Job: <%= link_to @job.name, @job, :title => "Visit the job page" %></p>
+<% end %>
+
+<%= simple_format strip_tags(@question.content) %>
+
+<p>
+-----------------------------------------------------------------------<br/>
+JSA Search, Inc. / 866-572-8326 / jsasearch.net <br/>
+23120 Alicia Parkway Suite 110<br/>
+Mission Viejo, CA 92692
+</p>

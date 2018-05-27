@@ -1,0 +1,32 @@
+.form
+ 
+  %p.object_links
+    = link_to "Back to Jobs", jobs_path, :class => "button"
+  
+  %h1= "Edit Multiple Jobs" 
+  
+  = form_for(:job, :url => update_multiple_jobs_path, :html => {:method => :put}) do |f|
+    
+    - @jobs.each do |job|
+      = hidden_field_tag "selected_jobs[]", job.id, :id => "selected_jobs_#{job.id}"
+    
+    %fieldset.first
+      .fields-alt
+        = f.label :source, "Referral Source"
+        = f.select :source,
+                   DefaultVars::JOB_SOURCES|AdminDefault.settings.job_sources,
+                   {:prompt => h("Select a Source")},
+                   {:class => 'chzn'}
+
+      .fields-alt
+        = f.label :employee_id, "JSA Employee"
+        = f.collection_select :employee_id,
+                              Employee.desc(:name),
+                              :id,
+                              :name,
+                              {:prompt => h("Select a JSA Employee")},
+                              {:class => 'chzn'}
+        
+  
+    .actions
+      = f.submit "Update Multiple Jobs", :class => "button", "data-disable-with" => "Saving . . ."

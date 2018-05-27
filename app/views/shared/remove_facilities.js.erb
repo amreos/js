@@ -1,0 +1,8 @@
+$(".modal").remove();
+$('#flash').remove();
+$("header#banner").after('<div id="flash"><div id="alert"><%= escape_javascript(flash.discard(:alert)) %></div></div>');
+$("form .fields.facilities").remove();
+
+var flashMargin = ($(window).width() - $("#flash").width()) / 2; 
+$("#flash").css({'left' : flashMargin+"px"});
+$("#flash").delay(5000).fadeOut('slow', function() {$(this).remove();});

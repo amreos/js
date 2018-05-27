@@ -1,0 +1,8 @@
+$("section.endlessItems")
+  .append("<%= j(render @tasks) %>");
+
+ <% if @tasks.current_page.to_i < @tasks.num_pages.to_i %>
+  $('.endlessLoad .pagination').replaceWith('<%= j paginate(@tasks) %>');
+<% else %>
+  $('.endlessLoad').remove();
+<% end %>

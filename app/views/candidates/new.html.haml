@@ -1,0 +1,12 @@
+.form
+ 
+  %p.object_links
+    = link_to 'Back to Candidates', candidates_path, :class => "button"
+  
+  %h1 Add A Candidate
+  
+  = form_for(@candidate) do |f|
+    = render :partial => 'form', :locals => { :f => f, :candidate => @candidate }
+  
+    .actions
+      = f.submit "Add Candidate", :class => "button", "data-disable-with" => "Saving . . ."

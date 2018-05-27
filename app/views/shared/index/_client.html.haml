@@ -1,0 +1,50 @@
+%table
+  %tr.tr-head
+    = render :partial => 'sort_links'
+
+  - @clients.each do |client|
+    %tr{:class => "table-row #{cycle('', '', 'third_row')}", "data-id" => client.id }
+      - if admin?
+        %td.tabble-td.location
+          = check_box_tag "selected_clients[]", client.id, false, :id => "selected_clients_#{client.id}"
+
+      %td.table-td.name
+        .grid
+          .grid-title
+            = link_to client.name, client, :title => "view #{client.name}"
+          .grid-links
+            %ul
+              %li= link_to "view", client
+              %li= link_to "#{content_tag(:span, "edit", :class => "edit")} edit".html_safe, edit_client_path(client)
+              - if admin?
+                %li= link_to "#{content_tag(:span, "destroy", :class => "delete")} destroy".html_safe, client_path(client), |
+                                    "data-method" => 'delete',  |
+                                    "data-confirm" => "Are you Sure?", |
+                                    "data-remote" => "true",            |
+                                    :class => "delete"
+      %td.table-td.current_state
+        = content_tag(:span, client.current_state, :class => "#{client.current_state} state", :title => "#{client.current_state}")
+
+
+      %td.table-td.location
+        - if client.addresses.present?
+          = "#{client.addresses.first.state}"
+        - else
+          N/A
+
+      %td.table-td.jobs
+        = link_to client.total_jobs, jobs_path(:client_id => client.id), :title => "View all jobs for #{client.name}"
+
+      %td.table-td.jobs.open
+        = link_to client.open_jobs, jobs_path(:client_id => client.id, :open => true), :title => "View all open jobs for #{client.name}"
+
+      %td.table-td.jobs.placed
+        = link_to client.total_placed_jobs, jobs_path(:client_id => client.id, :placed => true), :title => "View all placed jobs for #{client.name}"
+
+      %td.table-td.employee
+        - if client.employee.present?
+          = link_to client.employee.name, client.employee, :title => "View info for #{client.employee.name}"
+        - else
+          N/A
+
+= paginate @clients, :remote => "true"

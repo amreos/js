@@ -1,0 +1,85 @@
+.jsa-info
+  %ul
+    %li= image_tag('https://s3.amazonaws.com/new-assets.jsasearch.net/jsa-resume-logo.jpg', :alt => 'JSA Search, Inc.', :width => 150, :height => 58)
+  - if @resume.show_candidate_contact_info
+    %ul
+      %li.fn
+        %strong= @candidate.name
+      - @candidate.phones.first(2).each do |phone|
+        - if phone.type == "fax"
+          %li{:class => "fax"}
+            = "#{phone.type[0]} #{phone.formated_phone_number}"
+        - else
+          %li{:class => "#{phone.type} tel"}
+            = "#{phone.type[0]} #{phone.formated_phone_number}"
+      - @candidate.emails.first(1).each do |email|
+        %li{:class => "email"}
+          = email.address
+      - @candidate.addresses.first(1).each do |address|
+        %li{:class => "#{address.type} adr"}
+          = formatted_address(address)
+  %ul
+    %li.org
+      %strong
+        = "#{@candidate.employee.name},"
+        %br
+        JSA Search, Inc.
+    - @candidate.employee.phones.first(2).each do |phone|
+      - if phone.type == "fax"
+        %li{:class => "fax"}
+          = "#{phone.type[0]} #{phone.formated_phone_number}"
+      - else
+        %li{:class => "#{phone.type} tel"}
+          = "#{phone.type[0]} #{phone.formated_phone_number}"
+    - @candidate.employee.emails.first(1).each do |email|
+      %li{:class => "email"}
+        = email.address
+    - @candidate.employee.addresses.first(1).each do |address|
+      %li{:class => "#{address.type} adr"}
+        = formatted_address(address)
+
+%section
+  %hgroup
+    %h1= @candidate.name
+    %h2= @candidate.display_title
+
+  - if @resume.description.present?
+    %h2= @resume.objective
+    = simple_format @resume.description
+  - else
+    %h2.add_margin
+      = @resume.objective
+
+%section
+  - if @candidate.specialties.present?
+    %h2 Licenses | Skills
+    %ul.skills
+      - @candidate.licenses.each do |license|
+        %li= license
+      - @candidate.specialties.each do |skill|
+        %li= skill
+
+%section
+  %h2 Professional Experience
+  .wh-wrap
+    - @work_histories.sort_by(&:ended).reverse.each do |wh|
+      .wh
+        %span.work
+          = "#{wh.started}"
+          to
+          = "#{wh.ended}"
+        %h2= wh.company
+        %h3= wh.title
+        = simple_format wh.accomplishments
+
+- if @resume.awards.present?
+  %section
+    %h2 Awards | Recognition
+    = simple_format @resume.awards
+
+- if @resume.education_info.present?
+  %section
+    %h2 Education | Affiliations
+    = simple_format @resume.education_info
+
+/ = render :partial => "resume", :object => @resume, :locals => {@candidate => @candidate, @work_histories => @work_histories}

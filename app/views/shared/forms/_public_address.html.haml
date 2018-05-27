@@ -1,0 +1,33 @@
+.additional_field
+  .fields
+    = f.label :line_1, "Address Line 1"
+    .item
+      = f.text_field :line_1
+    %p.hint
+      e.g. 123 Main St.
+  .fields
+    = f.label :line_2, "Address Line 2"
+    .item
+      = f.text_field :line_2
+    %p.hint
+      e.g. Suite 202
+  .fields
+    = f.label :line_3, "Address Line 3"
+    .item
+      = f.text_field :line_3
+    %p.hint
+      e.g. Attn: Office of the President
+  .fields
+    = f.label :city, add_required_star("City")
+    .item
+      = f.text_field :city
+  .fields.short
+    = f.label :state, add_required_star("State")
+    .item
+      = f.text_field :state
+  .fields.short
+    = f.label :zip, add_required_star("Zip Code")
+    .item.search
+      = f.text_field :zip, :class => "general", "data-path" => "zip_codes", "data-goal" => "zip"
+    %p.hint
+      e.g. 98020 or 98020-3410

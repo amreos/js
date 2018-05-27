@@ -1,0 +1,36 @@
+- @facilities = client.facilities.where(:_id.in => contact.facility_ids).limit(2).only(:id, :name) unless contact.facility_ids.blank? 
+
+.c{"data-id" => contact.id}
+  .links          
+    = link_to "Edit", edit_client_contact_path(client, contact), :class => "edit", :title => "Edit"
+    - if admin?
+      = link_to "Delete", client_contact_path(client, contact), :title => "Delete", |
+                          :class => "delete", |
+                          "data-method" => 'delete',  |
+                          "data-confirm" => "Are you Sure?", |
+                          "data-remote" => "true" |                      
+  %hgroup
+    %h1
+      = link_to contact.name, client_contact_path(client, contact), :title => "Preview #{contact.name}'s info"
+    %h2=contact.display_title
+              
+  - if contact.emails.present? || contact.phones.present?
+          
+    %ul
+      = render :partial => "shared/info/phone", :collection => contact.phones.first(1)
+
+      = render :partial => "shared/info/email_short", :collection => contact.emails.first(1), :locals => {:parent => contact}
+  
+  
+  - if contact.facility_ids.present? && @facilities.present?         
+    %p
+      - @facilities.each do |facility|
+        %span.tag
+          = link_to facility.name, client_facility_path(client, facility.id), |
+            :title => "View #{facility.name} info", |
+            "data-remote" => "true" |
+
+  %p= link_to "Preview info",
+              client_contact_path(client, contact),
+              :title =>  "View all of #{contact.name}'s info",
+              "data-remote" => "true"

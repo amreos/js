@@ -1,0 +1,21 @@
+- @page_title = "Featured Open Jobs"
+
+%section.first
+  .row
+    .twelve.columns
+      .row
+        .eight.columns
+          %hgroup.call 
+            %h1
+              = "Featured Job Openings Across the Country"
+        .four.columns
+          = render :partial => 'shared/public/social_links'
+
+%section.listings
+  .row
+    .twelve.columns
+      .endlessItems
+        = render :partial => 'public_jobs/public_job', :collection => @public_jobs
+      
+    %section.endlessLoad
+      = paginate @public_jobs, :remote => "true"

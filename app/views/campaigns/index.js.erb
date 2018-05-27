@@ -1,0 +1,9 @@
+$(".modal").remove();
+$('#flash').remove();
+
+var flashMargin = ($(window).width() - $("#flash").width()) / 2; 
+$("#flash").css({'left' : flashMargin+"px"});
+$("#flash").delay(5000).fadeOut('slow', function() {$(this).remove();});
+
+$(".recent-campaigns").html("<table></table>");
+$(".recent-campaigns table").append("<%= j render(:partial => 'campaigns/campaign', :collection => @campaigns) %>");

@@ -1,0 +1,25 @@
+$('#flash').remove();
+$("header#banner").after('<div id="flash"><div id="notice"><%= escape_javascript(flash.discard(:notice)) %></div></div>');
+
+$("textarea#note_content").val("");
+
+if ( ($("#accordionNotes").length) && ($(".contactPreview").length < 1) ) {
+  $("#accordionNotes").prepend("<%= escape_javascript(render :partial => 'notes/note', :locals => {:note => @note, :parent => @parent}) %>");
+  $("#accordionNotes").accordion("destroy");
+
+  $("#accordionNotes").accordion({
+    collapsible: true,
+    header: "div.note_title",
+    autoHeight: false    
+  });  
+}
+
+if ($(".modal.closeAfterSuccess").length) {
+  $(".modal.closeAfterSuccess").remove();
+}
+
+$("textarea#note_content").parent().find(".charactersLeft").text("320");
+
+var flashMargin = ($(window).width() - $("#flash").width()) / 2; 
+$("#flash").css({'left' : flashMargin+"px"});
+$("#flash").delay(5000).fadeOut('slow', function() {$(this).remove();});

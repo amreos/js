@@ -1,0 +1,14 @@
+$(".modal").append("<%= escape_javascript(render(@contact)) %>").addClass("contactPreview");
+
+$("#flash").remove();
+
+$(".modal").dialog({
+ width: 600,
+ title: "Contact Info for <%= escape_javascript(@contact.name) %>",
+ position: ['center',50],
+ close: function(event, ui) {
+   $(this).removeClass("contactPreview");
+ }
+});
+
+$("a").blur();

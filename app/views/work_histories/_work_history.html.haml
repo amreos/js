@@ -1,0 +1,97 @@
+%section.vcard{"data-id" => work_history.id}
+  %hgroup
+    %h1= work_history.title
+    %h2= work_history.company
+
+  .links          
+    = link_to "Edit", edit_candidate_work_history_path(@candidate, work_history), :class => "edit", :title => "Edit"
+    = link_to "Delete", candidate_work_history_path(@candidate, work_history), :title => "Delete", |
+                        :class => "delete", |
+                        "data-method" => 'delete',  |
+                        "data-confirm" => "Are you Sure?", |
+                        "data-remote" => "true" |                      
+%section
+  %hgroup
+    %h3 Employment Dates 
+  %table.standard_table
+    %tr.tr-head
+      %th Started
+      %th Ended
+      
+    %tr.table-row
+      - if work_history.ended_on.present?
+        %td.table-td= "#{work_history.started}"
+        %td.table-td= "#{work_history.ended}"
+      - else
+        %td.table-td= "#{work_history.started}"
+        %td.table-td Present
+
+%section
+  %hgroup
+    %h3 Job Wages 
+  %table.standard_table
+    %tr.tr-head
+      %th Previous
+      %th Type
+      %th Bonus
+      %th Type
+    %tr.table-row
+      %td.table-td
+        = work_history.previous_wage && work_history.previous_wage.present? ? number_to_currency(work_history.previous_wage) : "N/A"
+      %td.table-td
+        = work_history.wage_type && work_history.wage_type.present? ? work_history.wage_type : "N/A"
+      = display_bonus(work_history)
+      %td.table-td
+        = work_history.bonus_type && work_history.bonus_type.present? ? work_history.bonus_type : "N/A"
+
+%section
+  %hgroup
+    %h3 Job Info 
+  %table.standard_table
+    %tr.tr-head
+      %th # of Beds
+      %th Current Census
+      %th Subordinates      
+    %tr.table-row
+      %td.table-td= work_history.num_beds && work_history.num_beds.present? ? work_history.num_beds : "N/A"             
+      %td.table-td= work_history.current_census && work_history.current_census.present? ? work_history.current_census : "N/A"
+      %td.table-td= work_history.subordinates && work_history.subordinates.present? ? work_history.subordinates : "N/A"
+  %table.standard_table
+    %tr.tr-head
+      %th Last Survey
+      %th Results
+    %tr.table-row
+      %td.table-td= work_history.chronic_last_survey_on && work_history.chronic_last_survey_on.present? ? work_history.chronic_last_survey_on : "N/A"
+      %td.table-td= work_history.survey_results && work_history.survey_results.present? ? simple_format(work_history.survey_results) : "N/A"
+  %table.standard_table
+    %tr.tr-head
+      %th Mix Types    
+    %tr.table-row
+      %td.table-td
+        - if work_history.mix_types.present?
+          - work_history.mix_types.each do |m|
+            %span.tag= m
+        - else
+          N/A
+  %table.standard_table          
+    %tr.tr-head
+      %th Facility Services      
+    %tr.table-row      
+      %td.table-td
+        - if work_history.mix_types.present?          
+          - work_history.special_units.each do |u|
+            %span.tag= u
+        - else
+          N/A
+
+%section
+  %hgroup
+    %h3 Accomplishments
+  = work_history.accomplishments && work_history.accomplishments.present? ? simple_format(work_history.accomplishments) : "N/A"           
+  
+%section
+  %hgroup
+    %h3 Reasons for Leaving
+  = work_history.resons_for_leaving && work_history.resons_for_leaving.present? ? simple_format(work_history.resons_for_leaving) : "N/A"             
+  
+      

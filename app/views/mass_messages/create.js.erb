@@ -1,0 +1,7 @@
+$(".modal").remove();
+$('#flash').remove();
+$("header#banner").after('<div id="flash"><div id="notice">Prepping Message - Redirecting you back to <%= escape_javascript(@klass.to_s.pluralize)%></div></div>');
+
+var flashMargin = ($(window).width() - $("#flash").width()) / 2; 
+$("#flash").css({'left' : flashMargin+"px"});
+window.location.replace('<%= send("#{@klass.to_s.downcase.pluralize}_path") %>');

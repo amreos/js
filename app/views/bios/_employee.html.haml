@@ -1,0 +1,39 @@
+.row
+  .twelve.columns
+    .four.columns
+      %p
+        - if employee.avatar.present?
+          = image_tag(employee.avatar.image_path_with_ssl, :alt => employee.name, :class => "")
+        - else
+          = image_tag('https://s3.amazonaws.com/new-assets.jsasearch.net/default-avatar.png', :alt => employee.name, :class => "")
+      %p
+
+    .eight.columns
+      %section.vcard
+        = link_to "back", "#", :class => "button right nice green radius", :title => "back to Employee list", :id => "back_to_bios"
+        %h2.fn= employee.name
+        %h3.title= employee.title if employee.title.present?
+
+        %ul.clearfix
+          %li.question
+            %a{:href => new_question_path, :class => "question", :title => "Contact #{employee.name.split(" ").first} at JSA Search", "data-remote" => "true"}
+              = "Send a Message"
+          - unless %w{ jsherman@jsasearch.net johns@jsasearch.net barbarah@jsasearch.net }.include? employee.email
+            - employee.emails.first(1).each do |email|
+              %li{:class => "email"}
+                %span{:class => "#{email.type} type"}= email.type
+                = email.address
+
+          - if employee.web_address.present?
+            = render :partial => "shared/info/url", :object => employee.web_address
+          - employee.phones.where(:type.ne => 'mobile').first(2).each do |phone|
+            - if phone.type == "fax"
+              %li{:class => "fax"}
+                %span{:class => "#{phone.type} type"}= phone.type
+                = phone.formated_phone_number
+            -else
+              %li{:class => "#{phone.type} tel"}
+                %span{:class => "#{phone.type} type"}= phone.type
+                = phone.formated_phone_number
+
+        = simple_format employee.bio

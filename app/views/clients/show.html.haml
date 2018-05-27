@@ -1,0 +1,224 @@
+.content-main{ "data-id" => @client.id }
+  .managed_by
+    - if @client.employee.present?
+      = render :partial => 'shared/info/emp_link', :object => @client
+    - if @client.emails.present?
+      = render :partial => 'shared/info/quick_message', :object => @client
+    %a.button{:href => new_task_path(:goal_id => @client.id, :goal_type => 'client'),
+                       :title => "Add a Task",
+                       :class => "new_task",
+                       "data-remote" => "true"}
+      %span Add a Task
+  .top
+    %section.vcard
+      %hgroup
+        %h1.org.fn
+          = @client.name
+        - if @client.contacts.present? && @client.primary_contact.present?
+          %h4
+            %strong Attn:
+            = link_to @client.attention_name,
+                      client_contact_path(@client, @client.primary_contact),
+                      :title => "Preview Primary Contact",
+                      :data => {:remote => true}
+        %h5= "Source: #{@client.source}"
+
+      %ul
+        = render :partial => "shared/info/url", :object => @client.web_address if @client.web_address.present?
+
+        = render :partial => "shared/info/phone", :collection => @client.phones.first(2)
+
+        = render :partial => "shared/info/email", :collection => @client.emails.first(1), :locals => {:parent => @client}
+
+        = render :partial => "shared/info/address", :collection => @client.addresses.first(1)
+
+      - if more_contact_info(@client)
+        %h4.additional Additional Contact Info
+        %ul.additional
+          = render :partial => "shared/info/phone", :collection => @client.phones[2..-1]
+
+          = render :partial => "shared/info/email", :collection => @client.emails[1..-1], :locals => {:parent => @client}
+
+          = render :partial => "shared/info/address", :collection => @client.addresses[1..-1]
+
+
+    %section.states
+      %header
+        %h1{:class => "button #{@client.current_state}", :id => "current_status"}
+          = @client.current_state.titleize
+
+      %ul
+        %li
+          = link_to "Veteran Client", update_status_client_path(@client, :new_status => 0), |
+                    :class => current_state_class("veteran_client", @client), "data-remote" => "true", "data-method" => "put", |
+                    :title => "Set as Veteran Client" |
+        %li
+          = link_to "New Client", update_status_client_path(@client, :new_status => 1), |
+                    :class => current_state_class("new_client", @client), "data-remote" => "true", "data-method" => "put", |
+                    :title => "Set as New Client" |
+        %li
+          = link_to "Marketing", update_status_client_path(@client, :new_status => 2), |
+                    :class => current_state_class("marketing", @client), "data-remote" => "true", "data-method" => "put", |
+                    :title => "Set as Marketing" |
+        %li
+          = link_to "Needs Marketing", update_status_client_path(@client, :new_status => 3), |
+                    :class => current_state_class("needs_marketing", @client), "data-remote" => "true", "data-method" => "put", |
+                    :title => "Set as Needs Marketing" |
+        %li
+          = link_to "Not Interested", update_status_client_path(@client, :new_status => 4), |
+                    :class => current_state_class("not_interested", @client), "data-remote" => "true", "data-method" => "put", |
+                    :title => "Set as Not Interested" |
+        - if admin?
+          %li
+            = link_to "Flagged", update_status_client_path(@client, :new_status => 5), |
+                      :class => current_state_class("flagged", @client), "data-remote" => "true", "data-method" => "put", |
+                      :title => "Set as Flagged" |
+
+      %p.clearfix
+        = link_to 'View More Info', '#', :class => 'button left more'
+        = link_to edit_text, edit_client_path(@client), :class => "button right edit"
+
+  .bottom
+    .notes
+      %section
+        %hgroup
+          %h1 Add a Note
+        = form_for(Note.new, :remote => "true")  do |f|
+          = render :partial => 'notes/form', :locals => {:f => f, :parent => @client}
+    %nav
+      %ul
+        %li#btn-tasks.button.active{"data-panel" => "tasks"} Tasks
+        %li#btn-contacts.button{"data-panel" => "contacts"} Contacts
+        %li#btn-facilities.button{"data-panel" => "facilities"} Facilities
+        %li#btn-jobs.button{"data-panel" => "jobs"} Open Jobs
+        %li#btn-placements.button{"data-panel" => "placements"} Placed Jobs
+        %li#btn-attachments.button{"data-panel" => "attachments"} Attachments
+
+    .clear
+    .previous_notes
+      #accordionNotes
+        = render :partial => 'notes/note', :collection => @notes
+      %section.loader
+        = link_to "Load More", "#", |
+                 "data-remote" => "true", |
+                 "data-page" => "2", |
+                 "data-per" => "5", |
+                 "data-path" => load_more_index_path(:obj_parent_id => @client.id, :obj_type => "note", :obj_finder => "user_ids" ), |
+                 "data-disable-with" => "Loading ...", |
+                 :class => "load_more button block active" |
+
+%aside.tasks.panel.first
+  %section
+    %hgroup
+      %h2
+        Upcoming Tasks
+
+  %section.list
+    = render :partial => 'tasks/task', :collection => @tasks
+
+%aside.contacts.panel
+  %section
+    %hgroup
+      %h2
+        %span.counter= @client.total_contacts
+        %span.cache_type{"data-plural" => "Contacts", "data-singular" => "Contact"}
+          = pluralize_without_count(@client.total_contacts, "Contact")
+    .search
+      = text_field_tag :contact_name, "", :type => "search", |
+                                           "placeholder" => "Search for a Contact", |
+                                           "data-client_id" => @client.id, |
+                                           "data-path" => "contacts" |
+    %p
+      = link_to "Add a Contact", new_client_contact_path(@client), |
+                :title => "Add a contact for #{@client.name}", :class => "button" |
+
+  %section.list
+    = render :partial => 'shared/panels/contact', :collection => @client.contacts.limit(10).desc(:updated_at), |
+             :locals => {:client => @client} |
+  %section.loader
+    = link_to "Load More", "#", |
+            "data-remote" => "true", |
+            "data-page" => "2", |
+            "data-per" => "10", |
+            "data-path" => load_more_index_path(:obj_parent_type => "client", :obj_parent_id => @client.id, :obj_type => "contact" ), |
+            "data-disable-with" => "Loading ...", |
+            :class => "load_more button block active" |
+
+%aside.facilities.panel
+  %section
+    %hgroup
+      %h2
+        %span.counter= @client.total_facilities
+        %span.cache_type{"data-plural" => "Facilities", "data-singular" => "Facility"}
+          = pluralize_without_count(@client.total_facilities, "Facility")
+    .search
+      = text_field_tag :facility_name, "", :type => "search", |
+                                           "placeholder" => "Search for a facility", |
+                                           "data-client_id" => @client.id, |
+                                           "data-path" => "facilities" |
+    %p
+      = link_to "Add a Facility", new_client_facility_path(@client), :title => "Add a Facility for #{@client.name}", :class => "button"
+
+  %section.list
+    = render :partial => 'shared/panels/facility', :collection => @client.facilities.limit(10).desc(:updated_at), :locals => {:client => @client}
+  %section.loader
+    = link_to "Load More", "#", |
+             "data-remote" => "true", |
+             "data-page" => "2", |
+             "data-per" => "10", |
+             "data-path" => load_more_index_path(:obj_parent_type => "client", :obj_parent_id => @client.id, :obj_type => "facility" ), |
+             "data-disable-with" => "Loading ...", |
+             :class => "load_more button block active" |
+
+%aside.jobs.panel
+  %section
+    %hgroup
+      %h2
+        %span.counter= @client.open_jobs
+        %span.cache_type{"data-plural" => "Open Jobs", "data-singular" => "Open Job"}
+          = pluralize_without_count(@client.open_jobs, "Open Job")
+    %p
+      = link_to "Add a Job", new_job_path, :title => "Add a Job for #{@client.name}", :class => "button"
+
+  %section.list
+    = render :partial => 'shared/panels/job', :collection => @open_jobs
+  %section.loader
+    = link_to "Load More", "#", |
+             "data-remote" => "true", |
+             "data-page" => "2", |
+             "data-per" => "10", |
+             "data-path" => load_more_index_path(:obj_finder => "client_id", :obj_parent_id => @client.id, :obj_type => "job", :obj_scope => "open" ), |
+             "data-disable-with" => "Loading ...", |
+             :class => "load_more button block active" |
+
+%aside.placements.panel
+  %section
+    %hgroup
+      %h2
+        %span.counter= @client.total_placed_jobs
+        %span.cache_type{"data-plural" => "Placed Jobs", "data-singular" => "Placed Job"}
+          = pluralize_without_count(@client.total_placed_jobs, "Placed Job")
+  %section.list
+    = render :partial => 'shared/panels/job', :collection => @placed_jobs
+  %section.loader
+    = link_to "Load More", "#", |
+             "data-remote" => "true", |
+             "data-page" => "2", |
+             "data-per" => "10", |
+             "data-path" => load_more_index_path(:obj_finder => "client_id", :obj_parent_id => @client.id, :obj_type => "job", :obj_scope => "placed" ), |
+             "data-disable-with" => "Loading ...", |
+             :class => "load_more button block active" |
+
+%aside.attachments.panel
+  %section
+    %hgroup
+      %h2 Attachments
+    = form_for(Attachment.new, :html => { :multipart => true })  do |f|
+      = render :partial => 'shared/attachment_form', :locals => {:parent => @client, :f => f}
+      .actions
+      = f.submit "Save Attachment", :class => "button", "data-disable-with" => "Saving..."
+
+  %section.list
+    = render :partial => 'shared/panels/attachment', |
+      :collection => @client.attachments.asc(:created_at), |
+      :locals => {:parent => @client}

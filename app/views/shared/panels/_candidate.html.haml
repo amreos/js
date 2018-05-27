@@ -1,0 +1,28 @@
+.c{"data-id" => candidate.id, :class => highlight_state(candidate.current_state)}
+  .links          
+    = link_to "Edit", edit_candidate_path(candidate), :class => "edit", :title => "Edit"
+    - if admin?
+      = link_to "Delete", candidate_path(candidate), :title => "Delete", |
+                          :class => "delete", |
+                          "data-method" => 'delete',  |
+                          "data-confirm" => "Are you Sure?", |
+                          "data-remote" => "true" |                      
+  %hgroup
+    %h1
+      = link_to candidate.name, candidate_path(candidate), :title => "View #{candidate.name}'s info"
+    %h2
+      = candidate.display_title
+      = content_tag(:em, "legacy title") if candidate.title.blank?
+
+    %ul
+      = render :partial => "shared/info/phone", :collection => candidate.phones.first(1)
+
+      = render :partial => "shared/info/email_short", :collection => candidate.emails.first(1), :locals => {:parent => candidate}
+
+      - candidate.addresses.first(1).each do |address|
+        %li{:class => "#{address.type} adr"}
+          %span{:class => "#{address.type} type"}= address.type
+          = "#{address.city}, #{address.state}"        
+      
+        
+  = content_tag(:span, candidate.current_state, :class => "#{candidate.current_state} state", :title => "#{candidate.current_state.titleize}")        

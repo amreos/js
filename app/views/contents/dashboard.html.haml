@@ -1,0 +1,33 @@
+.content-main.dashboard
+  .managed_by
+    %a.button{:href => new_task_path, :title => "Add a Task", :class => "new_task", "data-remote" => "true"}
+      %span Add a Task      
+  
+  .content-left
+    %section.top
+      %h2
+        Recent Jobs
+    %section.list    
+      = render :partial => 'shared/panels/job', :collection => @my_recent_jobs
+  .content-right
+    %section.top
+      %h2
+        Recent Candidates
+    %section.list          
+      = render :partial => 'shared/panels/candidate', :collection => @my_recent_candidates
+
+%aside.panel.first.activities
+  %section
+    %hgroup
+      %h2
+        Recent Activity
+  %section.list
+    = render :partial => 'shared/panels/activity', :collection => @activities
+  %section.loader
+    = link_to "Load More", "#", |
+              "data-remote" => "true", |
+              "data-page" => "2", |
+              "data-per" => "20", |
+              "data-path" => manage_dashboard_path, |
+              "data-disable-with" => "Loading ...", |
+              :class => "load_more button block active" |

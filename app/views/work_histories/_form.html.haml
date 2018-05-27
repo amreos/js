@@ -1,0 +1,154 @@
+%fieldset.first
+
+  - if work_history.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(work_history.errors.count, "error")
+        prohibited this work history from being saved:
+
+      %ul
+        - work_history.errors.full_messages.each do |msg|
+          %li= msg
+  .fields-alt
+    = f.label :title, add_required_star('Title')
+    = f.select :title, (DefaultVars::JOB_TITLES|AdminDefault.settings.job_titles).sort, {}, {:class => 'chzn'}
+    %p.hint
+      Select the most appropriate Job Title
+  .fields
+    = f.label :company, add_required_star('Company')
+    .item
+      = f.text_field :company
+    %p.hint
+
+  .fields
+    = f.label :chronic_started_on, add_required_star('Started On')  
+    .item
+      = f.text_field :chronic_started_on, :class => "historyStartedDate", :value => text_field_date_format(f.object.started_on)
+    %p.hint
+      When the candidate started the job
+    
+  .fields
+    = f.label :chronic_ended_on, "Ended On"  
+    .item
+      = f.text_field :chronic_ended_on, :class => "historyEndedDate", :value => text_field_date_format(f.object.ended_on)
+    %p.hint
+      Leave Blank if candidate is still working here
+      
+  .fields.bool
+    .item
+      = f.check_box :show_only_years
+    = f.label :show_only_years, "Display Only Years for Working Dates?"  
+    %p.hint
+      Display Work History Dates as 2001 - 2005, instead of Jan 2001 - Mar 2005    
+
+  .multiFields    
+    .fields.short
+      = f.label :previous_wage, "Previous Wage"
+      .item
+        = f.text_field :previous_wage
+      %p.hint
+        e.g. use 15.50 for $15.50              
+    .fields.wages
+      = f.label :wage_type, "Type of Wage"
+      .item
+        = f.select :wage_type, DefaultVars::JOB_WAGE_TYPES, {:class => "type", :prompt => h("Select a Wage Type")}
+
+  .multiFields    
+    .fields.short
+      = f.label :bonus, "Bonus Wage"
+      .item
+        = f.text_field :bonus
+      %p.hint
+        e.g. use 15.50 for $15.50              
+    .fields.wages
+      = f.label :bonus_type, "Type of Bonus"
+      .item
+        = f.select :bonus_type, DefaultVars::JOB_BONUS_TYPES, {:class => "type", :prompt => h("Select a Bonus Type")}
+
+            
+#accordionForm
+  %h3#history-info 
+    %a{:href => "#"}
+      Work History&#8217;s Info
+  .ui-accordion-content
+  
+    .multiFields  
+      .fields.short
+        = f.label :num_beds, "# of Beds"
+        .item
+          = f.text_field :num_beds
+        %p.hint
+          e.g. 58
+      .fields.short
+        = f.label :current_census, "Current Census"
+        .item
+          = f.text_field :current_census
+        %p.hint
+          e.g. 20          
+      .fields.short
+        = f.label :subordinates, "# of Subordinates"
+        .item
+          = f.text_field :subordinates
+        %p.hint
+          e.g. 6 or leave blank if none
+          
+    .fields
+      = f.label :chronic_last_survey_on, "Last Survey On"  
+      .item
+        = f.text_field :chronic_last_survey_on, :class => "surveyDate", :value => text_field_date_format(f.object.last_survey_on)
+      %p.hint
+        The day of the last survey
+        
+    .fields.long
+      = f.label :survey_results, "Results of Last Survey"
+      .item
+        = f.text_area :survey_results
+        %span.charactersLeft 320
+
+    .fields.bool
+      = f.label :special_units, "Facility Services"
+      %p 
+        - DefaultVars::JOB_SPECIAL_UNITS.each do |u|
+          %span
+            = check_box_tag "work_history[special_units][]", u, work_history.should_i_check?(work_history.special_units, u)
+            = u
+
+      %p.hint
+        check all that apply          
+
+    .fields.bool
+      = f.label :mix_types, "Mix Types"
+      %p 
+        - DefaultVars::JOB_MIX_TYPES.each do |m|
+          %span
+            = check_box_tag "work_history[mix_types][]", m, work_history.should_i_check?(work_history.mix_types, m)
+            = m
+      %p.hint
+        check all that apply
+
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next        
+
+  %h3 
+    %a{:href => "#"}
+      Work History&#8217;s Deeds
+  .ui-accordion-content
+    .fields.long
+      = f.label :accomplishments, "Accomplishments at this Job"
+      .item
+        = f.text_area :accomplishments
+        %span.charactersLeft 320 
+
+    .fields.long
+      = f.label :reasons_for_living, "Reasons for Leaving"
+      .item
+        = f.text_area :resons_for_leaving
+        %span.charactersLeft 320        
+
+    .actions
+      %p
+        %a{:href => "#", :class => "previous button"} previous
+        %a{:href => "#", :class => "next button"} next
+  

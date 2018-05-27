@@ -1,0 +1,12 @@
+.form
+  %p.object_links
+    = link_to 'Show', @employee, :class => 'button'
+    = link_to 'Back', employees_path , :class => 'button'  
+
+  %h1= "Edit Information"
+  
+  = form_for(@employee, :html => { :multipart => true }) do |f|
+    = render :partial => 'form', :locals => { :f => f, :employee => @employee }
+  
+    .links
+      = f.submit "Update Employee", :class => "button", "data-disable-with" => "Saving . . ."

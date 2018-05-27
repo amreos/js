@@ -1,0 +1,8 @@
+$("section.endlessItems")
+  .append("<%= j(render :partial => 'shared/panels/activity', :collection => @activities) %>");
+
+ <% if @activities.current_page.to_i < @activities.num_pages.to_i %>
+  $('.endlessLoad .pagination').replaceWith('<%= j paginate(@activities) %>');
+<% else %>
+  $('.endlessLoad').remove();
+<% end %>

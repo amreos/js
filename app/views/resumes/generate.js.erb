@@ -1,0 +1,17 @@
+$(".modal").remove();
+$('#flash').remove();
+$("header#banner").after('<div id="flash"><div id="notice"><%= escape_javascript(flash.discard(:notice)) %></div></div>');
+
+$("p#generatePDF").remove();
+$("p#downloadPDF").remove();
+$("p#sharePDF").remove();
+
+$(".resume-links").
+  append('<p id="processingPDF" class="searching block button"><span>Generating PDF</span></p>').
+  effect('highlight',{color: '#FDE00A'},'fast');
+
+    
+
+var flashMargin = ($(window).width() - $("#flash").width()) / 2; 
+$("#flash").css({'left' : flashMargin+"px"});
+$("#flash").delay(5000).fadeOut('slow', function() {$(this).remove();});

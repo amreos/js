@@ -1,0 +1,45 @@
+%table{:id => dragSort_id, "data-path" => update_position_employees_path }
+  %tr.tr-head
+    / = render :partial => 'sort_links'
+    %th.name Name
+    %th.jobs Clients
+    %th.jobs Candidates
+    %th.jobs Jobs
+    %th.jobs Open
+    %th.jobs Placed
+    - if admin?
+      %th.jobs &nbsp;
+
+  - @employees.each do |employee|
+    %tr{:class => "table-row drag", :id => "employee_position_#{employee.id.to_s}"}
+      %td.table-td.name
+        .grid
+          .grid-title
+            = link_to employee.name, employee, :title => "view #{employee.name}"
+            .grid-links
+              %ul
+                %li= link_to "view", employee
+                - if admin?
+                  %li= link_to "#{content_tag(:span, "edit", :class => "edit")} edit".html_safe, edit_employee_path(employee)
+                  %li= link_to "#{content_tag(:span, "destroy", :class => "delete")} destroy".html_safe, employee_path(employee), |
+                                      "data-method" => 'delete',  |
+                                      "data-confirm" => "Are you Sure?", |
+                                      "data-remote" => "true",            |
+                                      :class => "delete" |
+                - elsif current_user.id == employee.id
+                  %li= link_to "#{content_tag(:span, "edit", :class => "edit")} edit".html_safe, edit_employee_path(employee)
+
+      %td.table-td.jobs
+        = link_to employee.total_clients, clients_path(:employee_id => employee.id), :title => "View all clients for #{employee.name}"
+      %td.table-td.jobs
+        = link_to employee.total_candidates, candidates_path(:employee_id => employee.id), :title => "View all candidates for #{employee.name}"
+      %td.table-td.jobs
+        = link_to employee.total_jobs, jobs_path(:employee_id => employee.id), :title => "View all jobs by #{employee.name}"
+      %td.table-td.jobs.open
+        = link_to employee.open_jobs, jobs_path(:employee_id => employee.id, :open => true), :title => "View all open jobs by #{employee.name}"
+      %td.table-td.jobs.placed
+        = link_to employee.total_placed_jobs, jobs_path(:employee_id => employee.id, :placed => true), :title => "View all placed jobs by #{employee.name}"
+      - if admin?
+        %td.table-td.order
+          %span.handle
+            Drag

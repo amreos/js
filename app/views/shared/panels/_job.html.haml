@@ -1,0 +1,27 @@
+.c{"data-id" => job.id, :class => highlight_state(job.current_state)}
+    
+  .links          
+    = link_to "Edit", edit_job_path(job), :class => "edit", :title => "Edit"
+    - if admin?
+      = link_to "Delete", job_path(job), :title => "Delete", |
+                          :class => "delete", |
+                          "data-method" => 'delete',  |
+                          "data-confirm" => "Are you Sure?", |
+                          "data-remote" => "true" |                      
+  %hgroup
+    %h1
+      = link_to job.name, job_path(job), :title => "View #{job.name}'s info"
+      
+    - if job.facility_ids.present? && job.facility_names.present?
+      %h2
+        = link_to job.facility_name, client_facility_path(job.client_id, job.facility_ids.first), |
+                  :title => "View #{job.facility_name}'s info", |
+                  :class => "preview", |
+                  "data-remote" => "true" |
+    - else
+      %h2= link_to job.client_name, client_path(job.client_id), :title => "View #{job.client_name}"
+    %h2= "#{value_or_none(job.city_cache)}, #{value_or_none(job.region_cache)}" 
+
+  %p= job.job_type
+  
+  = content_tag(:span, job.current_state, :class => "#{job.current_state} state", :title => "#{job.current_state.titleize}")

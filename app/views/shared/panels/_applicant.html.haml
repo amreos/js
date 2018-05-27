@@ -1,0 +1,53 @@
+.c{"data-id" => applicant.id, :class => "#{applicant.current_state}"}
+  .links          
+    = link_to "Delete", applicant_path(applicant), :title => "Remove from Job Consideration", |
+                        :class => "delete", |
+                        "data-method" => 'delete',  |
+                        "data-confirm" => "Are you Sure?", |
+                        "data-remote" => "true" |                      
+  %hgroup
+    - if parent == "Candidate"
+      %h1
+        = link_to applicant.job.name, job_path(applicant.job), |
+                  :title => "View #{applicant.job.name}'s info" |
+                
+      - if applicant.job.facility_ids.present? && applicant.job.facility_name.present?
+        %h2
+          = link_to applicant.job.facility_name, client_facility_path(applicant.job.client_id, applicant.job.facility_ids.first), |
+                    :title => "View #{applicant.job.facility_name}'s info", |
+                    :class => "preview", |
+                    "data-remote" => "true" |
+      - else
+        %h2
+          = link_to applicant.job.client_name, client_path(applicant.job.client_id), |
+                    :title => "View #{applicant.job.client_name}'s info"
+
+    - elsif parent == "Job"
+      %h1
+        = link_to applicant.candidate.name, candidate_path(applicant.candidate), |
+                  :title => "View #{applicant.candidate.name}'s info" |                  
+      %h2
+        = applicant.candidate.display_title
+        = content_tag(:em, "legacy title") if applicant.candidate.title.blank?
+                
+
+  %ul.states
+    - DefaultVars::APPLICANT_TYPES.first(4).each do |state|
+      %li
+        = link_to state[:term].titleize, update_status_applicant_path(applicant, :new_status => state[:value].to_i), |
+                 :class => current_state_class(state[:term], applicant), "data-remote" => "true", "data-method" => "put", |
+                 :title => "Set as #{state[:term].titleize}" |
+  %ul.states
+    - DefaultVars::APPLICANT_TYPES[4..7].each do |state|
+      %li 
+        = link_to state[:term].titleize, update_status_applicant_path(applicant, :new_status => state[:value].to_i), |
+                 :class => current_state_class(state[:term], applicant), "data-remote" => "true", "data-method" => "put", |
+                 :title => "Set as #{state[:term].titleize}" |
+  %ul.states
+    - DefaultVars::APPLICANT_TYPES.last(5).each do |state|
+      %li
+        = link_to state[:term].titleize, update_status_applicant_path(applicant, :new_status => state[:value].to_i), |
+                 :class => current_state_class(state[:term], applicant), "data-remote" => "true", "data-method" => "put", |
+                 :title => "Set as #{state[:term].titleize}" |
+                         
+  = content_tag(:span, applicant.current_state, :class => "#{applicant.current_state} state", :title => "#{applicant.current_state}")

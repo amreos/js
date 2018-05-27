@@ -1,0 +1,101 @@
+.content-index
+  .managed_by
+    %a.button{:href => new_task_path, :title => "Add a Task", :class => "new_task", "data-remote" => "true"}
+      %span Add a Task      
+
+  %section
+    = link_to "reset", clients_path, :title => "Reset Search Options", :class => "button right active"
+    - if admin?
+      = link_to "export",
+                exports_path(params.merge({:export_type => 'client', :data_export => 1})),
+                :title => "Export to CSV",
+                :class => "button right rMargin10",
+                :data => {:remote => "true"}
+
+    - if admin? && params.include?(:source)
+      = link_to "mass email", mass_email_clients_path(params.slice(*Client::ACCEPTABLE_QUERIES).update(:mass_email => 1)),
+                              :title => "Mass email clients",
+                              :class => "button right rMargin10"
+    
+    = link_to "advanced search", "#", :title => "Complete an advanced search for Clients", :class => "advanced_search button right"    
+    %h1
+      All Clients
+    
+    .form#advanced_search
+      = form_tag(clients_path, :method => 'get') do
+        = hidden_field_tag :direction, params[:direction]
+        = hidden_field_tag :sort, params[:sort]
+        %fieldset.first
+          .fields
+            = label_tag :name, 'Client Name'
+            .item
+              = text_field_tag :name
+            %p.hint
+              Search any Client containing the entered name
+
+          .fields
+            = label_tag :user_email, 'Client Email'
+            .item
+              = text_field_tag :user_email
+            %p.hint
+              Search any Client containing the entered email
+
+          .fields
+            = label_tag :phone_number, 'Client Phone Number'
+            .item
+              = text_field_tag :phone_number
+            %p.hint
+              e.g. 909 will search for area code, 909-123-1234 will search the whole number
+              
+          .multiFields
+            .fields.short
+              = label_tag :city
+              .item
+                = text_field_tag :city
+            .fields.short
+              = label_tag :region
+              .item
+                = select_tag :region, options_for_select_with_prompt(DefaultVars::All_US_STATES, "Select a State")
+            .fields.short
+              = label_tag :zip
+              .item
+                = text_field_tag :zip
+
+
+          .fields.bool
+            = label_tag :state, "Current Client State"
+            %p 
+              - DefaultVars::CLIENT_STATE_TYPES.each do |u|
+                %span
+                  = radio_button_tag "state", u[:value]
+                  = u[:term].titleize
+                  
+          .fields-alt
+            = label_tag :source, "Referral Source"            
+            = select_tag :source,
+                         options_for_select(DefaultVars::JOB_SOURCES|AdminDefault.settings.job_sources),
+                         :prompt => h("Select a Source"),
+                         :class => 'chzn'
+
+          .fields-alt
+            = label_tag :employee_id, 'Employee'            
+            = select_tag :employee_id, options_from_collection_for_select(Employee.all, :id, :name), :prompt => h("Select an Employee"), :class => "chzn"
+            
+        .actions
+          = link_to "reset", clients_path, :title => "Reset Search Options", :class => "button right active"        
+          = submit_tag "Search", :class => "button", "data-disable-with" => "Searching . . ."
+          
+    - if  @clients.present?               
+      - if admin?
+        = form_tag(edit_multiple_clients_path) do
+          %fieldset.mass_tools
+            = link_to "check all", "#", :class => "select_all", :title => "Select all candidates below" 
+            = link_to "check none", "#", :class => "unselect_all", :title => "Select all candidates below"
+            = submit_tag "Edit Checked", :class => "button", "data-disable-with" => "Loading Clients . . ."
+          .client_section
+            = render :partial => 'shared/index/client'
+      - else
+        .client_section
+          = render :partial => 'shared/index/client'      
+    - else
+      %h2 No Clients were found. Please try another search.        

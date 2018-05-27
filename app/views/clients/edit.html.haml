@@ -1,0 +1,12 @@
+.form
+  %p.object_links
+    = link_to 'Show', @client, :class => 'button'
+    = link_to 'Back', clients_path , :class => 'button'  
+
+  %h1= "Editing Client"
+  
+  = form_for(@client) do |f|
+    = render :partial => 'form', :locals => { :f => f, :client => @client }
+  
+    .links
+      = f.submit "Update Client", :class => "button", "data-disable-with" => "Saving . . ."

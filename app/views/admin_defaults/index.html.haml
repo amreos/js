@@ -1,0 +1,16 @@
+.content-index
+  %section
+    = link_to "Edit Defaults",
+              edit_admin_default_path(@admin_default),
+              :title => "Edit Default Items",
+              :class => "button right"
+    %h1 System Defaults
+    %h2 Job Titles
+    .tagListing
+      - @admin_default.job_titles.sort.each do |title|
+        = content_tag(:span, title, :class => "tag")
+
+    %h2 Job Referral Sources
+    .tagListing
+      - @admin_default.job_sources.sort.each do |source|
+        = content_tag(:span, source, :class => "tag")

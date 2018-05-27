@@ -1,0 +1,76 @@
+.row
+  .four.columns
+    %section.featured
+      %hgroup
+        %h1
+          Featured Jobs
+      %p Our latest, featured jobs open for application around the US.
+
+      %p Take a look, apply or contact a recruiter to learn more.
+      %p
+        = link_to "Browse our Open Jobs",
+                  public_jobs_path,
+                  title: "View all our open Jobs",
+                  class: "button green"
+  .eight.columns
+    %a{:class => "nexter job_controls", :href => "#"}
+      %span Next
+    %a{:class => "prever job_controls", :href => "#"}
+      %span Previous
+
+    %section.scrollable
+      .items
+        - @jobs.each do |j|
+          .page
+            .job
+              - if j.loc.present?
+                = image_tag "https://maps.google.com/maps/api/staticmap?center=#{j.loc.last},#{j.loc.first}&zoom=7&size=120x120&maptype=roadmap&sensor=false",
+                            :alt => "Map of General Area",
+                            :class => "hide-on-phones"
+                %h2.loc= j.job_type
+                %h4.loc= j.general_area
+                = simple_format j.summary, {:class => "loc"}
+                %p.loc
+                  = link_to "Learn more about this job", |
+                            "/jobs/#{j.id}", |
+                            :title => "Learn more about the #{j.job_type} position near #{j.general_area}", |
+                            :class => "green button" |
+              - else
+                %h2= j.job_type
+                %h4= j.general_area
+                = simple_format j.summary, {:class => "loc"}
+                %p
+                  = link_to "Learn more about this job", |
+                            "/jobs/#{j.id}", |
+                            :title => "Learn more about the #{j.job_type} position near #{j.general_area}", |
+                            :class => "green button" |
+
+.row
+  .six.columns
+    %hgroup
+      %h2
+        Preferred By Professionals
+    .row
+      .three.columns.hide-on-phones
+        %section.partners.clearfix
+          .partner
+            %a{:href => "http://www.cahf.org/", :title => "California Association of Health Facilities"}
+              %img{src: "https://s3.amazonaws.com/new-assets.jsasearch.net/cahf.jpg", alt: "California Association of Health Facilities"}
+      .nine.columns
+        %section
+          %p JSA Search works hard to build trust and assurance with our clients and candidates. Here are a few companies and organizations that prefer our approach to recruitment services.
+  .six.columns
+    %hgroup
+      %h2
+        Jump-start Your Job Search
+    .row
+      .five.columns
+        %section
+          %p Contact our recruiters to discover the difference we can make in fulfilling your job search.
+      .seven.columns
+        %a{:href => new_question_path, :class => "question button orange radius", :title => "Ask JSA Search a question", "data-remote" => "true"}
+          Have a Question?
+          %em
+            Get a Quick Answer
+
+= render partial: "shared/public/newsletter_forms"

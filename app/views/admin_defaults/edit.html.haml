@@ -1,0 +1,24 @@
+.content-index
+  %section
+    = link_to "Back",
+            admin_defaults_path,
+            :title => "Back to Defaults List",
+            :class => "button right"
+    %h1 Edit Default Settings
+    .form
+      = form_for @admin_default do |f|
+        %fieldset.first
+          .fields.long
+            = f.label :job_title_taggings, add_required_star('Job Titles')                
+            .item
+              = f.text_area :job_title_taggings, :class => "note_content mass", :placeholder => "Add Job Titles"              
+            %p.hint
+              Separate Job Titles by comma. If you delete all and save, the Job Titles wil be reset.
+          .fields.long
+            = f.label :job_source_taggings, add_required_star('Job Referral Sources')                
+            .item
+              = f.text_area :job_source_taggings, :class => "note_content mass", :placeholder => "Add Job Referral Sources"              
+            %p.hint
+              Separate Job Sources by comma. If you delete all and save, the Job Sources wil be reset.              
+          .actions
+            = f.submit "Update Defaults", :class => 'button', "data-disable-with" => "Saving . . ."

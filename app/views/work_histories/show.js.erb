@@ -1,0 +1,13 @@
+$(".modal").append("<%= escape_javascript(render(@work_history)) %>");
+
+$("#flash").remove();
+
+$(".modal").dialog({
+ width: 700,
+ height: 550,
+ closeOnEscape: true,
+ title: "Detailed Info for <%= escape_javascript(@work_history.title) %>",
+ position: ['center',70]
+});
+
+$("a").blur();

@@ -1,0 +1,32 @@
+if ( $("body#tasks.index").length ) {
+	$("section.endlessItems .tasks").prepend("<%= j(render @task) %>");
+	$("section.endlessItems .tasks .c:first").addClass("placed");
+	if ( $('.c.none').length ) {
+		$('.c.none').remove();
+	}
+}
+
+if ( $("aside.panel.tasks").length ) {
+	var task_id =  "<%= j @task.goal_id.to_s %>";
+	var current_page_id = $(".content-main").data("id");
+
+	if ( task_id === current_page_id ) {
+		$("aside.panel.tasks section.list").prepend("<%= j(render @task) %>");
+		$("aside.panel.tasks section.list .c:first").addClass("placed new");
+	}
+}
+
+<% if (@task.due_at < Time.zone.now.end_of_day)  %>
+var count_text = parseInt($(".tasks_due").text());
+var new_count = count_text + 1;
+$(".task_counter").text(new_count).removeClass("hide");
+$(".task_counter, .tasks_due").text(new_count);
+<% end %>
+
+$(".modal").remove();
+$('#flash').remove();
+$("header#banner").after('<div id="flash"><div id="notice"><%= j(flash.discard(:notice)) %></div></div>');
+
+var flashMargin = ($(window).width() - $("#flash").width()) / 2; 
+$("#flash").css({'left' : flashMargin+"px"});
+$("#flash").delay(5000).fadeOut('slow', function() {$(this).remove();});

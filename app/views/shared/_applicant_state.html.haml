@@ -1,0 +1,4 @@
+%li
+  = link_to state.titleize, update_status_applicant_path(applicant, :new_status => state), |
+           :class => current_state_class(state, applicant), "data-remote" => "true", "data-method" => "put", |
+           :title => "Set as #{state.titleize}" |

@@ -1,0 +1,12 @@
+.additional_field
+  = remove_child_link "Remove Email", f
+  .fields.med
+    = f.label :address, add_required_star("Email Address")
+    .item
+      = f.text_field :address
+    %p.hint
+      e.g. info@jsasearch.net          
+  .fields.short
+    = f.label :type, add_required_star("Type")
+    .item
+      = f.select :type, [['work', "work"], ['personal', "personal"], ['mobile', "mobile"],['other', "other"]], {}, :class => "type"

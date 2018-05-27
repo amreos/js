@@ -1,0 +1,43 @@
+%table
+  %tr.tr-head
+    = render :partial => 'sort_links'
+
+    - @jobs.each do |job|
+      %tr.table-row
+        - if admin?
+          %td.tabble-td.location
+            = check_box_tag "selected_jobs[]", job.id, false, :id => "selected_jobs_#{job.id}"
+
+        %td.table-td.name
+          .grid
+            .grid-title
+              = link_to job.name, job, :title => "view #{job.name}"
+            .grid-links
+              %ul
+                %li= link_to "view", job
+                %li= link_to "#{content_tag(:span, "edit", :class => "edit")} edit".html_safe, edit_job_path(job)
+                - if admin?
+                  %li= link_to "#{content_tag(:span, "destroy", :class => "delete")} destroy".html_safe, job_path(job), |
+                                      "data-method" => 'delete',  |
+                                      "data-confirm" => "Are you Sure?", |
+                                      "data-remote" => "true",            |
+                                      :class => "delete"
+        %td.table-td.current_state
+          = content_tag(:span, job.current_state, :class => "#{job.current_state} state", :title => "#{job.current_state}")
+
+        %td.table-td.client
+          = link_to job.client_name, client_path(job.client), :title => "View Info for #{job.client_name}"
+
+        %td.table-td.location
+          = value_or_none(job.city_cache)
+
+        %td.table-td.location
+          = value_or_none(job.region_cache)
+
+        %td.table-td.employee
+          - if job.employee.present?
+            = link_to job.employee.name, job.employee, :title => "View info for #{job.employee.name}"
+          - else
+            N/A
+
+= paginate @jobs, :remote => "true"

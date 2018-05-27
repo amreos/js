@@ -1,0 +1,15 @@
+$(".modal").append("<%= escape_javascript(render :partial => 'notes/preview', :object => @note) %>").addClass("contactPreview");
+
+$("#flash").remove();
+
+$(".modal").dialog({
+ width: 600,
+ height: 400,
+ title: "<%= escape_javascript(@note.author) %> wrote <%= time_ago_in_words(@note.created_at) %> ago",
+ position: ['center',50],
+ close: function(event, ui) {
+   $(this).removeClass("contactPreview");
+ }
+});
+
+$("a").blur();

@@ -1,0 +1,22 @@
+%tr.table-row
+	%td.name
+		.grid
+			.grid-title
+				= doc_template.attachments.present? ? doc_template.attachments.first.name : "Template File"
+			- if admin?
+				.grid-links
+					%ul        
+						%li
+							= link_to "#{content_tag(:span, "edit doc template", :class => "edit")} edit".html_safe, edit_doc_template_path(doc_template)
+						%li
+							= link_to "#{content_tag(:span, "destroy doc template", :class => "delete")} destroy"	.html_safe,
+								doc_template_path(doc_template),
+								"data-method" => 'delete',
+								"data-confirm" => "Are you Sure?",
+								"data-remote" => "true",
+								:class => "delete"	
+	%td= doc_template.template_type
+	%td
+		= link_to "Download",
+			doc_template.attachments.first.misc_file.url,
+			:class => "target_blank"

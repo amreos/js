@@ -1,0 +1,17 @@
+var flashMargin = ($(window).width() - $("#flash").width()) / 2;
+// var client = $("#job_client").val();
+
+$('#flash').html('<div id="notice">Facilities found.</div>');
+
+$("form .fields.facilities").remove();
+
+$("form .fields")
+.filter(".client")
+.after("<%= escape_javascript(render :partial => 'shared/forms/new_facility', :locals => {:client => @client.id}) %>");
+$("#facility_search").focus();
+$(".facilities").effect('highlight',{color: '#FDE00A'},500);
+
+
+$("#flash").css({'left' : flashMargin+"px"});
+$("#flash").delay(5000).fadeOut('slow', function() {$(this).remove();});
+  

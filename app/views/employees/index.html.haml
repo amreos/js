@@ -1,0 +1,15 @@
+.content-index
+  .managed_by
+    %a.button{:href => new_task_path, :title => "Add a Task", :class => "new_task", "data-remote" => "true"}
+      %span Add a Task      
+  
+  %section
+    - if admin?
+      %p.right
+        = link_to "Add an Employee", new_employee_path, :title => "add an employee", :class => "button"
+  
+    %h1 All Employees
+
+    .employee_section
+      = render :partial => 'shared/index/employee'
+                            

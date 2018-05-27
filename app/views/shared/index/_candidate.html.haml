@@ -1,0 +1,57 @@
+%table
+  %tr.tr-head
+    = render :partial => 'sort_links'
+
+  - @candidates.each do |candidate|
+    %tr.table-row
+      %td.tabble-td.location
+        = check_box_tag "selected_candidates[]", candidate.id, false, :id => "selected_candidates_#{candidate.id}"
+
+      %td.table-td.name
+        .grid
+          .grid-title
+            %p= link_to name_and_title_display(candidate), candidate, :title => "view #{candidate.name}"
+            - if candidate.emails.present?
+              %ul
+                = render :partial => "shared/info/phone", :collection => candidate.phones.first(1)
+                = render :partial => "shared/info/email",
+                         :collection => candidate.emails.first(1),
+                         :locals => {:parent => candidate}
+
+            - if candidate.specialties.present?
+              .specialties
+                - candidate.specialties.each do |e|
+                  %span.tag= e
+            - if candidate.work_histories.present?
+              %p
+                - candidate.work_histories.take(3).each do |w|
+                  %span.tag= w.title
+
+          .grid-links
+            %ul
+              %li= link_to "view", candidate
+              %li= link_to "#{content_tag(:span, "edit candidate", :class => "edit")} edit".html_safe, edit_candidate_path(candidate)
+              - if admin?
+                %li= link_to "#{content_tag(:span, "destroy candidate", :class => "delete")} destroy".html_safe, |
+                              candidate_path(candidate), |
+                              "data-method" => 'delete',  |
+                              "data-confirm" => "Are you Sure?", |
+                              "data-remote" => "true",            |
+                              :class => "delete"
+
+      %td.table-td.current_state
+        = content_tag(:span, candidate.current_state, :class => "#{candidate.current_state} state", :title => "#{candidate.current_state}")
+
+      %td.table-td.location
+        = candidate.addresses && candidate.addresses.present? ? candidate.addresses.first.city : "N/A"
+
+      %td.table-td.location
+        = candidate.addresses && candidate.addresses.present? ? candidate.addresses.first.state : "N/A"
+
+      %td.table-td.employee
+        - if candidate.employee.present?
+          = link_to candidate.employee.name, candidate.employee, :title => "View info for #{candidate.employee.name}"
+        - else
+          N/A
+
+= paginate @candidates, :remote => "true"

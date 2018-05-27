@@ -1,0 +1,34 @@
+= render @resume, :locals => {@candidate => @candidate, @work_histories => @work_histories}
+
+.resume-links
+  %p
+    = link_to "Back to Candidate", @candidate, :title => "Go back to Candidate", :class => "button block"
+  %p
+    = link_to "Edit Resume", edit_candidate_resume_path(@candidate, @resume), :title => "Edit Resume", :class => "button block"
+
+  - unless @resume.currently_rendering?
+    %p#generatePDF
+      = link_to "Generate PDF", generate_candidate_resume_path(@candidate, @resume), |
+                :title => "Generate PDF", :class => "button block generate", |
+                "data-remote" => "true" |
+
+  - unless @resume.generated_pdf.blank? || @resume.currently_rendering?
+
+    %p#downloadPDF
+      = link_to "Download PDF", candidate_resume_path(@candidate, @resume, :format => :pdf), |
+                :title => "Generate PDF", :class => "button block generate" |
+
+    %p#sharePDF
+      = link_to "Share PDF", |
+                new_share_file_path(:parent_id => @candidate.id, |
+                                    :parent_type => @candidate.class.name, |
+                                    :shared_file_type => @resume.class.name, |
+                                    :shared_file_id => @resume.id ), |
+                                    :title => "Share #{@resume.name}", :class => "button block ", "data-remote" => "true" |
+
+
+  - if @resume.currently_rendering?
+    %p#processingPDF.button.searching.block
+      %span
+        Generating PDF
+

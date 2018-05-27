@@ -1,0 +1,46 @@
+.content-index
+  %section 
+    %h1
+      Data Imports
+      
+    = form_for(@import_item, :html => { :multipart => true }) do |f|
+      %fieldset.mass_tools
+        - if @import_item.errors.any?
+          #error_explanation
+            %h2
+              = pluralize(@import_item.errors.count, "error")
+              prohibited this import item from being saved:
+
+            %ul
+              - @import_item.errors.full_messages.each do |msg|
+                %li= msg
+        
+        = f.hidden_field :imported_by
+        
+        .multiFields
+          .fields.short
+            = f.label :import_type, add_required_star("Type of Import")
+            = f.select :import_type, [["Candidate", "candidate"],
+                                      ["New Client", "new_client"],
+                                      ["Legacy Client", "client"],
+                                      ["Contact", "contact"],
+                                      ["Facility", "facility"],
+                                      ["Zip Code", "zip_code"]], {}, :class => "type"
+            %p.hint
+              Select the type of import
+          .fields.med
+            = f.label :file_for_import, add_required_star("CSV File to Import")
+            = f.file_field :file_for_import
+            %p.hint
+              Files must be less than 5mb
+          .submit          
+            = f.submit "Import Data", :class => "button", "data-disable-with" => "Saving . . ."
+    
+    %table{:cellspacing => "0"}
+      %tr.tr-head
+        %th.name Message
+        %th Import Type
+        %th Imported By 
+        %th Imported On
+      
+        = render :partial => 'shared/index/import_item', :collection => @import_items

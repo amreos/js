@@ -1,0 +1,31 @@
+= form_for(@task, :remote => 'true', :html => {:class => "popup_form"}) do |f|
+	.fields
+		= f.label :purpose, add_required_star('What do You Need to do?')
+		.item
+			= f.text_field :purpose
+	.multiFields
+		.fields.short
+			= f.label :task_date, add_required_star('Due on')
+			.item
+				= f.text_field :task_date, :class => "taskDate"
+			%p.hint
+				The date your task is due.
+		.fields.short
+			= f.label :task_time, add_required_star('Due at')
+			.item
+				= f.text_field :task_time
+			%p.hint
+				e.g. 3pm or 1:30pm
+
+	= f.hidden_field :goal_id
+	= f.hidden_field :goal_type
+	= f.hidden_field :goal_parent_id
+	= f.hidden_field :goal_parent_type
+
+	.actions
+		- if controller.action_name == "edit"
+			= f.submit "Update Task",
+								 :class => 'button', "data-disable-with" => "Saving . . ."
+		- else
+			= f.submit "Add Task",
+								 :class => 'button', "data-disable-with" => "Saving . . ."

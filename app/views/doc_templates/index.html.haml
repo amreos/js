@@ -1,0 +1,21 @@
+.content-index
+	.managed_by
+		%a.button{:href => new_task_path,
+							:title => "Add a Task",
+							:class => "new_task",
+							"data-remote" => "true"}
+			%span Add a Task			
+	%section
+		- if admin?
+			= link_to "Add a Template",
+								new_doc_template_path,
+								:title => "Add a Template",
+								:class => "button right"							  
+
+		%h1 Downloads
+		%table
+			%tr.tr-head
+				%th File Name
+				%th Type
+				%th Links
+			= render @doc_templates

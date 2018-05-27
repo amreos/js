@@ -1,0 +1,17 @@
+.additional_field.public
+  .fields.short
+    = f.label :phone_number, add_required_star("Number")
+    .item
+      = f.text_field :phone_number
+    %p.hint
+      e.g. 9099091234          
+  .fields.short
+    = f.label :phone_extension, "Phone Extension"
+    .item
+      = f.text_field :phone_extension
+    %p.hint
+      e.g. 134
+  .fields.short
+    = f.label :type, add_required_star("Type")
+    .item
+      = f.select :type, [['work', "work"], ['personal', "personal"], ['mobile', "mobile"],['fax', "fax"],['other', "other"]], {}, :class => "type"

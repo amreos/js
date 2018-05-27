@@ -1,0 +1,12 @@
+= hidden_field_tag :file_parent_id, parent.id
+= hidden_field_tag :file_parent_type, parent.class.name
+.fields
+  = f.label :name 
+  .item
+    = f.text_field :name, :placeholder => "Enter a Name..."
+.fields 
+  .item
+    = f.file_field :misc_file
+    = f.hidden_field :misc_file_cache
+  %p.hint  
+    Only .doc, .docx, .numbers, .xls, .xlsm, .txt, .csv .pdf, .png, .jpg, &amp; .pages up to 5mbs in size.

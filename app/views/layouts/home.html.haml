@@ -1,0 +1,314 @@
+!!! 5
+/ paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
+/[if lt IE 7 ] <html class="ie6 public" lang=\"en\">
+/[if IE 7 ] <html class="ie7 public" lang="en">
+/[if IE 8 ] <html class="ie8 public" lang="en">
+/[if IE 9 ] <html class="ie9 public" lang="en">
+/[if (gt IE 9)|!(IE)]<!--> <html class="public" lang="en">
+%head
+  %meta{:charset => "UTF-8"}
+  %meta{ :name => "viewport", :content => "width=device-width, initial-scale=1.0" }
+  %meta{'http-equiv' => 'X-UA-Compatible', content: 'IE=7' }
+  %title= page_title
+  <!--[if lt IE 9]>
+  <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script type="text/javascript" src="https://use.typekit.com/tql8nur.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  %link{:rel => "stylesheet", :href => "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css"}
+  = stylesheet_link_tag 'home'
+  = csrf_meta_tag
+
+%body{:id => "#{controller.controller_name}", :class => "#{controller.action_name}"}
+  - if flash.present?
+    #flash
+      - flash.each do |type, msg|
+        %div{:id => "#{type}"}
+          = msg
+
+  .container.topBar#mobile-nav-top
+    .row
+      .nine.columns
+        %header{:id => "banner"}
+          %nav{:class => "main clearfix"}
+            %ul.clearfix
+              %li= link_to "Menu", "#mobile-nav-bottom", :title => "View Nav Links", :class => "menu show-on-phones"
+              %li= link_to "Home",
+                            root_path,
+                            :title => "JSA Search home",
+                            :class => "home"
+              %li
+                = link_to "Employers",
+                          employers_path,
+                          :title => "JSA Search for Employers",
+                          :class => "employers hide-on-phones"
+              %li
+                = link_to "Candidates",
+                          about_candidates_path,
+                          :title => "JSA Search for Candidates",
+                          :class => "candidates hide-on-phones"
+
+              %li= link_to "Jobs", public_jobs_path, :title => "Recent Jobs from JSA Search", :class => "jobs hide-on-phones"
+              %li= link_to "About", about_path, :title => "About JSA Search", :class => "about hide-on-phones"
+              %li= link_to "Executive Bios", bios_path, :title => "JSA Search Executive Bios", :class => "bios hide-on-phones"
+              %li= link_to "Contact", contact_path, :title => "Contact JSA Search", :class => "contact"
+      .three.columns.hide-on-phones
+        %span.jsa-phone 1-866-JSA-Team
+
+  .topWrapper
+    .container
+      .row
+        .twelve.columns
+          %a.show-on-phones{:href => "tel://1-866-572-8326"}
+            %span.jsa-phone.large-banner 1-866-JSA-Team
+          .row.byline
+            .four.columns
+              %h1.logo
+                %a{href: "/", title: "JSA Search - Placing Jobs Across the USA"}
+                  %img{:src => "https://s3.amazonaws.com/new-assets.jsasearch.net/jsa-logo-new.png",
+                       :alt => "JSA Search"}
+                  %span JSA Search
+            .eight.columns
+              %h2.headline
+                JSA Search, INC.
+                %em Nationwide Job Placement Made Easy <br> for Healthcare, Interim, and Accounting Staffing
+    .container.topMessage
+      .row
+        .twelve.columns
+          .row
+            .nine.columns
+              .preferred-banner.hide-on-phones.clearfix
+                %a{:href => "http://www.cahf.org/", :title => "California Association of Health Facilities"}
+                  %img{src: "https://s3.amazonaws.com/new-assets.jsasearch.net/cahf.jpg", alt: "California Association of Health Facilities"}
+                  %span Preferred by CAHF
+
+              %ul#scroller-nav.clearfix
+                %li.active What We Do
+                %li Our Promise
+                %li.hide-on-phones Employers
+                %li.hide-on-phones Candidates
+                %li.hide-on-phones Submit Resume
+              .topScrollWrap
+                .explanations.clearfix
+                  .items.clearfix
+                    .explanation
+                      .row
+                        .five.columns.hide-on-phones
+                          %img{:src => "https://s3.amazonaws.com/new-assets.jsasearch.net/e2.jpg", :alt => "JSA Search Makes Hiring Easy"}
+                        .seven.columns
+                          %h2
+                            We Fill Your Open Jobs
+                          %p
+                            JSA Search Inc. specializes in the placement of professionals at every level of the healthcare industry, accounting, interim staffing.
+                          %p
+                            We offer trusted experience in hiring the right people for healthcare agencies across the United States.
+                          %p.hide-on-phones
+                            Our healthcare recruiters are dedicated to working with you to find the best candidates and jobs.
+                          %p
+                            = link_to "Simplify Your Job Search with JSA", about_path,
+                                      :title => "Discover how JSA Search can help you find the right job placement",
+                                      :class => "button green"
+
+                    .explanation
+                      .row
+                        .five.columns.hide-on-phones
+                          %img{:src => "https://s3.amazonaws.com/new-assets.jsasearch.net/e10.jpg", :alt => "JSA Search's Promise to You"}
+                        .seven.columns
+                          %h2 Our Mission &amp; Creed
+                          %p
+                            JSA Search Inc. strives to improve recruitment services by always keeping the best interest of our clients and candidates in mind.
+                          %p
+                            We specialize in the placement of professionals to sound, stable companies at every level in the healthcare, accounting, and agency staffing industries. We are firmly committed to the betterment of healthcare services provided to Senior Citizens and Curative Patients Nationwide.
+                          %p
+                            = link_to "Learn More About Who We Are", |
+                                      bios_path, :title => "Discover Our Passion for Helping You Succeed", |
+                                      :class => "button green"
+                    .explanation.hide-on-phones
+                      .row
+                        .five.columns.hide-on-phones
+                          %img{:src => "https://s3.amazonaws.com/new-assets.jsasearch.net/e3.jpg", :alt => "JSA Search Helps You Find The Best Job Candidates"}
+                        .seven.columns
+                          %h2
+                            We Make Hiring Easy
+                          %p
+                            JSA Search Inc. wants to help you find the right candidates and make the right hire. We work closely together so the job candidate you hire is the best one for the job.
+                          %p
+                            We go the extra mile after the recruitment process to make sure your new hire is still the one.
+                          %p
+                            = link_to "Find Better Candidates for Your Business",
+                                      employers_path,
+                                      :title => "Hire the best job candidates with JSA Search",
+                                      :class => "button green"
+                    .explanation.hide-on-phones
+                      .row
+                        .five.columns.hide-on-phones
+                          %img{:src => "https://s3.amazonaws.com/new-assets.jsasearch.net/e4.jpg", :alt => "JSA Search Helps You Find The Best Job"}
+                        .seven.columns
+                          %h2 Find Your Best Job Ever
+                          %p
+                            JSA Search Inc. helps you find the right job, not only for your professional career, but also for your life outside of work.
+                          %p
+                            JSA Search is your advocate for finding a job placement that fits who you are and get you where you want to be.
+                          %p
+                            = link_to "Get Started with JSA to Find Your Next Job", |
+                                      about_candidates_path, :title => "Find the best job placement with JSA Search", |
+                                      :class => "button green" |
+
+                    .explanation.hide-on-phones
+                      .row
+                        .five.columns.hide-on-phones
+                          %img{:src => "https://s3.amazonaws.com/new-assets.jsasearch.net/jsa-puzzle-square.png", :alt => "JSA Search Helps You Find The Best Job"}
+                        .seven.columns
+                          %h2 Submit Your Resume
+                          %p
+                            Our number one priority is finding you the best job to fit your goals and aspirations.
+                          %p
+                            JSA Search Inc. can help you update your resume to effectively communicate your ability and experience.
+                          %p
+                            Let's work together to advocate your potential and find your best job ever.
+                          %p
+                            = link_to "Send Us Your Resume", |
+                                      new_resume_submission_path, :title => "Submit Your Resume for review", |
+                                      :class => "button green" |
+            .three.columns.special.hide-on-phones
+              .promiseWrapper
+                %h2 Dedicated to You
+                %a{:href => "#johnVid",
+                   :title => "Watch a Message from CEO John Sherman",
+                   :rel => "facebox",
+                   :class => "showVid" }
+                  %img{:src => "https://s3.amazonaws.com/new-assets.jsasearch.net/john-video.jpg",
+                       :alt => "JSA Search's Promise to You"}
+                %h6
+                  Watch our CEO, John Sherman, share our promise to make your job placement the best it can be.
+          .candidate.fly-out.panel
+            %h4 Are You Looking for a Job?
+            %p JSA Search, Inc. will help you find the right job to develop your potential. Learn how we can work together.
+            %ul
+              %li
+                %a{:href => public_jobs_path,
+                   :class => "candidates alt button small nice radius blue block center",
+                   :title => "View Our Open Jobs"}
+                  Browse Open Jobs
+              %li
+                %a{:href => about_candidates_path,
+                   :class => "candidates alt button small nice radius blue block center",
+                   :title => "JSA Search for Candidates"}
+                  How We Can Help
+              %li
+                %a{:href => career_advice_path,
+                   :class => "advice alt button small nice radius blue block center",
+                   :title => "Career Advice for Candidates by JSA Search"}
+                  Career Advice
+              %li
+                %a{:href => resume_writing_services_path,
+                   :class => "resume_services alt button small nice radius blue block center",
+                   :title => "Helpful Resume Services by JSA Search"}
+                  Resume Help
+          .client.fly-out.panel
+            %h4 Are You Looking to Hire?
+            %p JSA Search, Inc. has the best recruitment services and employment guarantee in the industry. Learn how we can help your company.
+            %ul
+              %li
+                %a{:href => healthcare_path,
+                   :class => "healthcare alt button nice radius blue small block center",
+                   :title => "Discover JSA Search for HealthCare"}
+                  Healthcare
+              %li
+                %a{:href => interim_staffing_path,
+                   :class => "interim alt button nice radius blue small block center",
+                   :title => "Discover JSA Search for Interim Staffing"}
+                  Interim Staffing
+              %li
+                %a{:href => consulting_path,
+                   :class => "consulting alt button nice radius blue small block center",
+                   :title => "Discover JSA Search for JSA Consulting"}
+                  Consulting
+              %li
+                %a{:href => finance_path,
+                   :class => "finance alt button nice radius blue small block center",
+                   :title => "Discover JSA Search for Accounting and Finance"}
+                  Finance
+  .container.bottomMessage
+    .row
+      .twelve.columns
+        .bottomWrap
+          = yield
+  .container.endingMessage
+    .row
+      .twelve.columns
+        .row
+          .six.columns
+            %h3 We Support Your HR
+            %p
+              JSA Search is dedicated to understanding your needs and presenting the most qualified and pre-screened candidates.
+
+            %nav.sub
+              %ul.block-grid.two-up
+                %li
+                  %a{:href => healthcare_path,
+                     :class => "healthcare alt",
+                     :title => "Discover JSA Search for HealthCare"}
+                    Healthcare
+                    %em
+                      Staffing for the CEO to the CNA
+                %li
+                  %a{:href => interim_staffing_path,
+                     :class => "interim alt",
+                     :title => "Discover JSA Search for Interim Staffing"}
+                    Interim Staffing
+                    %em
+                      Bring in short term experts
+                %li
+                  %a{:href => consulting_path,
+                     :class => "consulting alt",
+                     :title => "Discover JSA Search for JSA Consulting"}
+                    Consulting
+                    %em
+                      Inspire and build leadership
+                %li
+                  %a{:href => finance_path,
+                     :class => "finance alt",
+                     :title => "Discover JSA Search for Accounting and Finance"}
+                    Finance
+                    %em
+                      Trusted finanacial pros
+
+          .six.columns
+            %h3 Get the Best Job
+            %p
+              With over 10 years of healthcare staffing experience, we understand your success is our success, and we want to see you succeed.
+
+            %nav.sub
+              %ul.block-grid.two-up
+                %li
+                  %a{:href => about_candidates_path,
+                     :class => "candidates alt",
+                     :title => "JSA Search for Candidates"}
+                    Find a Job
+                    %em
+                      Work with the Best Recruiters
+                %li
+                  %a{:href => career_advice_path,
+                     :class => "advice alt",
+                     :title => "Career Advice for Candidates by JSA Search"}
+                    Career Advice
+                    %em
+                      Tips to Keep Moving Forward
+                %li
+                  %a{:href => resume_writing_services_path,
+                     :class => "resume_services alt",
+                     :title => "Helpful Resume Services by JSA Search"}
+                    Resume Help
+                    %em
+                      Communicate You
+
+  #johnVid{style: "display:none;"}
+    .vidWrapper
+      <iframe width="360" height="270" src="https://www.youtube-nocookie.com/embed/RDnKwpDdNFU?rel=0" frameborder="0" allowfullscreen></iframe>
+  .modal
+  #jstemplates
+    = yield :jstemplates
+  = render :partial => 'layouts/footer'
+
+  = javascript_include_tag "home"

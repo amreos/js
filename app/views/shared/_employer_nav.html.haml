@@ -1,0 +1,51 @@
+%nav{:class => "#{controller.action_name} sub"}
+  %ul
+    %li
+      %a{:href => healthcare_path, :class => "healthcare", :title => "Discover JSA Search for HealthCare"}
+        JSA Healthcare
+        %em.hide-on-phones
+          Staffing for the CEO to the CNA
+    %li
+      %a{:href => interim_staffing_path, :class => "interim", :title => "Discover JSA Search for Interim Staffing"}
+        JSA Interim Staffing
+        %em.hide-on-phones
+          Bringing in short term experts
+    %li
+      %a{:href => consulting_path, :class => "consulting", :title => "Discover JSA Search for JSA Consulting"}
+        JSA Consulting
+        %em.hide-on-phones
+          Helping to Inspire and Build Leadership
+    %li
+      %a{:href => finance_path, :class => "finance", :title => "Discover JSA Search for Accounting and Finance"}
+        JSA Finance
+        %em.hide-on-phones
+          Finding trusted professionals to guide your business
+
+    %li
+      %a{:href => new_job_request_path, :class => "jobRequest", :title => "Let's Work Together to Fill Your Open Job"}
+        Request a Job Order
+        %em.hide-on-phones
+          Fullfill Your Open Job with JSA
+
+    %li
+      %a{:href => new_question_path, :class => "question", :title => "Ask JSA Search a question", "data-remote" => "true"}
+        Have a Question?
+        %em.hide-on-phones
+          Get a Quick Answer
+
+.panel
+  %h5 Join Our Email List
+  %p Recieve News and Placement Tips
+  %form#subForm.nice.form.f2{:action => "https://jsasearch.createsend.com/t/j/s/jltilu/", :method => "post"}
+    %p
+      %label{:for => "name"} Name:
+      %input#name.input-text{:name => "cm-name", :type => "text"}
+    %p
+      %label{:for => "jltilu-jltilu"} Email:
+      %input#jltilu-jltilu.input-text{:name => "cm-jltilu-jltilu", :type => "text"}
+    %p
+      %label{:for => "Candidates"}
+        %input#Candidates{:name => "cm-ol-jliyg", :type => "checkbox"}
+        Join our Candidate List as well
+    %p
+      %input.button.green.small{:type => "submit", :value => "Subscribe"}

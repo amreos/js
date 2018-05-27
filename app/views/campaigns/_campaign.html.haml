@@ -1,0 +1,11 @@
+%tr
+	%td
+		= link_to "View",
+							campaign.WebVersionURL,
+							title: "View the web version of #{campaign.Subject}",
+							:class => "button green small",
+							:target => "_blank"
+	%td
+		%strong= l Time.parse(campaign.SentDate), :format => :calendar
+	%td
+		%strong= campaign.Subject

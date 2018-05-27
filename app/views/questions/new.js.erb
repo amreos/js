@@ -1,0 +1,11 @@
+$(".modal").append("<%= escape_javascript(render(:partial => 'questions/form', :locals => {:quesion => @question})) %>");
+
+$("#flash").remove();
+
+$(".modal").dialog({
+ width: 460,
+ title: "Ask us a Question",
+ position: ['center',10]
+});
+
+$("a").blur();

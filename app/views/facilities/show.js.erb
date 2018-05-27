@@ -1,0 +1,12 @@
+$(".modal").append("<%= escape_javascript(render(@facility)) %>");
+
+$("#flash").remove();
+
+$(".modal").dialog({
+ width: 600,
+ maxHeight: 400,
+ title: "Contact Info for <%= escape_javascript(@facility.name) %>",
+ position: ['center',70]
+});
+
+$("a").blur();

@@ -1,0 +1,32 @@
+- @page_title = "Resume Writing Services"
+
+%section.first
+  .row
+    .eight.columns
+      %hgroup.call
+        %h1
+          Get A Better Resume that Communicates You
+    .four.columns
+      = render :partial => 'shared/public/social_links'
+
+%section.employers
+  %section.clearfix
+    .row
+      .eight.columns
+        .point
+          = image_tag "https://s3.amazonaws.com/new-assets.jsasearch.net/jsa-puzzle.jpg", :alt => "Contact JSA Search"
+          %h3 Resume Writing Services that Advocate Your True Potential
+
+          %p
+            Ensure you interview for the jobs you want with an exceptional resume. At JSA we help you refine your resume and highlight your strengths so you get noticed. Professionally designed and exceptionally well written, we will help you move to the top of the applicant pool with a premier resume.
+
+        %nav.sub
+          %ul
+            %li
+              %a{:href => new_resume_submission_path, :class => "question", :title => "Click here to submit your resume" }
+                Get Started by Sending Your Resume
+                %em
+                  Let's Work Together
+
+      .four.columns
+        = render :partial => "shared/candidate_nav"
